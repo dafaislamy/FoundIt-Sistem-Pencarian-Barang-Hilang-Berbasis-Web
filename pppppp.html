@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoundIt - Layanan Informasi dan Pelaporan</title>
+</head>
+<body>
+
+    <!-- Section Tabel Informasi Barang Temuan -->
+    <section>
+        <h2>Daftar Barang Temuan Terkini</h2>
+        <table border="1" cellpadding="8" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Nama Barang</th>
+                    <th>Lokasi Ditemukan</th>
+                    <th>Status Pengambilan</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>Dompet Hitam</td>
+                    <td>Gedung Kuliah Terpadu</td>
+                    <td>Tersedia di Posko</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Kunci Motor Honda</td>
+                    <td>Area Parkir Utama</td>
+                    <td>Sudah Diambil</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>KTM Mahasiswa</td>
+                    <td>Perpustakaan Pusat</td>
+                    <td>Tersedia di Posko</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- Section Formulir Pelaporan / Klaim Barang -->
+    <section>
+        <h2>Formulir Laporan Kehilangan Barang</h2>
+        <form action="#" method="POST">
+            <label for="nama">Nama Lengkap Pelapor:</label><br>
+            <input type="text" id="nama" name="nama" placeholder="Masukkan nama lengkap..." required><br><br>
+
+            <label for="nim">NIM / Nomor Identitas:</label><br>
+            <input type="text" id="nim" name="nim" placeholder="Masukkan NIM..." required><br><br>
+
+            <label for="barang">Nama & Ciri Khusus Barang:</label><br>
+            <input type="text" id="barang" name="barang" placeholder="Contoh: Helm Bogo abu-abu ada stiker..." required><br><br>
+
+            <label for="lokasi">Perkiraan Lokasi Hilang:</label><br>
+            <input type="text" id="lokasi" name="lokasi" placeholder="Masukkan lokasi kejadian..." required><br><br>
+
+            <label for="pesan">Deskripsi Lengkap / Kronologi:</label><br>
+            <textarea id="pesan" name="pesan" rows="4" cols="35" placeholder="Tuliskan rincian kronologi barang hilang..."></textarea><br><br>
+
+            <button type="submit">Kirim Laporan</button>
+        </form>
+    </section>
+
+</body>
+</html>
