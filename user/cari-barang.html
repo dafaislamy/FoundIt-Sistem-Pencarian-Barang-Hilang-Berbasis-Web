@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Cari Barang - FoundIt</title>
+
+    <link rel="stylesheet" href="../css/user.css">
+    <link rel="stylesheet" href="../css/cari-barang.css">
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="logo">
+            <span>Found</span>It
+        </div>
+
+        <nav>
+
+            <a href="dashboard.html">
+                Dashboard
+            </a>
+
+            <a href="cari-barang.html" class="active">
+                Cari Barang
+            </a>
+
+            <a href="lapor-hilang.html">
+                Lapor Barang Hilang
+            </a>
+
+            <a href="lapor-ditemukan.html">
+                Lapor Barang Ditemukan
+            </a>
+
+            <a href="klaim.html">
+                Klaim Barang
+            </a>
+
+            <a href="status-klaim.html">
+                Status Klaim
+            </a>
+
+            <a href="riwayat-laporan.html">
+                Riwayat Laporan
+            </a>
+
+            <a href="profil.html">
+                Profil
+            </a>
+
+        </nav>
+
+        <a href="../login.html" class="logout">
+            Keluar
+        </a>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+
+        <!-- TOPBAR -->
+        <header class="topbar">
+
+            <div>
+
+                <h1>
+                    Cari Barang
+                </h1>
+
+                <p>
+                    Temukan barang hilang atau barang yang ditemukan.
+                </p>
+
+            </div>
+
+
+            <!-- PROFIL USER -->
+            <div class="user-profile">
+
+                <div
+                    class="profile-icon"
+                    id="profileInitial">
+                    U
+                </div>
+
+                <div>
+
+                    <strong id="profileName">
+                        User
+                    </strong>
+
+                    <small>
+                        User
+                    </small>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- SEARCH BOX -->
+        <section class="search-box">
+
+            <div class="search-title">
+
+                <h2>
+                    Cari Barang
+                </h2>
+
+                <p>
+                    Masukkan nama barang yang ingin kamu cari.
+                </p>
+
+            </div>
+
+
+            <!-- SEARCH -->
+            <div class="search-form">
+
+                <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="Contoh: Flashdisk, Kunci Motor, Handphone...">
+
+                <button
+                    type="button"
+                    id="searchButton">
+
+                    Cari
+
+                </button>
+
+            </div>
+
+
+            <!-- FILTER -->
+            <div class="filter-form">
+
+                <select id="statusFilter">
+
+                    <option value="semua">
+                        Semua Status
+                    </option>
+
+                    <option value="hilang">
+                        Hilang
+                    </option>
+
+                    <option value="ditemukan">
+                        Ditemukan
+                    </option>
+
+                </select>
+
+
+                <select id="categoryFilter">
+
+                    <option value="semua">
+                        Semua Kategori
+                    </option>
+
+                    <option value="elektronik">
+                        Elektronik
+                    </option>
+
+                    <option value="aksesoris">
+                        Aksesoris
+                    </option>
+
+                    <option value="dokumen">
+                        Dokumen
+                    </option>
+
+                    <option value="lainnya">
+                        Lainnya
+                    </option>
+
+                </select>
+
+            </div>
+
+        </section>
+
+
+        <!-- HASIL PENCARIAN -->
+        <section class="result-section">
+
+
+            <!-- HEADER HASIL -->
+            <div class="result-header">
+
+                <div>
+
+                    <h2>
+                        Daftar Barang
+                    </h2>
+
+                    <p id="resultCount">
+                        Menampilkan semua barang
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- GRID BARANG -->
+            <div
+                class="barang-grid"
+                id="barangGrid">
+
+
+                <!-- BARANG 1 -->
+                <div
+                    class="barang-card"
+                    data-name="Flashdisk SanDisk 64GB"
+                    data-status="hilang"
+                    data-category="elektronik">
+
+
+                    <!-- AREA GAMBAR KOSONG -->
+                    <div class="barang-image"></div>
+
+
+                    <div class="barang-content">
+
+                        <span class="status-badge hilang">
+                            Hilang
+                        </span>
+
+                        <h3>
+                            Flashdisk SanDisk 64GB
+                        </h3>
+
+                        <p>
+                            Hilang di sekitar Fakultas Teknik.
+                        </p>
+
+                        <span class="category">
+                            Elektronik
+                        </span>
+
+                        <a
+                            href="detail-barang.html"
+                            class="btn-detail">
+
+                            Lihat Detail
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+
+                <!-- BARANG 2 -->
+                <div
+                    class="barang-card"
+                    data-name="Kunci Motor Yamaha"
+                    data-status="ditemukan"
+                    data-category="aksesoris">
+
+
+                    <!-- AREA GAMBAR KOSONG -->
+                    <div class="barang-image"></div>
+
+
+                    <div class="barang-content">
+
+                        <span class="status-badge ditemukan">
+                            Ditemukan
+                        </span>
+
+                        <h3>
+                            Kunci Motor Yamaha
+                        </h3>
+
+                        <p>
+                            Ditemukan di area parkir kampus.
+                        </p>
+
+                        <span class="category">
+                            Aksesoris
+                        </span>
+
+                        <a
+                            href="detail-barang.html"
+                            class="btn-detail">
+
+                            Lihat Detail
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+
+                <!-- BARANG 3 -->
+                <div
+                    class="barang-card"
+                    data-name="Handphone"
+                    data-status="hilang"
+                    data-category="elektronik">
+
+
+                    <!-- AREA GAMBAR KOSONG -->
+                    <div class="barang-image"></div>
+
+
+                    <div class="barang-content">
+
+                        <span class="status-badge hilang">
+                            Hilang
+                        </span>
+
+                        <h3>
+                            Handphone
+                        </h3>
+
+                        <p>
+                            Hilang di area kantin kampus.
+                        </p>
+
+                        <span class="category">
+                            Elektronik
+                        </span>
+
+                        <a
+                            href="detail-barang.html"
+                            class="btn-detail">
+
+                            Lihat Detail
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+
+                <!-- BARANG 4 -->
+                <div
+                    class="barang-card"
+                    data-name="Dompet Hitam"
+                    data-status="ditemukan"
+                    data-category="aksesoris">
+
+
+                    <!-- AREA GAMBAR KOSONG -->
+                    <div class="barang-image"></div>
+
+
+                    <div class="barang-content">
+
+                        <span class="status-badge ditemukan">
+                            Ditemukan
+                        </span>
+
+                        <h3>
+                            Dompet Hitam
+                        </h3>
+
+                        <p>
+                            Ditemukan di sekitar perpustakaan.
+                        </p>
+
+                        <span class="category">
+                            Aksesoris
+                        </span>
+
+                        <a
+                            href="detail-barang.html"
+                            class="btn-detail">
+
+                            Lihat Detail
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+            <!-- TIDAK ADA HASIL -->
+            <div
+                class="no-result"
+                id="noResult"
+                style="display: none;">
+
+                <div></div>
+
+                <h3>
+                    Barang tidak ditemukan
+                </h3>
+
+                <p>
+                    Coba gunakan kata kunci atau filter yang berbeda.
+                </p>
+
+            </div>
+
+
+        </section>
+
+
+    </main>
+
+    <script src="../js/cari-barang.js"></script>
+
+</body>
+
+</html>

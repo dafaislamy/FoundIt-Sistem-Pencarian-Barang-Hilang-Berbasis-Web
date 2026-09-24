@@ -1,0 +1,239 @@
+.history-container {
+    background: #ffffff;
+
+    border-radius: 18px;
+
+    padding: 28px;
+
+    box-shadow:
+        0 4px 18px rgba(44, 62, 80, 0.06);
+}
+
+
+/* HEADER */
+.history-header {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 25px;
+
+    padding-bottom: 20px;
+
+    border-bottom: 1px solid #edf0f2;
+}
+
+.history-header h2 {
+    margin: 0 0 6px;
+
+    color: #2c3e50;
+
+    font-size: 22px;
+}
+
+.history-header p {
+    margin: 0;
+
+    color: #7f8c8d;
+
+    font-size: 13px;
+}
+
+
+/* BUTTON */
+.btn-report {
+    display: inline-block;
+
+    padding: 11px 17px;
+
+    border-radius: 9px;
+
+    background: #3498db;
+
+    color: #ffffff;
+
+    text-decoration: none;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    transition: 0.2s;
+}
+
+.btn-report:hover {
+    background: #2980b9;
+}
+
+
+/* CARD LAPORAN */
+
+.history-card {
+    border: 1px solid #edf0f2;
+
+    border-radius: 14px;
+
+    padding: 20px;
+
+    margin-bottom: 15px;
+
+    background: #ffffff;
+
+    transition: 0.2s;
+}
+
+.history-card:hover {
+    box-shadow:
+        0 5px 18px rgba(44, 62, 80, 0.06);
+}
+
+
+.history-top {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: flex-start;
+
+    gap: 15px;
+
+    margin-bottom: 15px;
+}
+
+
+.history-title h3 {
+    margin: 0 0 6px;
+
+    color: #2c3e50;
+
+    font-size: 17px;
+}
+
+.history-title p {
+    margin: 0;
+
+    color: #7f8c8d;
+
+    font-size: 12px;
+}
+
+
+/* STATUS */
+.history-status {
+    padding: 6px 11px;
+
+    border-radius: 20px;
+
+    background: #fdecea;
+
+    color: #e74c3c;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    white-space: nowrap;
+}
+
+
+/* DETAIL */
+.history-detail {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 12px;
+
+    padding-top: 15px;
+
+    border-top: 1px solid #f0f2f3;
+}
+
+
+.history-detail-item {
+    background: #f8fafc;
+
+    padding: 12px;
+
+    border-radius: 9px;
+}
+
+.history-detail-item span {
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: #95a5a6;
+
+    font-size: 11px;
+}
+
+.history-detail-item strong {
+    color: #2c3e50;
+
+    font-size: 13px;
+}
+
+
+/* KALAU KOSONG */
+.empty-history {
+    text-align: center;
+
+    padding: 60px 20px;
+
+    background: #f8fafc;
+
+    border-radius: 14px;
+}
+
+.empty-history h3 {
+    margin: 0 0 8px;
+
+    color: #2c3e50;
+
+    font-size: 18px;
+}
+
+.empty-history p {
+    margin: 0 0 20px;
+
+    color: #7f8c8d;
+
+    font-size: 13px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 800px) {
+
+    .history-header {
+        align-items: flex-start;
+
+        flex-direction: column;
+
+        gap: 15px;
+    }
+
+    .history-detail {
+        grid-template-columns: 1fr 1fr;
+    }
+
+}
+
+@media (max-width: 550px) {
+
+    .history-container {
+        padding: 20px;
+    }
+
+    .history-top {
+        flex-direction: column;
+    }
+
+    .history-detail {
+        grid-template-columns: 1fr;
+    }
+
+}

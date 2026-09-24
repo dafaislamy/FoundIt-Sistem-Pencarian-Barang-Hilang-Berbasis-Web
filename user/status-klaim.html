@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Status Klaim - FoundIt</title>
+
+    <link rel="stylesheet" href="../css/user.css">
+    <link rel="stylesheet" href="../css/status-klaim.css">
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="logo">
+            <span>Found</span>It
+        </div>
+
+        <nav>
+
+            <a href="dashboard.html">
+                Dashboard
+            </a>
+
+            <a href="cari-barang.html">
+                Cari Barang
+            </a>
+
+            <a href="lapor-hilang.html">
+                Lapor Barang Hilang
+            </a>
+
+            <a href="lapor-ditemukan.html">
+                Lapor Barang Ditemukan
+            </a>
+
+            <a href="klaim.html">
+                Klaim Barang
+            </a>
+
+            <a href="status-klaim.html" class="active">
+                Status Klaim
+            </a>
+
+            <a href="riwayat-laporan.html">
+                Riwayat Laporan
+            </a>
+
+            <a href="profil.html">
+                Profil
+            </a>
+
+        </nav>
+
+        <a href="../login.html" class="logout">
+            Keluar
+        </a>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+        <!-- TOPBAR -->
+        <header class="topbar">
+
+            <div>
+
+                <h1>
+                    Status Klaim
+                </h1>
+
+                <p>
+                    Pantau status pengajuan klaim barang kamu.
+                </p>
+
+            </div>
+
+
+            <div class="user-profile">
+
+                <div
+                    class="profile-icon"
+                    id="profileInitial">
+                    U
+                </div>
+
+                <div>
+
+                    <strong id="profileName">
+                        User
+                    </strong>
+
+                    <small>
+                        User
+                    </small>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- STATUS -->
+        <section class="claim-status-container">
+
+            <div class="status-header">
+
+                <div>
+
+                    <h2>
+                        Pengajuan Klaim
+                    </h2>
+
+                    <p id="jumlahKlaim">
+                        Memuat data...
+                    </p>
+
+                </div>
+
+                <a
+                    href="klaim.html"
+                    class="btn-claim">
+
+                    + Ajukan Klaim
+
+                </a>
+
+            </div>
+
+
+            <div id="klaimList">
+
+                <!-- Data klaim akan ditampilkan melalui JavaScript -->
+
+            </div>
+
+
+            <!-- EMPTY -->
+            <div
+                id="emptyClaim"
+                class="empty-claim">
+
+                <h3>
+                    Belum Ada Pengajuan Klaim
+                </h3>
+
+                <p>
+                    Kamu belum mengajukan klaim barang.
+                </p>
+
+                <a
+                    href="klaim.html"
+                    class="btn-claim">
+
+                    Ajukan Klaim
+
+                </a>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <script src="../js/status-klaim.js"></script>
+
+</body>
+
+</html>

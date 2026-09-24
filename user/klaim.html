@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Klaim Barang - FoundIt</title>
+
+    <link rel="stylesheet" href="../css/user.css">
+    <link rel="stylesheet" href="../css/klaim.css">
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="logo">
+            <span>Found</span>It
+        </div>
+
+        <nav>
+
+            <a href="dashboard.html">
+                Dashboard
+            </a>
+
+            <a href="cari-barang.html">
+                Cari Barang
+            </a>
+
+            <a href="lapor-hilang.html">
+                Lapor Barang Hilang
+            </a>
+
+            <a href="lapor-ditemukan.html">
+                Lapor Barang Ditemukan
+            </a>
+
+            <a href="klaim.html" class="active">
+                Klaim Barang
+            </a>
+
+            <a href="status-klaim.html">
+                Status Klaim
+            </a>
+
+            <a href="riwayat-laporan.html">
+                Riwayat Laporan
+            </a>
+
+            <a href="profil.html">
+                Profil
+            </a>
+
+        </nav>
+
+        <a href="../login.html" class="logout">
+            Keluar
+        </a>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+        <!-- TOPBAR -->
+        <header class="topbar">
+
+            <div>
+
+                <h1>
+                    Klaim Barang
+                </h1>
+
+                <p>
+                    Ajukan klaim untuk barang yang kamu kenali.
+                </p>
+
+            </div>
+
+
+            <div class="user-profile">
+
+                <div
+                    class="profile-icon"
+                    id="profileInitial">
+                    U
+                </div>
+
+                <div>
+
+                    <strong id="profileName">
+                        User
+                    </strong>
+
+                    <small>
+                        User
+                    </small>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- FORM KLAIM -->
+        <section class="claim-container">
+
+            <div class="claim-header">
+
+                <h2>
+                    Form Pengajuan Klaim
+                </h2>
+
+                <p>
+                    Isi informasi berikut untuk membantu proses verifikasi kepemilikan barang.
+                </p>
+
+            </div>
+
+
+            <form id="klaimForm">
+
+
+                <!-- NAMA BARANG -->
+                <div class="form-group">
+
+                    <label for="namaBarang">
+                        Nama Barang
+                    </label>
+
+                    <input
+                        type="text"
+                        id="namaBarang"
+                        placeholder="Contoh: Kunci Motor Yamaha"
+                        required>
+
+                </div>
+
+
+                <!-- KATEGORI -->
+                <div class="form-group">
+
+                    <label for="kategori">
+                        Kategori Barang
+                    </label>
+
+                    <select id="kategori" required>
+
+                        <option value="">
+                            Pilih kategori
+                        </option>
+
+                        <option value="elektronik">
+                            Elektronik
+                        </option>
+
+                        <option value="aksesoris">
+                            Aksesoris
+                        </option>
+
+                        <option value="dokumen">
+                            Dokumen
+                        </option>
+
+                        <option value="lainnya">
+                            Lainnya
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- CIRI BARANG -->
+                <div class="form-group">
+
+                    <label for="ciriBarang">
+                        Ciri-ciri Barang
+                    </label>
+
+                    <textarea
+                        id="ciriBarang"
+                        rows="5"
+                        placeholder="Jelaskan ciri khusus barang yang kamu klaim..."
+                        required></textarea>
+
+                </div>
+
+
+                <!-- LOKASI KEHILANGAN -->
+                <div class="form-group">
+
+                    <label for="lokasiHilang">
+                        Lokasi Kehilangan
+                    </label>
+
+                    <input
+                        type="text"
+                        id="lokasiHilang"
+                        placeholder="Contoh: Area parkir kampus"
+                        required>
+
+                </div>
+
+
+                <!-- KETERANGAN TAMBAHAN -->
+                <div class="form-group">
+
+                    <label for="keterangan">
+                        Keterangan Tambahan
+                    </label>
+
+                    <textarea
+                        id="keterangan"
+                        rows="4"
+                        placeholder="Tambahkan informasi lain yang dapat membantu proses verifikasi..."
+                        required></textarea>
+
+                </div>
+
+
+                <!-- BUTTON -->
+                <div class="form-actions">
+
+                    <a
+                        href="cari-barang.html"
+                        class="btn-cancel">
+
+                        Batal
+
+                    </a>
+
+                    <button
+                        type="submit"
+                        class="btn-submit">
+
+                        Ajukan Klaim
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </section>
+
+    </main>
+
+    <script src="../js/klaim.js"></script>
+
+</body>
+
+</html>

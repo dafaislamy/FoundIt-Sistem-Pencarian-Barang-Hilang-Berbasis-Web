@@ -1,0 +1,228 @@
+.claim-status-container {
+    background: #ffffff;
+
+    border-radius: 18px;
+
+    padding: 28px;
+
+    box-shadow:
+        0 4px 18px rgba(44, 62, 80, 0.06);
+}
+
+
+/* HEADER */
+.status-header {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 25px;
+
+    padding-bottom: 20px;
+
+    border-bottom: 1px solid #edf0f2;
+}
+
+.status-header h2 {
+    margin: 0 0 6px;
+
+    color: #2c3e50;
+
+    font-size: 22px;
+}
+
+.status-header p {
+    margin: 0;
+
+    color: #7f8c8d;
+
+    font-size: 13px;
+}
+
+
+/* BUTTON */
+.btn-claim {
+    display: inline-block;
+
+    padding: 11px 17px;
+
+    border-radius: 9px;
+
+    background: #3498db;
+
+    color: #ffffff;
+
+    text-decoration: none;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    transition: 0.2s;
+}
+
+.btn-claim:hover {
+    background: #2980b9;
+}
+
+
+/* CARD */
+.claim-card {
+    border: 1px solid #edf0f2;
+
+    border-radius: 14px;
+
+    padding: 20px;
+
+    margin-bottom: 15px;
+
+    background: #ffffff;
+}
+
+
+.claim-top {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: flex-start;
+
+    gap: 15px;
+
+    margin-bottom: 15px;
+}
+
+
+.claim-title h3 {
+    margin: 0 0 6px;
+
+    color: #2c3e50;
+
+    font-size: 17px;
+}
+
+.claim-title p {
+    margin: 0;
+
+    color: #7f8c8d;
+
+    font-size: 12px;
+}
+
+
+/* STATUS BADGE */
+.claim-badge {
+    padding: 6px 11px;
+
+    border-radius: 20px;
+
+    background: #fff6df;
+
+    color: #d68910;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    white-space: nowrap;
+}
+
+
+/* DETAIL */
+.claim-detail {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 12px;
+
+    padding-top: 15px;
+
+    border-top: 1px solid #f0f2f3;
+}
+
+
+.claim-detail-item {
+    background: #f8fafc;
+
+    padding: 12px;
+
+    border-radius: 9px;
+}
+
+.claim-detail-item span {
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: #95a5a6;
+
+    font-size: 11px;
+}
+
+.claim-detail-item strong {
+    color: #2c3e50;
+
+    font-size: 13px;
+}
+
+
+/* KALAU KOSONG */
+.empty-claim {
+    text-align: center;
+
+    padding: 60px 20px;
+
+    background: #f8fafc;
+
+    border-radius: 14px;
+}
+
+.empty-claim h3 {
+    margin: 0 0 8px;
+
+    color: #2c3e50;
+
+    font-size: 18px;
+}
+
+.empty-claim p {
+    margin: 0 0 20px;
+
+    color: #7f8c8d;
+
+    font-size: 13px;
+}
+
+
+/* RESPONSIVE */
+@media (max-width: 800px) {
+
+    .status-header {
+        align-items: flex-start;
+
+        flex-direction: column;
+
+        gap: 15px;
+    }
+
+}
+
+@media (max-width: 550px) {
+
+    .claim-status-container {
+        padding: 20px;
+    }
+
+    .claim-top {
+        flex-direction: column;
+    }
+
+    .claim-detail {
+        grid-template-columns: 1fr;
+    }
+
+}

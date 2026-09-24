@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login - FoundIt</title>
+
+    <link rel="stylesheet" href="css/login.css">
+</head>
+
+<body>
+
+    <div class="login-container">
+
+        <!-- Bagian kiri -->
+        <div class="login-info">
+
+            <div class="logo">
+                <span>Found</span>It
+            </div>
+
+            <h1>
+                Temukan Kembali
+                Barangmu.
+            </h1>
+
+            <p>
+                Platform barang hilang dan ditemukan
+                untuk seluruh civitas kampus.
+            </p>
+
+            <a href="index.html" class="back-home">
+                ← Kembali ke Beranda
+            </a>
+
+        </div>
+
+
+        <!-- Bagian kanan -->
+        <div class="login-box">
+
+            <div class="login-header">
+
+                <h2>Selamat Datang</h2>
+
+                <p>
+                    Silakan pilih akun untuk masuk
+                    ke FoundIt.
+                </p>
+
+            </div>
+
+
+            <!-- Pilihan Role -->
+            <div class="role-selection">
+
+                <button
+                    type="button"
+                    class="role-card active"
+                    onclick="pilihRole('user')">
+
+                    <div class="role-icon">
+                        👤
+                    </div>
+
+                    <div>
+                        <h3>User</h3>
+                        <p>
+                            Cari dan laporkan barang
+                        </p>
+                    </div>
+
+                </button>
+
+
+                <button
+                    type="button"
+                    class="role-card"
+                    onclick="pilihRole('admin')">
+
+                    <div class="role-icon">
+                        🛠️
+                    </div>
+
+                    <div>
+                        <h3>Admin</h3>
+                        <p>
+                            Kelola FoundIt
+                        </p>
+                    </div>
+
+                </button>
+
+            </div>
+
+
+            <!-- Form Login -->
+            <form id="loginForm">
+
+                <input
+                    type="hidden"
+                    id="role"
+                    value="user"
+                >
+
+                <div class="form-group">
+
+                    <label for="email">
+                        Email
+                    </label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        placeholder="Masukkan email"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="password">
+                        Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        placeholder="Masukkan password"
+                        required
+                    >
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="btn-login">
+
+                    Login sebagai User
+
+                </button>
+
+            </form>
+
+
+            <p class="login-note">
+                Belum memiliki akun?
+                <a href="#">
+                    Daftar sebagai User
+                </a>
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <script src="js/login.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,332 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    background-color: #f7f9fc;
+    color: #2c3e50;
+}
+
+.register-container {
+    min-height: 100vh;
+
+    display: flex;
+}
+
+
+/* DI KIRI*/
+.register-info {
+    width: 38%;
+
+    background: linear-gradient(
+        135deg,
+        #2c3e50,
+        #3498db
+    );
+
+    color: white;
+
+    padding: 60px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.logo {
+    font-size: 30px;
+    font-weight: bold;
+
+    margin-bottom: 60px;
+}
+
+.logo span {
+    color: #a9e7ff;
+}
+
+.register-info h1 {
+    font-size: 45px;
+    line-height: 1.2;
+
+    margin-bottom: 20px;
+}
+
+.register-info > p {
+    color: #eaf5fc;
+
+    line-height: 1.7;
+
+    max-width: 400px;
+
+    margin-bottom: 45px;
+}
+
+.steps {
+    display: flex;
+    flex-direction: column;
+
+    gap: 25px;
+}
+
+.step {
+    display: flex;
+
+    align-items: center;
+
+    gap: 15px;
+
+    opacity: 0.6;
+}
+
+.step.active {
+    opacity: 1;
+}
+
+.step > span {
+    width: 35px;
+    height: 35px;
+
+    border-radius: 50%;
+
+    background-color: white;
+
+    color: #3498db;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-weight: bold;
+}
+
+.step strong {
+    display: block;
+
+    font-size: 14px;
+
+    margin-bottom: 3px;
+}
+
+.step small {
+    color: #dceefa;
+
+    font-size: 12px;
+}
+
+
+/* DI KANAN */
+
+.register-box {
+    width: 62%;
+
+    background-color: white;
+
+    padding: 50px 70px;
+
+    overflow-y: auto;
+}
+
+.register-header {
+    margin-bottom: 25px;
+}
+
+.register-header h2 {
+    font-size: 28px;
+
+    margin-bottom: 7px;
+}
+
+.register-header p {
+    color: #777;
+
+    font-size: 14px;
+}
+
+.photo-section {
+    display: flex;
+
+    align-items: center;
+
+    gap: 15px;
+
+    margin-bottom: 25px;
+
+    padding-bottom: 20px;
+
+    border-bottom: 1px solid #eeeeee;
+}
+
+.photo-preview {
+    width: 65px;
+    height: 65px;
+
+    border-radius: 50%;
+
+    background-color: #eef6fc;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 28px;
+}
+
+.photo-section label {
+    display: block;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    margin-bottom: 7px;
+}
+
+.photo-section input {
+    font-size: 12px;
+}
+
+.photo-section small {
+    display: block;
+
+    color: #999;
+
+    font-size: 11px;
+
+    margin-top: 5px;
+}
+
+/* FORM */
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-group label {
+    display: block;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    margin-bottom: 7px;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+
+    padding: 12px 13px;
+
+    border: 1px solid #ddd;
+
+    border-radius: 7px;
+
+    font-family: inherit;
+
+    font-size: 13px;
+
+    background-color: white;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+
+    border-color: #3498db;
+}
+
+
+/* DUA KOLOM */
+.form-row {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 15px;
+}
+
+
+/* BUTTON */ 
+.btn-register {
+    width: 100%;
+
+    padding: 13px;
+
+    margin-top: 5px;
+
+    border: none;
+
+    border-radius: 7px;
+
+    background-color: #3498db;
+
+    color: white;
+
+    font-size: 14px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.btn-register:hover {
+    background-color: #2980b9;
+}
+
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+
+    .register-info {
+        width: 40%;
+
+        padding: 40px;
+    }
+
+    .register-box {
+        width: 60%;
+
+        padding: 40px;
+    }
+
+    .register-info h1 {
+        font-size: 35px;
+    }
+
+}
+
+@media (max-width: 700px) {
+
+    .register-container {
+        flex-direction: column;
+    }
+
+    .register-info {
+        width: 100%;
+
+        padding: 35px 25px;
+    }
+
+    .register-info h1 {
+        font-size: 32px;
+    }
+
+    .register-info > p {
+        margin-bottom: 25px;
+    }
+
+    .register-box {
+        width: 100%;
+
+        padding: 35px 25px;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+}

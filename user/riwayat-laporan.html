@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Riwayat Laporan - FoundIt</title>
+
+    <link rel="stylesheet" href="../css/user.css">
+    <link rel="stylesheet" href="../css/riwayat-laporan.css">
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="logo">
+            <span>Found</span>It
+        </div>
+
+        <nav>
+
+            <a href="dashboard.html">
+                Dashboard
+            </a>
+
+            <a href="cari-barang.html">
+                Cari Barang
+            </a>
+
+            <a href="lapor-hilang.html">
+                Lapor Barang Hilang
+            </a>
+
+            <a href="lapor-ditemukan.html">
+                Lapor Barang Ditemukan
+            </a>
+
+            <a href="klaim.html">
+                Klaim Barang
+            </a>
+
+            <a href="status-klaim.html">
+                Status Klaim
+            </a>
+
+            <a href="riwayat-laporan.html" class="active">
+                Riwayat Laporan
+            </a>
+
+            <a href="profil.html">
+                Profil
+            </a>
+
+        </nav>
+
+        <a href="../login.html" class="logout">
+            Keluar
+        </a>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+        <!-- TOPBAR -->
+        <header class="topbar">
+
+            <div>
+
+                <h1>
+                    Riwayat Laporan
+                </h1>
+
+                <p>
+                    Lihat laporan barang yang pernah kamu buat.
+                </p>
+
+            </div>
+
+
+            <div class="user-profile">
+
+                <div
+                    class="profile-icon"
+                    id="profileInitial">
+                    U
+                </div>
+
+                <div>
+
+                    <strong id="profileName">
+                        User
+                    </strong>
+
+                    <small>
+                        User
+                    </small>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- RIWAYAT -->
+        <section class="history-container">
+
+            <div class="history-header">
+
+                <div>
+
+                    <h2>
+                        Daftar Laporan
+                    </h2>
+
+                    <p id="jumlahLaporan">
+                        Memuat laporan...
+                    </p>
+
+                </div>
+
+                <a
+                    href="lapor-hilang.html"
+                    class="btn-report">
+
+                    + Buat Laporan
+
+                </a>
+
+            </div>
+
+
+            <div id="riwayatList">
+
+                <!-- Data laporan akan dimasukkan melalui JavaScript -->
+
+            </div>
+
+
+            <!-- TIDAK ADA DATA -->
+            <div
+                id="emptyHistory"
+                class="empty-history">
+
+                <h3>
+                    Belum Ada Laporan
+                </h3>
+
+                <p>
+                    Kamu belum membuat laporan barang.
+                </p>
+
+                <a
+                    href="lapor-hilang.html"
+                    class="btn-report">
+
+                    Buat Laporan
+
+                </a>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <script src="../js/riwayat-laporan.js"></script>
+
+</body>
+
+</html>

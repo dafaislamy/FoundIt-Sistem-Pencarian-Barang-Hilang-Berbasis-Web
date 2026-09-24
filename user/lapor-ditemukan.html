@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Lapor Barang Ditemukan - FoundIt</title>
+
+    <link rel="stylesheet" href="../css/user.css">
+    <link rel="stylesheet" href="../css/lapor-ditemukan.css">
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="logo">
+            <span>Found</span>It
+        </div>
+
+        <nav>
+
+            <a href="dashboard.html">
+                Dashboard
+            </a>
+
+            <a href="cari-barang.html">
+                Cari Barang
+            </a>
+
+            <a href="lapor-hilang.html">
+                Lapor Barang Hilang
+            </a>
+
+            <a href="lapor-ditemukan.html" class="active">
+                Lapor Barang Ditemukan
+            </a>
+
+            <a href="klaim.html">
+                Klaim Barang
+            </a>
+
+            <a href="status-klaim.html">
+                Status Klaim
+            </a>
+
+            <a href="riwayat-laporan.html">
+                Riwayat Laporan
+            </a>
+
+            <a href="profil.html">
+                Profil
+            </a>
+
+        </nav>
+
+        <a href="../login.html" class="logout">
+            Keluar
+        </a>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+        <!-- TOPBAR -->
+        <header class="topbar">
+
+            <div>
+
+                <h1>
+                    Lapor Barang Ditemukan
+                </h1>
+
+                <p>
+                    Laporkan barang yang kamu temukan di lingkungan kampus.
+                </p>
+
+            </div>
+
+
+            <div class="user-profile">
+
+                <div
+                    class="profile-icon"
+                    id="profileInitial">
+                    U
+                </div>
+
+                <div>
+
+                    <strong id="profileName">
+                        User
+                    </strong>
+
+                    <small>
+                        User
+                    </small>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- FORM -->
+        <section class="report-container">
+
+            <div class="report-header">
+
+                <h2>
+                    Form Laporan Barang Ditemukan
+                </h2>
+
+                <p>
+                    Isi informasi barang yang kamu temukan dengan lengkap.
+                </p>
+
+            </div>
+
+
+            <form id="laporDitemukanForm">
+
+
+                <!-- NAMA BARANG -->
+                <div class="form-group">
+
+                    <label for="namaBarang">
+                        Nama Barang
+                    </label>
+
+                    <input
+                        type="text"
+                        id="namaBarang"
+                        placeholder="Contoh: Dompet hitam"
+                        required>
+
+                </div>
+
+
+                <!-- KATEGORI -->
+                <div class="form-group">
+
+                    <label for="kategori">
+                        Kategori
+                    </label>
+
+                    <select id="kategori" required>
+
+                        <option value="">
+                            Pilih kategori
+                        </option>
+
+                        <option value="elektronik">
+                            Elektronik
+                        </option>
+
+                        <option value="aksesoris">
+                            Aksesoris
+                        </option>
+
+                        <option value="dokumen">
+                            Dokumen
+                        </option>
+
+                        <option value="lainnya">
+                            Lainnya
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- LOKASI -->
+                <div class="form-group">
+
+                    <label for="lokasi">
+                        Lokasi Ditemukan
+                    </label>
+
+                    <input
+                        type="text"
+                        id="lokasi"
+                        placeholder="Contoh: Gedung C Fakultas Teknik"
+                        required>
+
+                </div>
+
+
+                <!-- TANGGAL -->
+                <div class="form-group">
+
+                    <label for="tanggal">
+                        Tanggal Ditemukan
+                    </label>
+
+                    <input
+                        type="date"
+                        id="tanggal"
+                        required>
+
+                </div>
+
+
+                <!-- DESKRIPSI -->
+                <div class="form-group">
+
+                    <label for="deskripsi">
+                        Deskripsi Barang
+                    </label>
+
+                    <textarea
+                        id="deskripsi"
+                        rows="5"
+                        placeholder="Jelaskan ciri-ciri atau informasi lain mengenai barang..."
+                        required></textarea>
+
+                </div>
+
+
+                <!-- FOTO -->
+                <div class="form-group">
+
+                    <label for="foto">
+                        Foto Barang
+                    </label>
+
+                    <input
+                        type="file"
+                        id="foto"
+                        accept="image/*">
+
+                    <small class="form-hint">
+                        Foto bersifat opsional.
+                    </small>
+
+                </div>
+
+
+                <!-- BUTTON -->
+                <div class="form-actions">
+
+                    <a
+                        href="dashboard.html"
+                        class="btn-cancel">
+
+                        Batal
+
+                    </a>
+
+                    <button
+                        type="submit"
+                        class="btn-submit">
+
+                        Kirim Laporan
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </section>
+
+    </main>
+
+    <script src="../js/lapor-ditemukan.js"></script>
+
+</body>
+
+</html>

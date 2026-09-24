@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 
-    // Pencarian terjadi saat tombol 'Cari' diklik
+    // Pencarian saat tombol 'Cari' diklik
     searchButton.addEventListener("click", function(e) {
         e.preventDefault();
         filterBarang();
