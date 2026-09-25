@@ -60,8 +60,8 @@
 
 .btn-edit {
     text-decoration: none;
-    background: #3498db;
-    color: white;
+    background: #3498db !important;
+    color: white !important;
     padding: 10px 18px;
     border-radius: 8px;
     font-weight: 600;

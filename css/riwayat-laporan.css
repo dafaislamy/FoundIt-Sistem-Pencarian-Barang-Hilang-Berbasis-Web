@@ -44,22 +44,13 @@
 
 /* BUTTON */
 .btn-report {
-    display: inline-block;
-
+    background: #3498db !important;
+    color: #ffffff !important;
     padding: 11px 17px;
-
     border-radius: 9px;
-
-    background: #3498db;
-
-    color: #ffffff;
-
     text-decoration: none;
-
     font-size: 13px;
-
     font-weight: 600;
-
     transition: 0.2s;
 }
 

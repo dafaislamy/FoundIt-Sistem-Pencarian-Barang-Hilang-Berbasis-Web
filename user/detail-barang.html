@@ -1,231 +1,106 @@
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Detail Barang - FoundIt</title>
 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/bootstrap-override.css">
     <link rel="stylesheet" href="../css/user.css">
     <link rel="stylesheet" href="../css/detail-barang.css">
 </head>
-
 <body>
 
-    <!-- SIDEBAR -->
     <aside class="sidebar">
-
-        <div class="logo">
-            <span>Found</span>It
-        </div>
-
+        <div class="logo"><span>Found</span>It</div>
         <nav>
-
-            <a href="dashboard.html">
-                Dashboard
-            </a>
-
-            <a href="cari-barang.html">
-                Cari Barang
-            </a>
-
-            <a href="lapor-hilang.html">
-                Lapor Barang Hilang
-            </a>
-
-            <a href="lapor-ditemukan.html">
-                Lapor Barang Ditemukan
-            </a>
-
-            <a href="klaim.html">
-                Klaim Barang
-            </a>
-
-            <a href="status-klaim.html">
-                Status Klaim
-            </a>
-
-            <a href="riwayat-laporan.html">
-                Riwayat Laporan
-            </a>
-
-            <a href="profil.html">
-                Profil
-            </a>
-
+            <a href="dashboard.html">Dashboard</a>
+            <a href="cari-barang.html">Cari Barang</a>
+            <a href="lapor-hilang.html">Lapor Barang Hilang</a>
+            <a href="lapor-ditemukan.html">Lapor Barang Ditemukan</a>
+            <a href="klaim.html">Klaim Barang</a>
+            <a href="status-klaim.html">Status Klaim</a>
+            <a href="riwayat-laporan.html">Riwayat Laporan</a>
+            <a href="profil.html">Profil</a>
         </nav>
-
-        <a href="../login.html" class="logout">
-            Keluar
-        </a>
-
+        <a href="../login.html" class="logout">Keluar</a>
     </aside>
 
-
-    <!-- MAIN -->
     <main class="main-content">
 
-        <!-- TOPBAR -->
         <header class="topbar">
-
             <div>
-
-                <h1>
-                    Detail Barang
-                </h1>
-
-                <p>
-                    Informasi lengkap mengenai barang.
-                </p>
-
+                <h1>Detail Barang</h1>
+                <p>Informasi lengkap mengenai barang.</p>
             </div>
-
-
-            <!-- PROFIL USER -->
             <div class="user-profile">
-
-                <div
-                    class="profile-icon"
-                    id="profileInitial">
-                    U
-                </div>
-
+                <div class="profile-icon" id="profileInitial">U</div>
                 <div>
-
-                    <strong id="profileName">
-                        User
-                    </strong>
-
-                    <small>
-                        User
-                    </small>
-
+                    <strong id="profileName">User</strong>
+                    <small>User</small>
                 </div>
-
             </div>
-
         </header>
 
         <section class="detail-container">
+            <div class="row g-4">
+                <div class="col-lg-5">
+                    <div class="detail-image"></div>
+                </div>
 
+                <div class="col-lg-7">
+                    <div class="detail-content">
+                        <div class="detail-status">
+                            <span class="status-badge ditemukan">Ditemukan</span>
+                        </div>
 
-            <!-- GAMBAR -->
-            <div class="detail-image">
+                        <h2>Kunci Motor Yamaha</h2>
 
-                <!-- Area gambar sementara -->
+                        <p class="detail-description">
+                            Kunci motor ditemukan di area parkir kampus.
+                            Pemilik dapat mengajukan klaim dengan memberikan informasi yang sesuai.
+                        </p>
 
+                        <div class="row g-3 detail-info">
+                            <div class="col-md-6">
+                                <div class="detail-item">
+                                    <span>Kategori</span>
+                                    <strong>Aksesoris</strong>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="detail-item">
+                                    <span>Lokasi Ditemukan</span>
+                                    <strong>Area Parkir Kampus</strong>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="detail-item">
+                                    <span>Tanggal</span>
+                                    <strong>18 September 2026</strong>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="detail-item">
+                                    <span>Status</span>
+                                    <strong class="text-found">Ditemukan</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-3 flex-wrap detail-actions">
+                            <a href="cari-barang.html" class="btn-secondary">Kembali</a>
+                            <a href="klaim.html" class="btn-primary">Ajukan Klaim</a>
+                        </div>
+                    </div>
+                </div>
             </div>
-
-
-            <!-- INFORMASI -->
-            <div class="detail-content">
-
-                <div class="detail-status">
-                    <span class="status-badge ditemukan">
-                        Ditemukan
-                    </span>
-                </div>
-
-
-                <h2>
-                    Kunci Motor Yamaha
-                </h2>
-
-
-                <p class="detail-description">
-                    Kunci motor ditemukan di area parkir kampus.
-                    Pemilik dapat mengajukan klaim dengan
-                    memberikan informasi yang sesuai.
-                </p>
-
-
-                <!-- INFORMASI BARANG -->
-                <div class="detail-info">
-
-                    <div class="detail-item">
-
-                        <span>
-                            Kategori
-                        </span>
-
-                        <strong>
-                            Aksesoris
-                        </strong>
-
-                    </div>
-
-
-                    <div class="detail-item">
-
-                        <span>
-                            Lokasi Ditemukan
-                        </span>
-
-                        <strong>
-                            Area Parkir Kampus
-                        </strong>
-
-                    </div>
-
-
-                    <div class="detail-item">
-
-                        <span>
-                            Tanggal
-                        </span>
-
-                        <strong>
-                            18 September 2026
-                        </strong>
-
-                    </div>
-
-
-                    <div class="detail-item">
-
-                        <span>
-                            Status
-                        </span>
-
-                        <strong class="text-found">
-                            Ditemukan
-                        </strong>
-
-                    </div>
-
-                </div>
-
-
-                <!-- ACTION -->
-                <div class="detail-actions">
-
-                    <a
-                        href="cari-barang.html"
-                        class="btn-secondary">
-
-                        Kembali
-
-                    </a>
-
-                    <a
-                        href="klaim.html"
-                        class="btn-primary">
-
-                        Ajukan Klaim
-
-                    </a>
-
-                </div>
-
-            </div>
-
         </section>
 
     </main>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../js/detail-barang.js"></script>
-
 </body>
-
 </html>
