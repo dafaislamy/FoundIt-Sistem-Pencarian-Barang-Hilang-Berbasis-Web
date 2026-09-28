@@ -6,7 +6,14 @@ body {
     color: #2c3e50;
 }
 
-.login-container { min-height: 100vh; }
+.login-container.container-fluid {
+    width: 100%;
+    max-width: none;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    border-radius: 0;
+}
 
 /* DI KIRI */
 .login-info {
@@ -119,4 +126,34 @@ body {
     .login-info h1 { font-size: 35px; }
     .login-box { padding: 40px 25px; min-height: auto; }
     .role-selection { flex-direction: column; }
+}
+
+/* PERSYARATAN PASSWORD */
+.password-requirements {
+    margin-top: 12px;
+    font-size: 14px;
+    color: #777;
+}
+
+.password-requirements p {
+    margin-bottom: 7px;
+    transition: color 0.2s ease;
+    line-height: 1.5;
+}
+
+.password-requirements p.valid {
+    color: #00c853;
+    font-weight: 600;
+    text-shadow: 0 0 5px rgba(0, 200, 83, 0.25);
+}
+
+/* LINK REGISTRASI */
+.login-note a {
+    color: #3498db;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.login-note a:hover {
+    text-decoration: underline;
 }

@@ -19,7 +19,7 @@ a { text-decoration: none; }
     padding: 0 60px;
 }
 .logo {
-    font-size: 25px;
+    font-size: 32px !important;
     font-weight: bold;
     color: #2c3e50;
 }
@@ -325,4 +325,27 @@ a { text-decoration: none; }
 }
 .hero p {
     color: #eaf5fc !important;
+}
+
+/* ==================== GAMBAR BARANG ==================== */
+
+.gambar-barang {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    background-color: #f3f4f6;
+}
+
+.gambar-barang {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    background-color: #f3f4f6;
+}
+
+.gambar-barang img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
 }

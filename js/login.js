@@ -1,48 +1,94 @@
+// MEMILIH ROLE
 function pilihRole(role) {
-
     const roleInput = document.getElementById("role");
     const loginButton = document.querySelector(".btn-login");
-
     const roleCards = document.querySelectorAll(".role-card");
+    const daftarLink = document.getElementById("daftarLink");
+    const registerNote = document.getElementById("registerNote");
 
     roleInput.value = role;
 
+    // Menghapus status aktif dari semua kartu
     roleCards.forEach(card => {
         card.classList.remove("active");
     });
 
     if (role === "user") {
-
         roleCards[0].classList.add("active");
 
         loginButton.innerText = "Login sebagai User";
 
-    } else {
+        // User memiliki fitur registrasi
+        registerNote.style.display = "block";
+        daftarLink.innerText = "Daftar sebagai User";
+        daftarLink.href = "user/register.html";
 
+    } else {
         roleCards[1].classList.add("active");
 
         loginButton.innerText = "Login sebagai Admin";
 
+        // Admin tidak memiliki fitur registrasi
+        registerNote.style.display = "none";
     }
 }
 
 
-document
-    .getElementById("loginForm")
-    .addEventListener("submit", function (event) {
+// VALIDASI PASSWORD
+const passwordInput = document.getElementById("password");
 
-        event.preventDefault();
+passwordInput.addEventListener("input", function () {
+    const password = passwordInput.value;
 
-        const role = document.getElementById("role").value;
+    const lengthCheck = document.getElementById("lengthCheck");
+    const uppercaseCheck = document.getElementById("uppercaseCheck");
+    const symbolCheck = document.getElementById("symbolCheck");
 
-        if (role === "user") {
+    // Memeriksa persyaratan password
+    const hasLength = password.length >= 8;
+    const hasUppercase = /[A-Z]/.test(password);
+    const hasSymbol = /[^A-Za-z0-9]/.test(password);
 
-            window.location.href = "user/register.html";
+    // Mengubah warna indikator
+    lengthCheck.classList.toggle("valid", hasLength);
+    uppercaseCheck.classList.toggle("valid", hasUppercase);
+    symbolCheck.classList.toggle("valid", hasSymbol);
 
-        } else {
+    // Mengubah simbol indikator
+    lengthCheck.textContent =
+        (hasLength ? "✓ " : "✕ ") + "Minimal 8 karakter";
 
-            window.location.href = "admin/dashboard.html";
+    uppercaseCheck.textContent =
+        (hasUppercase ? "✓ " : "✕ ") +
+        "Mengandung huruf kapital (A-Z)";
 
-        }
+    symbolCheck.textContent =
+        (hasSymbol ? "✓ " : "✕ ") +
+        "Mengandung simbol (!@#$%^&*)";
+});
 
-    });
+
+// FORM LOGIN
+document.getElementById("loginForm").addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    const role = document.getElementById("role").value;
+    const password = passwordInput.value;
+
+    // Memeriksa persyaratan password
+    const hasLength = password.length >= 8;
+    const hasUppercase = /[A-Z]/.test(password);
+    const hasSymbol = /[^A-Za-z0-9]/.test(password);
+
+    if (!hasLength || !hasUppercase || !hasSymbol) {
+        alert("Password belum memenuhi semua persyaratan.");
+        return;
+    }
+
+    // Mengarahkan berdasarkan role
+    if (role === "user") {
+        window.location.href = "user/dashboard.html";
+    } else {
+        window.location.href = "admin/admin-dashboard.html";
+    }
+});
