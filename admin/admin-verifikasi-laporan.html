@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verifikasi Laporan - FoundIt Admin</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/bootstrap-override.css">
+    <link rel="stylesheet" href="../css/user.css">
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div class="logo"><span>Found</span>It</div>
+        <nav>
+            <a href="admin-dashboard.html">Dashboard</a>
+            <a href="admin-kelola-kategori.html">Kelola Kategori</a>
+            <a href="admin-kelola-laporan.html">Kelola Laporan Barang</a>
+            <a href="admin-kelola-user.html">Kelola User</a>
+            <a href="admin-ubah-status.html">Ubah Status Barang</a>
+            <a href="admin-verifikasi-klaim.html">Verifikasi Klaim</a>
+            <a href="admin-verifikasi-laporan.html" class="active">Verifikasi Laporan</a>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+
+        <header class="topbar">
+            <div>
+                <h1>Verifikasi Laporan Masuk</h1>
+                <p>Validasi laporan barang yang diajukan oleh pengguna sebelum ditayangkan ke publik.</p>
+            </div>
+            <div class="user-profile">
+                <div class="profile-icon bg-primary text-white">A</div>
+                <div>
+                    <strong>Administrator</strong>
+                    <small>Super Admin</small>
+                </div>
+            </div>
+        </header>
+
+        <section class="row g-4">
+
+            <!-- KARTU REVIEW LAPORAN 1 -->
+            <div class="col-lg-6">
+                <div class="card border-0 shadow-sm p-4 rounded-3 h-100">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="badge bg-danger">Laporan Kehilangan</span>
+                        <small class="text-muted">Diajukan 2 jam yang lalu</small>
+                    </div>
+
+                    <h4 class="mb-2">MacBook Air M2 2023</h4>
+                    <p class="text-muted small mb-3">Oleh: <strong>Sarah Amelia</strong> (NIM: 230102045 - FASILKOM)</p>
+
+                    <div class="bg-light p-3 rounded-2 mb-3">
+                        <div class="row g-2 small">
+                            <div class="col-6"><strong>Kategori:</strong> Elektronik</div>
+                            <div class="col-6"><strong>Lokasi Hilang:</strong> Kantin Utama</div>
+                            <div class="col-12 mt-2">
+                                <strong>Deskripsi / Ciri:</strong>
+                                <p class="mb-0 text-secondary">Warna Space Grey, ada goresan tipis di bagian bawah pojok kanan dan stiker GitHub.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-2 mt-auto">
+                        <button class="btn btn-outline-danger w-50">Tolak Laporan</button>
+                        <button class="btn btn-primary w-50">Setujui & Publikasikan</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- KARTU REVIEW LAPORAN 2 -->
+            <div class="col-lg-6">
+                <div class="card border-0 shadow-sm p-4 rounded-3 h-100">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="badge bg-warning text-dark">Laporan Ditemukan</span>
+                        <small class="text-muted">Diajukan 4 jam yang lalu</small>
+                    </div>
+
+                    <h4 class="mb-2">Kunci Motor Honda Vario</h4>
+                    <p class="text-muted small mb-3">Oleh: <strong>Budi Santoso</strong> (NIM: 220101002 - FT)</p>
+
+                    <div class="bg-light p-3 rounded-2 mb-3">
+                        <div class="row g-2 small">
+                            <div class="col-6"><strong>Kategori:</strong> Aksesoris</div>
+                            <div class="col-6"><strong>Lokasi Ditemukan:</strong> Parkiran Gedung C</div>
+                            <div class="col-12 mt-2">
+                                <strong>Deskripsi / Ciri:</strong>
+                                <p class="mb-0 text-secondary">Kunci kontak remote hitam dengan gantungan tali merah bertuliskan 'One Heart'.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-2 mt-auto">
+                        <button class="btn btn-outline-danger w-50">Tolak Laporan</button>
+                        <button class="btn btn-primary w-50">Setujui & Publikasikan</button>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

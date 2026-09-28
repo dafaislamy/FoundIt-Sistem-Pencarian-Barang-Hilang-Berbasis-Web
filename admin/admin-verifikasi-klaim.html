@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verifikasi Klaim - FoundIt Admin</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/bootstrap-override.css">
+    <link rel="stylesheet" href="../css/user.css">
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div class="logo"><span>Found</span>It</div>
+        <nav>
+            <a href="admin-dashboard.html">Dashboard</a>
+            <a href="admin-kelola-kategori.html">Kelola Kategori</a>
+            <a href="admin-kelola-laporan.html">Kelola Laporan Barang</a>
+            <a href="admin-kelola-user.html">Kelola User</a>
+            <a href="admin-ubah-status.html">Ubah Status Barang</a>
+            <a href="admin-verifikasi-klaim.html" class="active">Verifikasi Klaim</a>
+            <a href="admin-verifikasi-laporan.html">Verifikasi Laporan</a>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+
+        <header class="topbar">
+            <div>
+                <h1>Verifikasi Klaim Barang</h1>
+                <p>Cocokkan data pengajuan klaim pemilik dengan detail barang yang ditemukan.</p>
+            </div>
+            <div class="user-profile">
+                <div class="profile-icon bg-primary text-white">A</div>
+                <div>
+                    <strong>Administrator</strong>
+                    <small>Super Admin</small>
+                </div>
+            </div>
+        </header>
+
+        <!-- KOTAK BANDING KLAIM -->
+        <section class="card border-0 shadow-sm p-4 mb-4 rounded-3">
+            <div class="d-flex justify-content-between align-items-center border-bottom pb-3 mb-3">
+                <div>
+                    <span class="badge bg-primary mb-1">Tiket Klaim #KLM-092</span>
+                    <h3 class="mb-0">Klaim atas: Kunci Motor Yamaha</h3>
+                </div>
+                <div class="text-end">
+                    <span class="badge bg-warning text-dark">Menunggu Persetujuan Admin</span>
+                </div>
+            </div>
+
+            <div class="row g-4">
+                <!-- SISI KIRI: DATA BARANG ASLI TEMUAN -->
+                <div class="col-md-6 border-end">
+                    <h5 class="text-muted mb-3">Data Barang yang Ditemukan</h5>
+                    <div class="mb-2"><strong>Barang:</strong> Kunci Motor Yamaha</div>
+                    <div class="mb-2"><strong>Ditemukan di:</strong> Parkiran Barat Kampus</div>
+                    <div class="mb-2"><strong>Kategori:</strong> Aksesoris / Kendaraan</div>
+                    <div>
+                        <strong>Catatan Penemu:</strong>
+                        <p class="text-secondary small">Kunci kontak disertai remote alarm dan gantungan tali bertuliskan klub futsal.</p>
+                    </div>
+                </div>
+
+                <!-- SISI KANAN: BUKTI DARI PEMOHON KLAIM -->
+                <div class="col-md-6">
+                    <h5 class="text-primary mb-3">Bukti Pengajuan Pemohon</h5>
+                    <div class="mb-2"><strong>Nama Pengaju:</strong> Ahmad Fauzi (NIM: 220104112)</div>
+                    <div class="mb-2"><strong>Tanggal Kehilangan:</strong> 18 September 2026</div>
+                    <div class="mb-2"><strong>Ciri yang Disebutkan Pemohon:</strong></div>
+                    <p class="bg-light p-3 rounded-2 text-secondary small">
+                        "Kunci Yamaha Aerox, ada gantungan logo tim Futsal Elektro warna biru dan remote keyless dengan cover karet hitam."
+                    </p>
+                </div>
+            </div>
+
+            <div class="border-top pt-3 mt-4 d-flex justify-content-end gap-2">
+                <button class="btn btn-outline-danger px-4">Tolak Klaim</button>
+                <button class="btn btn-success px-4 text-white">Setujui & Hubungi Pemilik</button>
+            </div>
+        </section>
+
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
