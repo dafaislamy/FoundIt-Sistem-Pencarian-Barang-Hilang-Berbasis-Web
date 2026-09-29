@@ -15,13 +15,11 @@
 
     <!-- SIDEBAR -->
     <aside class="sidebar">
-        <!-- Logo -->
         <div class="logo"><span>Found</span>It</div>
 
-        <!-- Menu navigasi -->
         <nav>
             <a href="dashboard.html">Dashboard</a>
-            <a href="cari-barang.html">Cari Barang</a>
+            <a href="cari-barang.html" class="active">Cari Barang</a>
             <a href="lapor-hilang.html">Lapor Barang Hilang</a>
             <a href="lapor-ditemukan.html">Lapor Barang Ditemukan</a>
             <a href="klaim.html">Klaim Barang</a>
@@ -30,7 +28,6 @@
             <a href="profil.html">Profil</a>
         </nav>
 
-        <!-- Tombol keluar -->
         <a href="../login.html" class="logout">Keluar</a>
     </aside>
 
@@ -44,7 +41,7 @@
                 <p>Informasi lengkap mengenai barang.</p>
             </div>
 
-            <!-- Profil user -->
+            <!-- PROFIL USER -->
             <div class="user-profile">
                 <div class="profile-icon" id="profileInitial">U</div>
                 <div>
@@ -55,76 +52,104 @@
         </header>
 
         <!-- DETAIL BARANG -->
-        <section class="detail-container">
+        <section class="detail-container" id="detailContainer">
+
             <div class="row g-4">
 
-                <!-- Gambar barang -->
+                <!-- GAMBAR BARANG -->
                 <div class="col-lg-5">
-                    <div class="detail-image"></div>
+                    <div class="detail-image">
+                        <img
+                            src=""
+                            alt="Gambar barang"
+                            id="detailImage"
+                        >
+                    </div>
                 </div>
 
-                <!-- Informasi barang -->
+                <!-- INFORMASI BARANG -->
                 <div class="col-lg-7">
                     <div class="detail-content">
 
-                        <!-- Status barang -->
+                        <!-- STATUS BARANG -->
                         <div class="detail-status">
-                            <span class="status-badge ditemukan">Ditemukan</span>
+                            <span
+                                class="status-badge"
+                                id="detailStatus"
+                            ></span>
                         </div>
 
-                        <!-- Nama barang -->
-                        <h2>Kunci Motor Yamaha</h2>
+                        <!-- NAMA BARANG -->
+                        <h2 id="detailName"></h2>
 
-                        <!-- Deskripsi barang -->
-                        <p class="detail-description">
-                            Kunci motor ditemukan di area parkir kampus.
-                            Pemilik dapat mengajukan klaim dengan memberikan informasi yang sesuai.
-                        </p>
+                        <!-- DESKRIPSI BARANG -->
+                        <p
+                            class="detail-description"
+                            id="detailDescription"
+                        ></p>
 
-                        <!-- Informasi lengkap barang -->
+                        <!-- INFORMASI LENGKAP -->
                         <div class="row g-3 detail-info">
 
-                            <!-- Kategori barang -->
+                            <!-- KATEGORI -->
                             <div class="col-md-6">
                                 <div class="detail-item">
                                     <span>Kategori</span>
-                                    <strong>Aksesoris</strong>
+                                    <strong id="detailCategory"></strong>
                                 </div>
                             </div>
 
-                            <!-- Lokasi barang ditemukan -->
+                            <!-- LOKASI -->
                             <div class="col-md-6">
                                 <div class="detail-item">
-                                    <span>Lokasi Ditemukan</span>
-                                    <strong>Area Parkir Kampus</strong>
+                                    <span>Lokasi</span>
+                                    <strong id="detailLocation"></strong>
                                 </div>
                             </div>
 
-                            <!-- Tanggal barang dilaporkan -->
+                            <!-- TANGGAL -->
                             <div class="col-md-6">
                                 <div class="detail-item">
                                     <span>Tanggal</span>
-                                    <strong>18 September 2026</strong>
+                                    <strong id="detailDate"></strong>
                                 </div>
                             </div>
 
-                            <!-- Status barang -->
+                            <!-- STATUS -->
                             <div class="col-md-6">
                                 <div class="detail-item">
                                     <span>Status</span>
-                                    <strong class="text-found">Ditemukan</strong>
+                                    <strong id="detailStatusText"></strong>
                                 </div>
                             </div>
+
                         </div>
 
-                        <!-- Tombol kembali dan ajukan klaim -->
+                        <!-- TOMBOL AKSI -->
                         <div class="d-flex gap-3 flex-wrap detail-actions">
-                            <a href="cari-barang.html" class="btn-secondary">Kembali</a>
-                            <a href="klaim.html" class="btn-primary">Ajukan Klaim</a>
+
+                            <a
+                                href="cari-barang.html"
+                                class="btn-secondary"
+                            >
+                                Kembali
+                            </a>
+
+                            <a
+                                href="klaim.html"
+                                class="btn-primary"
+                                id="claimButton"
+                            >
+                                Ajukan Klaim
+                            </a>
+
                         </div>
+
                     </div>
                 </div>
+
             </div>
+
         </section>
 
     </main>
@@ -132,5 +157,6 @@
     <!-- JAVASCRIPT -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../js/detail-barang.js"></script>
+
 </body>
 </html>

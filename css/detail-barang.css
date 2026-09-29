@@ -6,18 +6,37 @@
     max-width: 1100px;
 }
 
+/* GAMBAR BARANG */
 .detail-image {
     width: 100%;
     height: 400px;
     background: #f3f6f8;
     border: 1px solid #e5eaee;
     border-radius: 14px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.detail-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+    padding: 10px;
+    display: block;
 }
 
 /* KONTEN DAN INFORMASI BARANG */
-.detail-content { padding: 5px 0; }
+.detail-content {
+    padding: 5px 0;
+}
 
-.detail-status { margin-bottom: 12px; }
+/* STATUS BARANG */
+.detail-status {
+    margin-bottom: 12px;
+}
 
 .status-badge {
     display: inline-block;
@@ -27,16 +46,24 @@
     font-weight: 700;
 }
 
-.status-badge.ditemukan { background: #eafaf1; color: #27ae60; }
+.status-badge.ditemukan {
+    background: #eafaf1;
+    color: #27ae60;
+}
 
-.status-badge.hilang { background: #fdecea; color: #e74c3c; }
+.status-badge.hilang {
+    background: #fdecea;
+    color: #e74c3c;
+}
 
+/* NAMA BARANG */
 .detail-content h2 {
     margin: 0 0 15px;
     color: #2c3e50;
     font-size: 28px;
 }
 
+/* DESKRIPSI BARANG */
 .detail-description {
     margin: 0 0 25px;
     color: #6c7a89;
@@ -44,7 +71,10 @@
     line-height: 1.7;
 }
 
-.detail-info { margin-bottom: 30px; }
+/* INFORMASI BARANG */
+.detail-info {
+    margin-bottom: 30px;
+}
 
 .detail-item {
     background: #f7f9fc;
@@ -60,9 +90,18 @@
     margin-bottom: 6px;
 }
 
-.detail-item strong { color: #2c3e50; font-size: 14px; }
+.detail-item strong {
+    color: #2c3e50;
+    font-size: 14px;
+}
 
-.text-found { color: #27ae60 !important; }
+.text-found {
+    color: #27ae60 !important;
+}
+
+.text-lost {
+    color: #e74c3c !important;
+}
 
 /* TOMBOL AKSI */
 .btn-primary,
@@ -73,25 +112,57 @@
     font-size: 14px;
     font-weight: 600;
     text-align: center;
+    display: inline-block;
+    border: none;
 }
 
-.btn-primary { background: #3498db !important; color: white !important; }
+/* TOMBOL KLAIM */
+.btn-primary {
+    background: #3498db !important;
+    color: white !important;
+}
 
-.btn-primary:hover { background: #2980b9 !important; color: white !important; }
+.btn-primary:hover {
+    background: #2980b9 !important;
+    color: white !important;
+}
 
-.btn-secondary { background: #ecf0f1 !important; color: #2c3e50 !important; }
+/* TOMBOL KEMBALI */
+.btn-secondary {
+    background: #ecf0f1 !important;
+    color: #2c3e50 !important;
+}
 
-.btn-secondary:hover { background: #dfe6e9 !important; color: #2c3e50 !important; }
+.btn-secondary:hover {
+    background: #dfe6e9 !important;
+    color: #2c3e50 !important;
+}
 
 /* TAMPILAN RESPONSIF */
 @media (max-width: 900px) {
-
-    .detail-image { height: 300px; }
-
+    .detail-image {
+        height: 300px;
+    }
 }
 
 @media (max-width: 600px) {
+    .detail-container {
+        padding: 20px;
+    }
 
-    .detail-container { padding: 20px; }
+    .detail-image {
+        height: 250px;
+    }
 
+    .detail-content h2 {
+        font-size: 23px;
+    }
+
+    .detail-actions {
+        gap: 10px !important;
+    }
+
+    .detail-actions a {
+        flex: 1;
+    }
 }
