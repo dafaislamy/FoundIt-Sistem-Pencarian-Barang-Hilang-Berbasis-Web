@@ -18,7 +18,7 @@ function pilihRole(role) {
 
         loginButton.innerText = "Login sebagai User";
 
-        // User memiliki fitur registrasi
+        // Menampilkan tautan registrasi untuk user
         registerNote.style.display = "block";
         daftarLink.innerText = "Daftar sebagai User";
         daftarLink.href = "user/register.html";
@@ -28,7 +28,7 @@ function pilihRole(role) {
 
         loginButton.innerText = "Login sebagai Admin";
 
-        // Admin tidak memiliki fitur registrasi
+        // Menyembunyikan tautan registrasi untuk admin
         registerNote.style.display = "none";
     }
 }
@@ -49,12 +49,11 @@ passwordInput.addEventListener("input", function () {
     const hasUppercase = /[A-Z]/.test(password);
     const hasSymbol = /[^A-Za-z0-9]/.test(password);
 
-    // Mengubah warna indikator
+    // Memperbarui tampilan indikator password
     lengthCheck.classList.toggle("valid", hasLength);
     uppercaseCheck.classList.toggle("valid", hasUppercase);
     symbolCheck.classList.toggle("valid", hasSymbol);
 
-    // Mengubah simbol indikator
     lengthCheck.textContent =
         (hasLength ? "✓ " : "✕ ") + "Minimal 8 karakter";
 
@@ -75,7 +74,7 @@ document.getElementById("loginForm").addEventListener("submit", function (event)
     const role = document.getElementById("role").value;
     const password = passwordInput.value;
 
-    // Memeriksa persyaratan password
+    // Memeriksa kembali persyaratan password
     const hasLength = password.length >= 8;
     const hasUppercase = /[A-Z]/.test(password);
     const hasSymbol = /[^A-Za-z0-9]/.test(password);
@@ -85,7 +84,7 @@ document.getElementById("loginForm").addEventListener("submit", function (event)
         return;
     }
 
-    // Mengarahkan berdasarkan role
+    // Mengarahkan pengguna sesuai role yang dipilih
     if (role === "user") {
         window.location.href = "user/dashboard.html";
     } else {

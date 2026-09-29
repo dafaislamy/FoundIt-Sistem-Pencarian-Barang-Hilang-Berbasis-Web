@@ -1,4 +1,9 @@
-* { box-sizing: border-box; margin: 0; padding: 0; }
+/* PENGATURAN DASAR */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 
 body {
     font-family: 'Segoe UI', Tahoma, sans-serif;
@@ -6,9 +11,12 @@ body {
     color: #2c3e50;
 }
 
-.register-container { min-height: 100vh; }
+/* CONTAINER REGISTRASI */
+.register-container {
+    min-height: 100vh;
+}
 
-/* DI KIRI */
+/* BAGIAN INFORMASI */
 .register-info {
     background: linear-gradient(135deg, #2c3e50, #3498db);
     color: white;
@@ -17,18 +25,48 @@ body {
     flex-direction: column;
     justify-content: center;
 }
-.logo { font-size: 30px; font-weight: bold; margin-bottom: 60px; }
-.logo span { color: #a9e7ff; }
-.register-info h1 { font-size: 45px; line-height: 1.2; margin-bottom: 20px; }
+
+.logo {
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 60px;
+}
+
+.logo span {
+    color: #a9e7ff;
+}
+
+.register-info h1 {
+    font-size: 45px;
+    line-height: 1.2;
+    margin-bottom: 20px;
+}
+
 .register-info > p {
     color: #eaf5fc;
     line-height: 1.7;
     max-width: 400px;
     margin-bottom: 45px;
 }
-.steps { display: flex; flex-direction: column; gap: 25px; }
-.step { display: flex; align-items: center; gap: 15px; opacity: 0.6; }
-.step.active { opacity: 1; }
+
+/* LANGKAH REGISTRASI */
+.steps {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.step {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    opacity: 0.6;
+}
+
+.step.active {
+    opacity: 1;
+}
+
 .step > span {
     width: 35px;
     height: 35px;
@@ -40,19 +78,40 @@ body {
     justify-content: center;
     font-weight: bold;
 }
-.step strong { display: block; font-size: 14px; margin-bottom: 3px; }
-.step small { color: #dceefa; font-size: 12px; }
 
-/* DI KANAN */
+.step strong {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 3px;
+}
+
+.step small {
+    color: #dceefa;
+    font-size: 12px;
+}
+
+/* FORM REGISTRASI */
 .register-box {
     background-color: white;
     padding: 50px 70px;
     overflow-y: auto;
 }
-.register-header { margin-bottom: 25px; }
-.register-header h2 { font-size: 28px; margin-bottom: 7px; }
-.register-header p { color: #777; font-size: 14px; }
 
+.register-header {
+    margin-bottom: 25px;
+}
+
+.register-header h2 {
+    font-size: 28px;
+    margin-bottom: 7px;
+}
+
+.register-header p {
+    color: #777;
+    font-size: 14px;
+}
+
+/* FOTO PROFIL */
 .photo-section {
     display: flex;
     align-items: center;
@@ -61,6 +120,7 @@ body {
     padding-bottom: 20px;
     border-bottom: 1px solid #eeeeee;
 }
+
 .photo-preview {
     width: 65px;
     height: 65px;
@@ -71,13 +131,18 @@ body {
     justify-content: center;
     font-size: 28px;
 }
+
 .photo-section label {
     display: block;
     font-size: 13px;
     font-weight: 600;
     margin-bottom: 7px;
 }
-.photo-section input { font-size: 12px; }
+
+.photo-section input {
+    font-size: 12px;
+}
+
 .photo-section small {
     display: block;
     color: #999;
@@ -85,14 +150,18 @@ body {
     margin-top: 5px;
 }
 
-/* FORM */
-.form-group { margin-bottom: 18px; }
+/* INPUT FORM */
+.form-group {
+    margin-bottom: 18px;
+}
+
 .form-group label {
     display: block;
     font-size: 13px;
     font-weight: 600;
     margin-bottom: 7px;
 }
+
 .form-group input,
 .form-group select {
     width: 100%;
@@ -104,9 +173,14 @@ body {
     background-color: white;
     box-sizing: border-box;
 }
-.form-group input:focus,
-.form-group select:focus { outline: none; border-color: #3498db; }
 
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #3498db;
+}
+
+/* TOMBOL DAFTAR */
 .btn-register {
     width: 100%;
     padding: 13px;
@@ -120,17 +194,40 @@ body {
     cursor: pointer;
     transition: 0.2s;
 }
-.btn-register:hover { background-color: #2980b9 !important; }
 
-/* RESPONSIVE */
-@media (max-width: 900px) {
-    .register-info { padding: 40px; }
-    .register-box { padding: 40px; }
-    .register-info h1 { font-size: 35px; }
+.btn-register:hover {
+    background-color: #2980b9 !important;
 }
+
+/* TAMPILAN RESPONSIF */
+@media (max-width: 900px) {
+    .register-info {
+        padding: 40px;
+    }
+
+    .register-box {
+        padding: 40px;
+    }
+
+    .register-info h1 {
+        font-size: 35px;
+    }
+}
+
 @media (max-width: 700px) {
-    .register-info { padding: 35px 25px; }
-    .register-info h1 { font-size: 32px; }
-    .register-info > p { margin-bottom: 25px; }
-    .register-box { padding: 35px 25px; }
+    .register-info {
+        padding: 35px 25px;
+    }
+
+    .register-info h1 {
+        font-size: 32px;
+    }
+
+    .register-info > p {
+        margin-bottom: 25px;
+    }
+
+    .register-box {
+        padding: 35px 25px;
+    }
 }

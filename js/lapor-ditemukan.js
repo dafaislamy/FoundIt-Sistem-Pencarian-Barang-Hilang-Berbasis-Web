@@ -1,3 +1,4 @@
+/* MENGAMBIL DATA PENGGUNA */
 const dataUser = JSON.parse(
     localStorage.getItem("dataUser")
 );
@@ -13,14 +14,14 @@ if (dataUser) {
 
 }
 
-// FORM LAPORAN
+// FORM LAPORAN BARANG DITEMUKAN
 document
     .getElementById("laporDitemukanForm")
     .addEventListener("submit", function (event) {
 
         event.preventDefault();
 
-
+        // MENYIMPAN DATA LAPORAN BARU
         const laporanBaru = {
 
             id: Date.now(),
@@ -46,26 +47,23 @@ document
 
         };
 
-
+        // MENGAMBIL DAFTAR LAPORAN YANG TERSIMPAN
         let daftarLaporan =
             JSON.parse(
                 localStorage.getItem("daftarLaporan")
             ) || [];
 
-
         daftarLaporan.push(laporanBaru);
 
-
+        // MENYIMPAN DAFTAR LAPORAN KE LOCAL STORAGE
         localStorage.setItem(
             "daftarLaporan",
             JSON.stringify(daftarLaporan)
         );
 
-
         alert(
             "Laporan barang ditemukan berhasil dikirim!"
         );
-
 
         window.location.href =
             "riwayat-laporan.html";

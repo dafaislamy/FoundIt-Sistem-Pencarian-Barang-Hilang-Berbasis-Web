@@ -1,3 +1,4 @@
+/* CONTAINER FORM LAPORAN */
 .report-container {
     max-width: 850px;
 
@@ -11,8 +12,7 @@
         0 4px 18px rgba(44, 62, 80, 0.06);
 }
 
-
-/* HEADER */
+/* JUDUL DAN DESKRIPSI */
 .report-header {
     margin-bottom: 28px;
 
@@ -37,8 +37,7 @@
     font-size: 14px;
 }
 
-
-/* FORM */
+/* FORM LAPORAN */
 .form-group {
     margin-bottom: 20px;
 }
@@ -54,7 +53,6 @@
 
     font-weight: 600;
 }
-
 
 .form-group input,
 .form-group select,
@@ -80,14 +78,12 @@
     transition: 0.2s;
 }
 
-
 .form-group input,
 .form-group select {
     height: 46px;
 
     padding: 0 14px;
 }
-
 
 .form-group textarea {
     padding: 13px 14px;
@@ -97,7 +93,6 @@
     min-height: 120px;
 }
 
-
 .form-group input:focus,
 .form-group select:focus,
 .form-group textarea:focus {
@@ -106,8 +101,6 @@
     background: #ffffff;
 }
 
-
-/* FILE */
 .form-group input[type="file"] {
     height: auto;
 
@@ -115,7 +108,6 @@
 
     cursor: pointer;
 }
-
 
 .form-hint {
     display: block;
@@ -127,9 +119,7 @@
     font-size: 12px;
 }
 
-
-/* BUTTON */
-
+/* TOMBOL AKSI */
 .form-actions {
     display: flex;
 
@@ -143,7 +133,6 @@
 
     border-top: 1px solid #edf0f2;
 }
-
 
 .btn-cancel,
 .btn-submit {
@@ -164,18 +153,15 @@
     transition: 0.2s;
 }
 
-
 .btn-cancel {
     background: #ecf0f1;
 
     color: #2c3e50;
 }
 
-
 .btn-cancel:hover {
     background: #dfe6e9;
 }
-
 
 .btn-submit {
     border: none;
@@ -185,13 +171,11 @@
     color: #ffffff;
 }
 
-
 .btn-submit:hover {
     background: #2980b9;
 }
 
-
-/* RESPONSIVE */
+/* TAMPILAN RESPONSIF */
 @media (max-width: 600px) {
 
     .report-container {

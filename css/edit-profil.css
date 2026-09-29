@@ -1,3 +1,4 @@
+/* KARTU EDIT PROFIL */
 .edit-profile-card {
     max-width: 900px;
     background: white;
@@ -5,6 +6,7 @@
     border-radius: 16px;
 }
 
+/* JUDUL EDIT PROFIL */
 .edit-header {
     margin-bottom: 30px;
 }
@@ -19,6 +21,7 @@
     color: #7f8c8d;
 }
 
+/* FORM EDIT PROFIL */
 .form-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -50,6 +53,7 @@
     border-color: #3498db;
 }
 
+/* TOMBOL AKSI */
 .form-actions {
     display: flex;
     justify-content: flex-end;
@@ -78,6 +82,7 @@
     color: white !important;
 }
 
+/* TAMPILAN RESPONSIF */
 @media (max-width: 768px) {
 
     .form-row {

@@ -1,7 +1,9 @@
+/* CONTAINER HALAMAN PROFIL */
 .profile-page {
     max-width: 1100px;
 }
 
+/* HEADER PROFIL */
 .profile-header {
     background: white;
     padding: 30px;
@@ -35,6 +37,7 @@
     color: #7f8c8d;
 }
 
+/* KARTU INFORMASI PROFIL */
 .profile-card {
     background: white;
     padding: 30px;
@@ -67,6 +70,7 @@
     font-weight: 600;
 }
 
+/* GRID INFORMASI PROFIL */
 .profile-info-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -91,8 +95,8 @@
     font-size: 15px;
 }
 
+/* TAMPILAN RESPONSIF */
 @media (max-width: 768px) {
-
     .profile-info-grid {
         grid-template-columns: 1fr;
     }
@@ -102,5 +106,4 @@
         flex-direction: column;
         gap: 15px;
     }
-
 }

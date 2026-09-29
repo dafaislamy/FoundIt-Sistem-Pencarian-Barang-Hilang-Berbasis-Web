@@ -1,7 +1,9 @@
+/* DATA USER */
 const dataUser = JSON.parse(
     localStorage.getItem("dataUser")
 );
 
+// MENAMPILKAN NAMA DAN INISIAL PENGGUNA
 if (dataUser) {
 
     document.getElementById("profileName").textContent =

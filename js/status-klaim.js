@@ -1,3 +1,4 @@
+/* MENGAMBIL DATA PENGGUNA */
 const dataUser = JSON.parse(
     localStorage.getItem("dataUser")
 );
@@ -13,12 +14,11 @@ if (dataUser) {
 
 }
 
-// AMBIL DATA KLAIM
+// MENGAMBIL DATA KLAIM
 const daftarKlaim =
     JSON.parse(
         localStorage.getItem("daftarKlaim")
     ) || [];
-
 
 const klaimList =
     document.getElementById("klaimList");
@@ -29,12 +29,12 @@ const emptyClaim =
 const jumlahKlaim =
     document.getElementById("jumlahKlaim");
 
-// JUMLAH KLAIM
+// MENAMPILKAN JUMLAH KLAIM
 jumlahKlaim.textContent =
     daftarKlaim.length +
     " pengajuan klaim";
 
-// CEK DATA
+// MEMERIKSA DATA KLAIM
 if (daftarKlaim.length === 0) {
 
     emptyClaim.style.display = "block";
@@ -45,11 +45,7 @@ if (daftarKlaim.length === 0) {
 
 }
 
-
-// =========================
-// TAMPILKAN DATA
-// =========================
-
+// MENAMPILKAN DAFTAR KLAIM
 daftarKlaim
     .slice()
     .reverse()
@@ -61,7 +57,7 @@ daftarKlaim
         card.className =
             "claim-card";
 
-
+        // MEMBUAT KARTU DETAIL KLAIM
         card.innerHTML = `
 
             <div class="claim-top">
@@ -145,7 +141,7 @@ daftarKlaim
 
         `;
 
-
+        // MENAMBAHKAN KARTU KE DAFTAR KLAIM
         klaimList.appendChild(card);
 
     });

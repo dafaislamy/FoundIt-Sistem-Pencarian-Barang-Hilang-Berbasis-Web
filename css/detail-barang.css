@@ -1,9 +1,11 @@
+/* CONTAINER DETAIL BARANG */
 .detail-container {
     background: white;
     border-radius: 18px;
     padding: 30px;
     max-width: 1100px;
 }
+
 .detail-image {
     width: 100%;
     height: 400px;
@@ -12,9 +14,11 @@
     border-radius: 14px;
 }
 
-/* CONTENT */
+/* KONTEN DAN INFORMASI BARANG */
 .detail-content { padding: 5px 0; }
+
 .detail-status { margin-bottom: 12px; }
+
 .status-badge {
     display: inline-block;
     padding: 6px 12px;
@@ -22,36 +26,45 @@
     font-size: 12px;
     font-weight: 700;
 }
+
 .status-badge.ditemukan { background: #eafaf1; color: #27ae60; }
+
 .status-badge.hilang { background: #fdecea; color: #e74c3c; }
+
 .detail-content h2 {
     margin: 0 0 15px;
     color: #2c3e50;
     font-size: 28px;
 }
+
 .detail-description {
     margin: 0 0 25px;
     color: #6c7a89;
     font-size: 14px;
     line-height: 1.7;
 }
+
 .detail-info { margin-bottom: 30px; }
+
 .detail-item {
     background: #f7f9fc;
     padding: 15px;
     border-radius: 10px;
     height: 100%;
 }
+
 .detail-item span {
     display: block;
     color: #8a959e;
     font-size: 12px;
     margin-bottom: 6px;
 }
+
 .detail-item strong { color: #2c3e50; font-size: 14px; }
+
 .text-found { color: #27ae60 !important; }
 
-/* BUTTON */
+/* TOMBOL AKSI */
 .btn-primary,
 .btn-secondary {
     padding: 12px 20px;
@@ -61,14 +74,24 @@
     font-weight: 600;
     text-align: center;
 }
+
 .btn-primary { background: #3498db !important; color: white !important; }
+
 .btn-primary:hover { background: #2980b9 !important; color: white !important; }
+
 .btn-secondary { background: #ecf0f1 !important; color: #2c3e50 !important; }
+
 .btn-secondary:hover { background: #dfe6e9 !important; color: #2c3e50 !important; }
 
+/* TAMPILAN RESPONSIF */
 @media (max-width: 900px) {
+
     .detail-image { height: 300px; }
+
 }
+
 @media (max-width: 600px) {
+
     .detail-container { padding: 20px; }
+
 }

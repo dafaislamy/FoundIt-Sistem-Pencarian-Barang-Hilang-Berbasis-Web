@@ -1,3 +1,4 @@
+/* MENGAMBIL DATA PENGGUNA */
 const dataUser = JSON.parse(
     localStorage.getItem("dataUser")
 );
@@ -13,12 +14,11 @@ if (dataUser) {
 
 }
 
-// AMBIL DATA LAPORAN
+// MENGAMBIL DATA LAPORAN
 const daftarLaporan =
     JSON.parse(
         localStorage.getItem("daftarLaporan")
     ) || [];
-
 
 const riwayatList =
     document.getElementById("riwayatList");
@@ -29,12 +29,12 @@ const emptyHistory =
 const jumlahLaporan =
     document.getElementById("jumlahLaporan");
 
-// TAMPILKAN JUMLAH
+// MENAMPILKAN JUMLAH LAPORAN
 jumlahLaporan.textContent =
     daftarLaporan.length +
     " laporan ditemukan";
 
-// JIKA BELUM ADA LAPORAN
+// MENAMPILKAN PESAN JIKA BELUM ADA LAPORAN
 if (daftarLaporan.length === 0) {
 
     emptyHistory.style.display = "block";
@@ -45,7 +45,7 @@ if (daftarLaporan.length === 0) {
 
 }
 
-// TAMPILKAN LAPORAN
+// MENAMPILKAN RIWAYAT LAPORAN
 daftarLaporan
     .slice()
     .reverse()
@@ -57,7 +57,7 @@ daftarLaporan
         card.className =
             "history-card";
 
-
+        // MEMBUAT KARTU BERISI DETAIL LAPORAN
         card.innerHTML = `
 
             <div class="history-top">
@@ -125,7 +125,7 @@ daftarLaporan
 
         `;
 
-
+        // MENAMBAHKAN KARTU KE DAFTAR RIWAYAT
         riwayatList.appendChild(card);
 
     });

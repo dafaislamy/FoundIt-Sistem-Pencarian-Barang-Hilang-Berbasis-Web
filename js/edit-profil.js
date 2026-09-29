@@ -1,7 +1,9 @@
+/* MENGAMBIL DATA PENGGUNA */
 const dataUser = JSON.parse(
     localStorage.getItem("dataUser")
 );
 
+// MENGISI FORM DENGAN DATA PROFIL
 if (dataUser) {
 
     document.getElementById("nama").value =
@@ -26,6 +28,7 @@ if (dataUser) {
         dataUser.nohp;
 }
 
+// MENYIMPAN PERUBAHAN PROFIL
 document
     .getElementById("editProfileForm")
     .addEventListener("submit", function (event) {
@@ -54,6 +57,7 @@ document
                 document.getElementById("nohp").value
         };
 
+        // MEMPERBARUI DATA DI LOCAL STORAGE
         localStorage.setItem(
             "dataUser",
             JSON.stringify(dataBaru)

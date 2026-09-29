@@ -1,7 +1,9 @@
+/* MENGAMBIL DATA PENGGUNA */
 const dataUser = JSON.parse(
     localStorage.getItem("dataUser")
 );
 
+// MENAMPILKAN PROFIL USER
 if (dataUser) {
 
     document.getElementById("profileName").textContent =
@@ -12,14 +14,14 @@ if (dataUser) {
 
 }
 
-
+// FORM LAPORAN BARANG HILANG
 document
     .getElementById("laporHilangForm")
     .addEventListener("submit", function (event) {
 
         event.preventDefault();
 
-
+        // MENYIMPAN DATA LAPORAN BARU
         const laporanBaru = {
 
             id: Date.now(),
@@ -45,26 +47,23 @@ document
 
         };
 
-
+        // MENGAMBIL DAFTAR LAPORAN
         let daftarLaporan =
             JSON.parse(
                 localStorage.getItem("daftarLaporan")
             ) || [];
 
-
         daftarLaporan.push(laporanBaru);
 
-
+        // MENYIMPAN LAPORAN KE LOCAL STORAGE
         localStorage.setItem(
             "daftarLaporan",
             JSON.stringify(daftarLaporan)
         );
 
-
         alert(
             "Laporan barang hilang berhasil dikirim!"
         );
-
 
         window.location.href =
             "riwayat-laporan.html";

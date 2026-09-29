@@ -1,57 +1,42 @@
+/* CONTAINER FORM LAPORAN */
 .report-container {
     max-width: 850px;
-
     background: #ffffff;
-
     border-radius: 18px;
-
     padding: 30px;
-
     box-shadow:
         0 4px 18px rgba(44, 62, 80, 0.06);
 }
 
-
-/* HEADER */
+/* JUDUL DAN DESKRIPSI */
 .report-header {
     margin-bottom: 28px;
-
     padding-bottom: 20px;
-
     border-bottom: 1px solid #edf0f2;
 }
 
 .report-header h2 {
     margin: 0 0 7px;
-
     color: #2c3e50;
-
     font-size: 22px;
 }
 
 .report-header p {
     margin: 0;
-
     color: #7f8c8d;
-
     font-size: 14px;
 }
 
-
-/* FORM */
+/* FORM LAPORAN */
 .form-group {
     margin-bottom: 20px;
 }
 
 .form-group label {
     display: block;
-
     margin-bottom: 8px;
-
     color: #2c3e50;
-
     font-size: 14px;
-
     font-weight: 600;
 }
 
@@ -59,38 +44,26 @@
 .form-group select,
 .form-group textarea {
     width: 100%;
-
     box-sizing: border-box;
-
     border: 1px solid #dfe6e9;
-
     border-radius: 10px;
-
     background: #f8fafc;
-
     color: #2c3e50;
-
     font-family: inherit;
-
     font-size: 14px;
-
     outline: none;
-
     transition: 0.2s;
 }
 
 .form-group input,
 .form-group select {
     height: 46px;
-
     padding: 0 14px;
 }
 
 .form-group textarea {
     padding: 13px 14px;
-
     resize: vertical;
-
     min-height: 120px;
 }
 
@@ -98,68 +71,46 @@
 .form-group select:focus,
 .form-group textarea:focus {
     border-color: #3498db;
-
     background: #ffffff;
 }
 
-
-/* FILE */
 .form-group input[type="file"] {
     height: auto;
-
     padding: 11px 14px;
-
     cursor: pointer;
 }
 
 .form-hint {
     display: block;
-
     margin-top: 7px;
-
     color: #95a5a6;
-
     font-size: 12px;
 }
 
-
-/* BUTTON */
+/* TOMBOL AKSI */
 .form-actions {
     display: flex;
-
     justify-content: flex-end;
-
     gap: 12px;
-
     margin-top: 30px;
-
     padding-top: 20px;
-
     border-top: 1px solid #edf0f2;
 }
 
 .btn-cancel,
 .btn-submit {
     padding: 12px 22px;
-
     border-radius: 9px;
-
     font-family: inherit;
-
     font-size: 14px;
-
     font-weight: 600;
-
     text-decoration: none;
-
     cursor: pointer;
-
     transition: 0.2s;
 }
 
 .btn-cancel {
     background: #ecf0f1;
-
     color: #2c3e50;
 }
 
@@ -169,9 +120,7 @@
 
 .btn-submit {
     border: none;
-
     background: #3498db;
-
     color: #ffffff;
 }
 
@@ -179,8 +128,7 @@
     background: #2980b9;
 }
 
-
-/* RESPONSIVE */
+/* TAMPILAN RESPONSIF */
 @media (max-width: 600px) {
 
     .report-container {
@@ -194,9 +142,7 @@
     .btn-cancel,
     .btn-submit {
         width: 100%;
-
         box-sizing: border-box;
-
         text-align: center;
     }
 

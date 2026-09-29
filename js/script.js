@@ -1,11 +1,13 @@
 document.addEventListener("DOMContentLoaded", function() {
 
+    /* MENGAMBIL ELEMEN FILTER */
     const searchInput = document.querySelector(".filter input[type='text']");
     const selectStatus = document.querySelectorAll(".filter select")[0];    
     const selectKategori = document.querySelectorAll(".filter select")[1];  
     const searchButton = document.querySelector(".filter button");
     const cols = document.querySelectorAll(".grid-barang .col"); 
 
+    // FUNGSI PENCARIAN DAN FILTER BARANG
     function filterBarang() {
         const keyword = searchInput.value.toLowerCase();
         const statusValue = selectStatus.value;
@@ -17,25 +19,23 @@ document.addEventListener("DOMContentLoaded", function() {
             const statusBarang = card.querySelector(".badge").innerText.trim();
             const kategoriBarang = card.querySelector(".kategori").innerText.trim();
 
-            // Cek kondisi pencarian teks
+            // MEMERIKSA KESESUAIAN NAMA, STATUS, DAN KATEGORI
             const matchKeyword = namaBarang.includes(keyword);
 
-            // cocok jika pilih "Semua Status" atau teks badge sama persis
             const matchStatus = (statusValue === "Semua Status" || statusBarang === statusValue);
 
-            // cocok jika pilih "Semua Kategori" atau teks kategori sama persis
             const matchKategori = (kategoriValue === "Semua Kategori" || kategoriBarang === kategoriValue);
 
-            // jika ketiganya cocok
+            // MENAMPILKAN BARANG YANG SESUAI DENGAN FILTER
             if (matchKeyword && matchStatus && matchKategori) {
-                col.style.display = ""; // Tampilkan kembali
+                col.style.display = "";
             } else {
-                col.style.display = "none"; // Sembunyikan
+                col.style.display = "none";
             }
         });
     }
 
-    // Jalankan filter saat tombol 'Cari' diklik
+    // MENJALANKAN FILTER SAAT TOMBOL CARI DIKLIK
     searchButton.addEventListener("click", function(e) {
         e.preventDefault();
         filterBarang();

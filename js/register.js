@@ -1,3 +1,4 @@
+// MENYIMPAN DATA REGISTRASI
 document
     .getElementById("registerForm")
     .addEventListener("submit", function (event) {
@@ -23,9 +24,11 @@ document
 
     });
 
+// PENGATURAN FORM REGISTRASI
 document.addEventListener("DOMContentLoaded", function () {
     const nameInput = document.getElementById("nama");
 
+    // MENGUBAH HURUF AWAL MENJADI KAPITAL
     if (nameInput) {
         nameInput.addEventListener("input", function () {
             this.value = this.value.replace(/\b\w/g, function (char) {
@@ -37,11 +40,13 @@ document.addEventListener("DOMContentLoaded", function () {
     const fakultasSelect = document.getElementById("fakultas");
     const prodiSelect = document.getElementById("prodi");
 
+    // DAFTAR PROGRAM STUDI BERDASARKAN FAKULTAS
     const dataProdi = {
         FTI: ["Teknik Informatika", "Sistem Informasi"],
         FEB: ["Manajemen", "Akuntansi"]
     };
 
+    // MENAMPILKAN PILIHAN PRODI SESUAI FAKULTAS
     if (fakultasSelect && prodiSelect) {
         fakultasSelect.addEventListener("change", function () {
             const selectedFakultas = this.value;

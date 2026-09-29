@@ -1,4 +1,4 @@
-/* DATA USER*/
+/* DATA USER */
 const dataUser = JSON.parse(
     localStorage.getItem("dataUser")
 );
@@ -35,6 +35,7 @@ const noResult =
 const resultCount =
     document.getElementById("resultCount");
 
+/* FUNGSI PENCARIAN DAN FILTER BARANG */
 function filterBarang() {
 
     const keyword =
@@ -50,7 +51,6 @@ function filterBarang() {
 
     let jumlah = 0;
 
-
     barangCards.forEach(function (card) {
 
         const nama =
@@ -62,7 +62,6 @@ function filterBarang() {
         const kategoriBarang =
             card.dataset.category;
 
-
         const cocokNama =
             nama.includes(keyword);
 
@@ -73,7 +72,6 @@ function filterBarang() {
         const cocokKategori =
             category === "semua" ||
             kategoriBarang === category;
-
 
         if (
             cocokNama &&
@@ -93,7 +91,7 @@ function filterBarang() {
 
     });
 
-
+    // MENAMPILKAN HASIL PENCARIAN
     if (jumlah === 0) {
 
         noResult.style.display = "block";

@@ -1,7 +1,9 @@
+/* MENGAMBIL DATA PENGGUNA */
 const dataUser = JSON.parse(
     localStorage.getItem("dataUser")
 );
 
+// MENAMPILKAN INFORMASI PROFIL
 if (dataUser) {
 
     document.getElementById("profileName").textContent =
@@ -19,6 +21,7 @@ if (dataUser) {
     document.getElementById("nimProfil").textContent =
         dataUser.nim;
 
+    // MENAMPILKAN DATA LENGKAP PENGGUNA
     document.getElementById("dataNama").textContent =
         dataUser.nama;
 

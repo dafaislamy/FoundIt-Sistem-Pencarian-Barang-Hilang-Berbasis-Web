@@ -1,8 +1,9 @@
+/* MENGAMBIL DATA USER */
 const dataUser = JSON.parse(
     localStorage.getItem("dataUser")
 );
 
-// DATA USER
+// MENAMPILKAN INFORMASI USER
 if (dataUser) {
 
     document.getElementById("profileName").textContent =
@@ -15,19 +16,19 @@ if (dataUser) {
         "Selamat datang, " + dataUser.nama + "!";
 }
 
-// DATA LAPORAN
+// MENGAMBIL DATA LAPORAN
 const daftarLaporan =
     JSON.parse(
         localStorage.getItem("daftarLaporan")
     ) || [];
 
-// DATA KLAIM
+// MENGAMBIL DATA KLAIM
 const daftarKlaim =
     JSON.parse(
         localStorage.getItem("daftarKlaim")
     ) || [];
 
-// STATISTIK
+// MENGHITUNG STATISTIK LAPORAN
 const jumlahHilang =
     daftarLaporan.filter(function (laporan) {
 
@@ -47,7 +48,7 @@ const jumlahDitemukan =
 const jumlahKlaim =
     daftarKlaim.length;
 
-// TAMPILKAN STATISTIK
+// MENAMPILKAN STATISTIK PADA DASHBOARD
 document.getElementById("totalHilang").textContent =
     jumlahHilang;
 
@@ -63,7 +64,7 @@ document.getElementById("totalKlaim").textContent =
 document.getElementById("totalDikembalikan").textContent =
     0;
 
-// LAPORAN TERBARU
+// MENAMPILKAN LAPORAN TERBARU
 const reportList =
     document.querySelector(".report-list");
 
@@ -72,7 +73,7 @@ if (reportList) {
 
     reportList.innerHTML = "";
 
-
+    // MENGAMBIL TIGA LAPORAN TERBARU
     const laporanTerbaru =
         [...daftarLaporan]
             .reverse()
@@ -81,6 +82,7 @@ if (reportList) {
 
     if (laporanTerbaru.length === 0) {
 
+        // MENAMPILKAN PESAN JIKA BELUM ADA LAPORAN
         reportList.innerHTML = `
             <div class="report-item">
 
@@ -101,6 +103,7 @@ if (reportList) {
 
     } else {
 
+        // MENAMPILKAN SETIAP LAPORAN TERBARU
         laporanTerbaru.forEach(function (laporan) {
 
             let icon = "📦";
@@ -148,7 +151,6 @@ if (reportList) {
                 </span>
 
             `;
-
 
             reportList.appendChild(item);
 
