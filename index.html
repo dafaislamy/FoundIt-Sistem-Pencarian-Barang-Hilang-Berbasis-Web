@@ -19,18 +19,17 @@
     <!-- NAVBAR -->
     <nav class="navbar navbar-expand-lg bg-white sticky-top">
         <div class="container-fluid">
-            <!-- Logo FoundIt -->
             <a class="navbar-brand logo" href="#">
                 <span>Found</span>It
             </a>
 
-            <!-- Tombol menu untuk layar kecil -->
             <button class="navbar-toggler" type="button"
-                    data-bs-toggle="collapse" data-bs-target="#navMenu">
+                    data-bs-toggle="collapse" data-bs-target="#navMenu"
+                    aria-controls="navMenu" aria-expanded="false"
+                    aria-label="Buka menu navigasi">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <!-- Menu navigasi -->
             <div class="collapse navbar-collapse" id="navMenu">
                 <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-4">
                     <li class="nav-item">
@@ -61,7 +60,6 @@
                 <div class="col-lg-9 hero-text">
                     <span class="label">PLATFORM BARANG HILANG KAMPUS</span>
 
-                    <!-- Judul utama -->
                     <h1>
                         Barang Hilang?<br>
                         <span>Temukan Kembali.</span>
@@ -73,7 +71,6 @@
                         di lingkungan kampus.
                     </p>
 
-                    <!-- Tombol utama -->
                     <div class="hero-button">
                         <a href="#barang" class="btn-utama">Cari Barang</a>
                         <a href="#lapor" class="btn-outline">Lapor Barang</a>
@@ -88,7 +85,6 @@
     <section class="fitur container">
         <div class="row g-4">
 
-            <!-- Fitur cari barang -->
             <div class="col-md-4">
                 <div class="fitur-box">
                     <div class="ikon">🔎</div>
@@ -100,7 +96,6 @@
                 </div>
             </div>
 
-            <!-- Fitur membuat laporan -->
             <div class="col-md-4">
                 <div class="fitur-box">
                     <div class="ikon">📝</div>
@@ -112,7 +107,6 @@
                 </div>
             </div>
 
-            <!-- Fitur pengajuan klaim -->
             <div class="col-md-4">
                 <div class="fitur-box">
                     <div class="ikon">✓</div>
@@ -132,10 +126,9 @@
     <section id="barang">
         <div class="container">
 
-            <!-- Judul bagian barang -->
             <div class="judul-section">
                 <span class="label-biru">BARANG TERBARU</span>
-                <h2>Barang Hilang & Ditemukan</h2>
+                <h2>Barang Hilang &amp; Ditemukan</h2>
                 <p>
                     Lihat laporan barang dari mahasiswa dan civitas
                     kampus lainnya.
@@ -149,25 +142,57 @@
 
                     <!-- Pencarian nama barang -->
                     <div class="col-md-5">
-                        <input
-                            type="text"
-                            placeholder="Cari nama barang..."
-                            id="searchInput"
-                        >
+                        <div class="search-box">
+
+                            <span class="search-icon" aria-hidden="true">
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                    width="20" height="20"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <circle cx="11" cy="11" r="8"></circle>
+                                    <line x1="16.65" y1="16.65"
+                                        x2="21" y2="21"></line>
+                                </svg>
+                            </span>
+
+                            <input
+                                type="text"
+                                id="searchInput"
+                                placeholder="Cari nama barang..."
+                                aria-label="Cari nama barang"
+                                autocomplete="off"
+                            >
+
+                            <button
+                                type="button"
+                                id="clearSearch"
+                                class="clear-search"
+                                aria-label="Hapus kata pencarian"
+                                title="Hapus pencarian"
+                                hidden
+                            >&times;</button>
+
+                        </div>
                     </div>
 
-                    <!-- Filter status barang -->
+                    <!-- Filter status -->
                     <div class="col-md-3">
-                        <select class="w-100" id="selectStatus">
+                        <select class="w-100" id="selectStatus"
+                                aria-label="Filter status barang">
                             <option>Semua Status</option>
                             <option>Hilang</option>
                             <option>Ditemukan</option>
                         </select>
                     </div>
 
-                    <!-- Filter kategori barang -->
-                    <div class="col-md-3">
-                        <select class="w-100" id="selectKategori">
+                    <!-- Filter kategori -->
+                    <div class="col-md-4">
+                        <select class="w-100" id="selectKategori"
+                                aria-label="Filter kategori barang">
                             <option>Semua Kategori</option>
                             <option>Elektronik</option>
                             <option>Dokumen</option>
@@ -176,24 +201,25 @@
                         </select>
                     </div>
 
-                    <!-- Tombol pencarian -->
-                    <div class="col-md-1">
-                        <button id="searchButton">Cari</button>
-                    </div>
-
                 </div>
+
+                <!-- Tombol Reset Filter (Berada di dalam kotak putih) -->
+                <div class="filter-actions">
+                    <button type="button" id="resetFilter" class="reset-filter">
+                        Reset Filter
+                    </button>
+                </div>
+
             </div>
 
 
             <!-- DAFTAR KARTU BARANG -->
             <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 grid-barang">
 
-
                 <!-- BARANG 1: FLASHDISK -->
                 <div class="col">
                     <div class="card">
 
-                        <!-- Gambar barang -->
                         <div class="gambar-barang">
                             <img
                                 src="https://images.pexels.com/photos/18641665/pexels-photo-18641665.png?auto=compress&cs=tinysrgb&w=600"
@@ -202,7 +228,6 @@
                             >
                         </div>
 
-                        <!-- Informasi barang -->
                         <div class="card-body">
                             <span class="badge hilang">Hilang</span>
 
@@ -213,8 +238,8 @@
 
                             <p class="kategori">Elektronik</p>
 
-                            <!-- Tombol menuju login -->
-                            <button class="btn-detail" onclick="window.location.href='login.html'">
+                            <button class="btn-detail"
+                                    onclick="window.location.href='login.html'">
                                 Lihat Detail
                             </button>
                         </div>
@@ -227,7 +252,6 @@
                 <div class="col">
                     <div class="card">
 
-                        <!-- Gambar barang -->
                         <div class="gambar-barang">
                             <img
                                 src="https://motosneno.cdn.magazord.com.br/img/2025/09/produto/48777/5sl8251108.jpg"
@@ -236,7 +260,6 @@
                             >
                         </div>
 
-                        <!-- Informasi barang -->
                         <div class="card-body">
                             <span class="badge ditemukan">Ditemukan</span>
 
@@ -247,8 +270,8 @@
 
                             <p class="kategori">Aksesoris</p>
 
-                            <!-- Tombol menuju login -->
-                            <button class="btn-detail" onclick="window.location.href='login.html'">
+                            <button class="btn-detail"
+                                    onclick="window.location.href='login.html'">
                                 Ajukan Klaim
                             </button>
                         </div>
@@ -256,12 +279,10 @@
                     </div>
                 </div>
 
-
                 <!-- BARANG 3: HANDPHONE -->
                 <div class="col">
                     <div class="card">
 
-                        <!-- Gambar barang -->
                         <div class="gambar-barang">
                             <img
                                 src="https://m.media-amazon.com/images/I/41Hh3xwzdFL._SL500_.jpg"
@@ -270,7 +291,6 @@
                             >
                         </div>
 
-                        <!-- Informasi barang -->
                         <div class="card-body">
                             <span class="badge hilang">Hilang</span>
 
@@ -281,8 +301,8 @@
 
                             <p class="kategori">Elektronik</p>
 
-                            <!-- Tombol menuju login -->
-                            <button class="btn-detail" onclick="window.location.href='login.html'">
+                            <button class="btn-detail"
+                                    onclick="window.location.href='login.html'">
                                 Lihat Detail
                             </button>
                         </div>
@@ -290,23 +310,21 @@
                     </div>
                 </div>
 
-
             </div>
 
             <!-- PESAN JIKA BARANG TIDAK DITEMUKAN -->
-            <p id="pesanKosong" style="display: none; text-align: center; margin-top: 30px;">
+            <p id="pesanKosong" role="status" aria-live="polite"
+                style="display: none; text-align: center; margin-top: 30px;">
                 Barang tidak ditemukan.
             </p>
 
         </div>
     </section>
 
-
     <!-- CARA KERJA -->
     <section class="cara-kerja" id="cara-kerja">
         <div class="container">
 
-            <!-- Judul bagian cara kerja -->
             <div class="judul-section tengah">
                 <span class="label-biru">CARA KERJA</span>
 
@@ -318,11 +336,8 @@
                 </p>
             </div>
 
-
-            <!-- Langkah-langkah penggunaan -->
             <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 langkah mt-4">
 
-                <!-- Langkah 1: Laporkan -->
                 <div class="col">
                     <div class="langkah-box">
                         <span>01</span>
@@ -334,7 +349,6 @@
                     </div>
                 </div>
 
-                <!-- Langkah 2: Cari -->
                 <div class="col">
                     <div class="langkah-box">
                         <span>02</span>
@@ -346,7 +360,6 @@
                     </div>
                 </div>
 
-                <!-- Langkah 3: Klaim -->
                 <div class="col">
                     <div class="langkah-box">
                         <span>03</span>
@@ -358,7 +371,6 @@
                     </div>
                 </div>
 
-                <!-- Langkah 4: Selesai -->
                 <div class="col">
                     <div class="langkah-box">
                         <span>04</span>
@@ -374,12 +386,10 @@
         </div>
     </section>
 
-
-    <!-- TENTANG FoundIt -->
+    <!-- TENTANG FOUNDIT -->
     <section class="tentang container" id="tentang">
         <div class="row align-items-center g-5">
 
-            <!-- Penjelasan tentang FoundIt -->
             <div class="col-lg-8 tentang-text">
                 <span class="label-biru">TENTANG FoundIt</span>
 
@@ -406,8 +416,6 @@
                 </p>
             </div>
 
-
-            <!-- Ringkasan tujuan FoundIt -->
             <div class="col-lg-4">
                 <div class="tentang-box">
                     <div class="ikon-besar">🔍</div>
@@ -424,7 +432,6 @@
         </div>
     </section>
 
-
     <!-- AJAKAN UNTUK MELAPOR -->
     <section class="lapor" id="lapor">
         <h2>Kehilangan atau Menemukan Barang?</h2>
@@ -433,7 +440,6 @@
             Bantu barang tersebut kembali kepada pemiliknya.
         </p>
 
-        <!-- Tombol mulai melapor -->
         <a href="login.html" class="btn-utama">
             Mulai Melapor
         </a>
@@ -446,7 +452,6 @@
 
             <div class="row g-4">
 
-                <!-- Informasi FoundIt -->
                 <div class="col-md-6">
                     <h2><span>Found</span>It</h2>
 
@@ -456,8 +461,6 @@
                     </p>
                 </div>
 
-
-                <!-- Daftar menu -->
                 <div class="col-md-3">
                     <h3>Menu</h3>
 
@@ -467,12 +470,10 @@
                     <p>Tentang</p>
                 </div>
 
-
-                <!-- Teknologi yang digunakan -->
                 <div class="col-md-3">
                     <h3>Teknologi</h3>
 
-                    <p>HTML & CSS</p>
+                    <p>HTML &amp; CSS</p>
                     <p>JavaScript</p>
                 </div>
 
@@ -483,13 +484,12 @@
 
     <!-- COPYRIGHT -->
     <div class="copyright">
-        © 2026 FoundIt. Platform Barang Hilang Kampus.
+        &copy; 2026 FoundIt. Platform Barang Hilang Kampus.
     </div>
 
 
     <!-- JAVASCRIPT -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
     <script src="js/script.js"></script>
 
 </body>
