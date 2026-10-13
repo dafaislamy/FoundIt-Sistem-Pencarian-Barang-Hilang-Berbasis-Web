@@ -286,31 +286,33 @@ a {
     box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.12);
 }
 
-/* TOMBOL RESET FILTER DI DALAM KOTAK PUTIH */
+/* TOMBOL RESET FILTER */
 .filter-actions {
     display: flex;
-    justify-content: flex-end;
-    margin-top: 15px;
-    border-top: 1px solid #eee;
-    padding-top: 12px;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
 }
 
+
 .reset-filter {
-    padding: 8px 16px;
-    border: 1px solid #cbd5e1;
+    width: 100%;
+    padding: 11px 8px;
+    border: 1px solid #ddd;
     border-radius: 6px;
-    background: #f8fafc;
-    color: #475569;
-    font-size: 13px;
-    font-weight: 500;
+    background-color: white;
+    color: #2c3e50;
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: 400;
     cursor: pointer;
     transition: all 0.2s;
 }
 
 .reset-filter:hover {
-    background: #e2e8f0;
-    color: #1e293b;
-    border-color: #94a3b8;
+    background-color: #f8fafc;
+    border-color: #3498db;
+    color: #3498db;
 }
 
 /* KARTU BARANG */

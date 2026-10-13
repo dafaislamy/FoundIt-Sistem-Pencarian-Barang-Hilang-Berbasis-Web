@@ -1,4 +1,7 @@
-/* CONTAINER PENCARIAN */
+/* ========================================
+   CONTAINER PENCARIAN & FILTER
+======================================== */
+
 .search-box {
     background: #ffffff;
     padding: 28px;
@@ -7,80 +10,213 @@
     box-shadow: 0 4px 18px rgba(44, 62, 80, 0.06);
 }
 
-.search-title { margin-bottom: 20px; }
+.search-title {
+    margin-bottom: 20px;
+}
 
-.search-title h2 { margin: 0 0 7px; font-size: 22px; color: #2c3e50; }
+.search-title h2 {
+    margin: 0 0 7px;
+    font-size: 22px;
+    color: #2c3e50;
+}
 
-.search-title p { margin: 0; color: #7f8c8d; font-size: 14px; }
+.search-title p {
+    margin: 0;
+    color: #7f8c8d;
+    font-size: 14px;
+    line-height: 1.6;
+}
 
-/* FORM PENCARIAN */
-.search-form { display: flex; gap: 12px; }
+/* ========================================
+   GABUNGAN FORM PENCARIAN & FILTER (SEBARIS)
+======================================== */
 
-.search-form input {
-    flex: 1;
+.search-filter-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    flex-wrap: wrap;
+}
+
+/* Pembungkus input pencarian */
+.search-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex: 2;
+    min-width: 240px;
     height: 46px;
     box-sizing: border-box;
-    padding: 0 16px;
     border: 1px solid #dfe6e9;
     border-radius: 10px;
     background: #f8fafc;
-    color: #2c3e50;
-    font-size: 14px;
-    outline: none;
+    transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
 }
 
-.search-form input:focus { border-color: #3498db; background: #ffffff; }
+.search-input-wrapper:focus-within {
+    border-color: #3498db;
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.12);
+}
 
-.search-form button {
-    height: 46px;
-    padding: 0 22px;
+/* Ikon kaca pembesar */
+.search-icon {
+    position: absolute;
+    left: 14px;
+    width: 20px;
+    height: 20px;
+    color: #7f8c8d;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.search-icon svg {
+    width: 20px;
+    height: 20px;
+    display: block;
+}
+
+/* Input pencarian */
+.search-input-wrapper input {
+    flex: 1;
+    width: 100%;
+    min-width: 0;
+    height: 100%;
+    box-sizing: border-box;
+    padding: 0 44px;
     border: none;
     border-radius: 10px;
-    background: #3498db !important;
-    color: white !important;
+    background: transparent;
+    color: #2c3e50;
+    font-family: inherit;
+    font-size: 14px;
+    outline: none;
+    box-shadow: none;
+}
+
+.search-input-wrapper input::placeholder {
+    color: #9aa4ad;
+}
+
+/* Tombol hapus pencarian */
+.clear-search {
+    position: absolute;
+    right: 9px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+    color: #7f8c8d;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+
+.clear-search:hover {
+    background: #e9eef2;
+    color: #2c3e50;
+}
+
+.clear-search svg {
+    width: 17px;
+    height: 17px;
+    display: block;
+}
+
+.clear-search[hidden] {
+    display: none !important;
+}
+
+/* Dropdown Filter Status & Kategori */
+.filter-select {
+    flex: 1;
+    min-width: 150px;
+    height: 46px;
+    padding: 0 12px;
+    border: 1px solid #dfe6e9;
+    border-radius: 10px;
+    background: #ffffff;
+    color: #2c3e50;
+    font-family: inherit;
+    font-size: 14px;
+    outline: none;
+    cursor: pointer;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.filter-select:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.12);
+}
+
+/* Tombol Reset Filter */
+.reset-filter {
+    height: 46px;
+    padding: 0 18px;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    background: #f8fafc;
+    color: #475569;
+    font-family: inherit;
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
-    transition: 0.2s;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+    white-space: nowrap;
 }
 
-.search-form button:hover { background: #2980b9 !important; }
+.reset-filter:hover {
+    background: #e2e8f0;
+    color: #1e293b;
+    border-color: #94a3b8;
+}
 
-/* FORM FILTER BARANG */
-.filter-form { display: flex; gap: 12px; margin-top: 14px; }
+/* ========================================
+   HASIL PENCARIAN
+======================================== */
 
-.filter-form select {
-    min-width: 180px;
-    height: 42px;
-    padding: 0 12px;
-    border: 1px solid #dfe6e9;
-    border-radius: 9px;
-    background: #ffffff;
+.result-section {
+    margin-top: 10px;
+}
+
+.result-header {
+    margin-bottom: 18px;
+}
+
+.result-header h2 {
+    margin: 0 0 5px;
+    font-size: 22px;
     color: #2c3e50;
-    font-size: 14px;
-    outline: none;
 }
 
-.filter-form select:focus { border-color: #3498db; }
+.result-header p {
+    margin: 0;
+    color: #7f8c8d;
+    font-size: 14px;
+    line-height: 1.6;
+}
 
-/* HASIL PENCARIAN */
-.result-section { margin-top: 10px; }
+/* ========================================
+   KARTU BARANG
+======================================== */
 
-.result-header { margin-bottom: 18px; }
-
-.result-header h2 { margin: 0 0 5px; font-size: 22px; color: #2c3e50; }
-
-.result-header p { margin: 0; color: #7f8c8d; font-size: 14px; }
-
-/* KARTU BARANG */
 .barang-card {
+    height: 100%;
+    overflow: hidden;
     background: #ffffff;
     border: 1px solid #edf0f2;
     border-radius: 16px;
-    overflow: hidden;
     box-shadow: 0 4px 15px rgba(44, 62, 80, 0.05);
-    transition: 0.2s;
-    height: 100%;
+    transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .barang-card:hover {
@@ -88,23 +224,22 @@
     box-shadow: 0 10px 25px rgba(44, 62, 80, 0.10);
 }
 
-/* GAMBAR BARANG */
 .barang-image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 100%;
     height: 200px;
     overflow: hidden;
-    background-color: #f1f3f5;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    background: #f1f3f5;
 }
 
 .barang-image img {
+    display: block;
     width: 100%;
     height: 100%;
     object-fit: contain;
     object-position: center;
-    display: block;
     transition: transform 0.3s ease;
 }
 
@@ -112,98 +247,145 @@
     transform: scale(1.03);
 }
 
-/* KONTEN KARTU BARANG */
-.barang-content { padding: 20px; }
+.barang-content {
+    padding: 20px;
+}
 
 .status-badge {
     display: inline-block;
+    margin-bottom: 12px;
     padding: 5px 11px;
     border-radius: 20px;
     font-size: 11px;
     font-weight: 700;
-    margin-bottom: 12px;
 }
 
-.status-badge.hilang { background: #fdecea; color: #e74c3c; }
+.status-badge.hilang {
+    background: #fdecea;
+    color: #e74c3c;
+}
 
-.status-badge.ditemukan { background: #eafaf1; color: #27ae60; }
+.status-badge.ditemukan {
+    background: #eafaf1;
+    color: #27ae60;
+}
 
-.barang-content h3 { margin: 0 0 8px; color: #2c3e50; font-size: 17px; }
+.barang-content h3 {
+    margin: 0 0 8px;
+    color: #2c3e50;
+    font-size: 17px;
+    line-height: 1.4;
+}
 
-.barang-content p { margin: 0 0 13px; color: #7f8c8d; font-size: 13px; line-height: 1.6; }
+.barang-content p {
+    margin: 0 0 13px;
+    color: #7f8c8d;
+    font-size: 13px;
+    line-height: 1.6;
+}
 
 .category {
     display: inline-block;
+    margin-bottom: 16px;
     padding: 5px 9px;
+    border-radius: 6px;
     background: #f1f7fc;
     color: #3498db;
-    border-radius: 6px;
     font-size: 11px;
     font-weight: 600;
-    margin-bottom: 16px;
 }
 
-/* TOMBOL DETAIL */
-.btn-detail {
+/* ========================================
+   TOMBOL DETAIL DAN KLAIM
+======================================== */
+
+.btn-detail,
+.btn-klaim {
     display: block;
-    text-align: center;
-    text-decoration: none;
+    flex: 1;
     padding: 11px;
+    border: none;
     border-radius: 9px;
     background: #3498db !important;
-    color: white !important;
+    color: #ffffff !important;
     font-size: 13px;
     font-weight: 600;
-    transition: 0.2s;
+    line-height: 1.4;
+    text-align: center;
+    text-decoration: none;
+    transition: background 0.2s;
 }
 
-.btn-detail:hover { background: #2980b9 !important; }
+.btn-detail:hover {
+    background: #2980b9 !important;
+}
 
-/* TAMPILAN KETIKA HASIL KOSONG */
+.btn-klaim:hover {
+    background: #1e8e4e !important;
+}
+
+.barang-actions {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+}
+
+/* ========================================
+   HASIL KOSONG
+======================================== */
+
 .no-result {
-    text-align: center;
-    background: #ffffff;
+    margin-top: 20px;
     padding: 55px 20px;
     border-radius: 16px;
+    background: #ffffff;
     box-shadow: 0 4px 15px rgba(44, 62, 80, 0.05);
-}
-
-.no-result div { font-size: 45px; margin-bottom: 12px; }
-
-.no-result h3 { margin: 0 0 7px; color: #2c3e50; }
-
-.no-result p { margin: 0; color: #7f8c8d; font-size: 14px; }
-
-/* TAMPILAN RESPONSIF */
-@media (max-width: 700px) {
-
-    .search-form { flex-direction: column; }
-
-    .search-form button { width: 100%; }
-
-    .filter-form { flex-direction: column; }
-
-    .filter-form select { width: 100%; }
-
-}
-
-/* TOMBOL AKSI KARTU (DETAIL + KLAIM) */
-.barang-actions { display: flex; gap: 10px; }
-
-.barang-actions .btn-detail { flex: 1; }
-
-.btn-klaim {
-    flex: 1;
-    display: block;
     text-align: center;
-    text-decoration: none;
-    padding: 11px;
-    border-radius: 9px;
-    background: #3498db !important;
-    color: white !important;
-    font-size: 13px;
-    font-weight: 600;
-    transition: 0.2s;
 }
 
-.btn-klaim:hover { background: #1e8e4e !important; }
+.no-result div {
+    margin-bottom: 12px;
+    font-size: 45px;
+}
+
+.no-result h3 {
+    margin: 0 0 7px;
+    color: #2c3e50;
+    font-size: 20px;
+}
+
+.no-result p {
+    margin: 0;
+    color: #7f8c8d;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* ========================================
+   TAMPILAN RESPONSIF
+======================================== */
+
+@media (max-width: 768px) {
+    .search-filter-wrapper {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .search-input-wrapper,
+    .filter-select,
+    .reset-filter {
+        width: 100%;
+    }
+
+    .barang-actions {
+        flex-direction: column;
+    }
+
+    .barang-content {
+        padding: 17px;
+    }
+
+    .barang-image {
+        height: 190px;
+    }
+}

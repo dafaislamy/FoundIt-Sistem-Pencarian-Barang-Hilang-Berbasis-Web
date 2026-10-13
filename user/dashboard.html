@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cari Barang - FoundIt</title>
+    <title>Dashboard - FoundIt</title>
 
     <!-- Bootstrap dan CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../css/bootstrap-override.css">
     <link rel="stylesheet" href="../css/user.css">
-    <link rel="stylesheet" href="../css/cari-barang.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
 </head>
 <body>
 
@@ -20,8 +20,8 @@
 
         <!-- Menu navigasi -->
         <nav>
-            <a href="dashboard.html">Dashboard</a>
-            <a href="cari-barang.html" class="active">Cari Barang</a>
+            <a href="dashboard.html" class="active">Dashboard</a>
+            <a href="cari-barang.html">Cari Barang</a>
             <a href="lapor-hilang.html">Lapor Barang Hilang</a>
             <a href="lapor-ditemukan.html">Lapor Barang Ditemukan</a>
             <a href="klaim.html">Klaim Barang</a>
@@ -34,239 +34,91 @@
         <a href="../login.html" class="logout">Keluar</a>
     </aside>
 
-    <!-- MAIN -->
+    <!-- MAIN CONTENT -->
     <main class="main-content">
 
         <!-- TOPBAR -->
-        <header class="topbar">
-            <div>
-                <h1>Cari Barang</h1>
-                <p>Temukan barang hilang atau barang yang ditemukan.</p>
+        <header class="topbar align-items-start mb-4 py-4">
+            <div style="max-width: 650px; padding-right: 20px;">
+                <h1 id="welcomeName" class="fw-bold mb-2">Selamat datang, Yu!</h1>
+                <p class="text-muted mb-0">Pantau status laporan barang hilang, temukan barang yang tertinggal di area kampus, dan kelola klaim Anda dengan mudah melalui pusat kendali ini.</p>
             </div>
 
             <!-- Profil user -->
             <div class="user-profile">
-                <div class="profile-icon" id="profileInitial">U</div>
+                <div class="profile-icon" id="profileInitial">Y</div>
                 <div>
-                    <strong id="profileName">User</strong>
-                    <small>User</small>
+                    <strong id="profileName">Yu</strong>
+                    <small class="text-muted">User</small>
                 </div>
             </div>
         </header>
 
-        <!-- FORM PENCARIAN -->
-        <section class="search-box">
-            <div class="search-title">
-                <h2>Cari Barang</h2>
-                <p>Masukkan nama barang yang ingin kamu cari.</p>
-            </div>
-
-            <!-- Input dan tombol pencarian -->
-            <div class="search-form">
-                <input
-                    type="text"
-                    id="searchInput"
-                    placeholder="Contoh: Flashdisk, Kunci Motor, Handphone..."
-                >
-                <button type="button" id="searchButton">Cari</button>
-            </div>
-
-            <!-- FILTER BARANG -->
-            <div class="filter-form">
-                <!-- Filter berdasarkan status -->
-                <select id="statusFilter">
-                    <option value="semua">Semua Status</option>
-                    <option value="hilang">Hilang</option>
-                    <option value="ditemukan">Ditemukan</option>
-                </select>
-
-                <!-- Filter berdasarkan kategori -->
-                <select id="categoryFilter">
-                    <option value="semua">Semua Kategori</option>
-                    <option value="elektronik">Elektronik</option>
-                    <option value="aksesoris">Aksesoris</option>
-                    <option value="dokumen">Dokumen</option>
-                    <option value="lainnya">Lainnya</option>
-                </select>
+        <!-- SECTION: STATISTIK RINGKAS -->
+        <section class="mb-4">
+            <div class="row row-cols-1 row-cols-md-4 g-4">
+                <div class="col">
+                    <div class="card border-0 shadow-sm p-3">
+                        <p class="text-muted mb-1">Barang Hilang</p>
+                        <h3 class="fw-bold mb-0" id="totalHilang">0</h3>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card border-0 shadow-sm p-3">
+                        <p class="text-muted mb-1">Barang Ditemukan</p>
+                        <h3 class="fw-bold mb-0" id="totalDitemukan">0</h3>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card border-0 shadow-sm p-3">
+                        <p class="text-muted mb-1">Klaim Saya</p>
+                        <h3 class="fw-bold mb-0" id="totalKlaim">0</h3>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card border-0 shadow-sm p-3">
+                        <p class="text-muted mb-1">Dikembalikan</p>
+                        <h3 class="fw-bold mb-0" id="totalDikembalikan">0</h3>
+                    </div>
+                </div>
             </div>
         </section>
 
-        <!-- HASIL PENCARIAN -->
+        <!-- SECTION: AKSI CEPAT -->
+        <section class="mb-5">
+            <div class="card border-0 shadow-sm p-4">
+                <h5 class="mb-3">Aksi Cepat</h5>
+                <div class="d-flex gap-3 flex-wrap">
+                    <a href="lapor-hilang.html" class="btn btn-danger">Lapor Barang Hilang</a>
+                    <a href="lapor-ditemukan.html" class="btn btn-success">Lapor Barang Ditemukan</a>
+                    <a href="cari-barang.html" class="btn btn-outline-primary">Cari Barang</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: LAPORAN TERBARU -->
         <section class="result-section">
-            <div class="result-header">
+            <div class="result-header d-flex justify-content-between align-items-center mb-3">
                 <div>
-                    <h2>Daftar Barang</h2>
-                    <!-- Jumlah hasil pencarian -->
-                    <p id="resultCount">Menampilkan semua barang</p>
+                    <h2>Laporan Terbaru</h2>
+                    <p class="text-muted">Aktivitas laporan barang hilang dan ditemukan terakhir.</p>
                 </div>
+                <a href="riwayat-laporan.html" class="text-decoration-none fw-semibold">Lihat Semua →</a>
             </div>
 
-            <!-- DAFTAR BARANG -->
-            <div
-                class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4"
-                id="barangGrid"
-            >
-
-                <!-- BARANG 1: FLASHDISK -->
-                <div class="col">
-                    <div
-                        class="barang-card"
-                        data-name="Flashdisk SanDisk 64GB"
-                        data-status="hilang"
-                        data-category="elektronik"
-                    >
-                        <!-- Gambar barang -->
-                        <div class="barang-image">
-                            <img
-                                src="https://images.pexels.com/photos/18641665/pexels-photo-18641665.png?auto=compress&cs=tinysrgb&w=600"
-                                alt="Flashdisk SanDisk 64GB"
-                                loading="lazy"
-                            >
-                        </div>
-
-                        <!-- Informasi barang -->
-                        <div class="barang-content">
-                            <span class="status-badge hilang">Hilang</span>
-
-                            <h3>Flashdisk SanDisk 64GB</h3>
-
-                            <p>Hilang di sekitar Fakultas Teknik.</p>
-
-                            <span class="category">Elektronik</span>
-
-                            <!-- Tombol detail barang -->
-                            <a href="detail-barang.html" class="btn-detail">
-                                Lihat Detail
-                            </a>
-                        </div>
-                    </div>
+            <!-- KOTAK LAPORAN TERBARU -->
+            <div class="card border-0 shadow-sm p-4">
+                <div class="report-list">
+                    <!-- Data laporan akan otomatis dirender di sini oleh JavaScript -->
                 </div>
-
-                <!-- BARANG 2: KUNCI MOTOR -->
-                <div class="col">
-                    <div
-                        class="barang-card"
-                        data-name="Kunci Motor Yamaha"
-                        data-status="ditemukan"
-                        data-category="aksesoris"
-                    >
-                        <!-- Gambar barang -->
-                        <div class="barang-image">
-                            <img
-                                src="https://motosneno.cdn.magazord.com.br/img/2025/09/produto/48777/5sl8251108.jpg"
-                                alt="Kunci motor"
-                                loading="lazy"
-                            >
-                        </div>
-
-                        <!-- Informasi barang -->
-                        <div class="barang-content">
-                            <span class="status-badge ditemukan">
-                                Ditemukan
-                            </span>
-
-                            <h3>Kunci Motor Yamaha</h3>
-
-                            <p>Ditemukan di area parkir kampus.</p>
-
-                            <span class="category">Aksesoris</span>
-
-                            <!-- Tombol detail barang -->
-                            <a href="detail-barang.html" class="btn-detail">
-                                Lihat Detail
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- BARANG 3: HANDPHONE -->
-                <div class="col">
-                    <div
-                        class="barang-card"
-                        data-name="Handphone"
-                        data-status="hilang"
-                        data-category="elektronik"
-                    >
-                        <!-- Gambar barang -->
-                        <div class="barang-image">
-                            <img
-                                src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=600"
-                                alt="Handphone"
-                                loading="lazy"
-                            >
-                        </div>
-
-                        <!-- Informasi barang -->
-                        <div class="barang-content">
-                            <span class="status-badge hilang">Hilang</span>
-
-                            <h3>Handphone</h3>
-
-                            <p>Hilang di area kantin kampus.</p>
-
-                            <span class="category">Elektronik</span>
-
-                            <!-- Tombol detail barang -->
-                            <a href="detail-barang.html" class="btn-detail">
-                                Lihat Detail
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- BARANG 4: DOMPET -->
-                <div class="col">
-                    <div
-                        class="barang-card"
-                        data-name="Dompet Hitam"
-                        data-status="ditemukan"
-                        data-category="aksesoris"
-                    >
-                        <!-- Gambar barang -->
-                        <div class="barang-image">
-                            <img
-                                src="https://images.unsplash.com/photo-1627123424574-724758594e93?w=600"
-                                alt="Dompet hitam"
-                                loading="lazy"
-                            >
-                        </div>
-
-                        <!-- Informasi barang -->
-                        <div class="barang-content">
-                            <span class="status-badge ditemukan">
-                                Ditemukan
-                            </span>
-
-                            <h3>Dompet Kulit</h3>
-
-                            <p>Ditemukan di sekitar perpustakaan.</p>
-
-                            <span class="category">Aksesoris</span>
-
-                            <!-- Tombol detail barang -->
-                            <a href="detail-barang.html" class="btn-detail">
-                                Lihat Detail
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
             </div>
-
-            <!-- PESAN JIKA BARANG TIDAK DITEMUKAN -->
-            <div class="no-result" id="noResult" style="display: none;">
-                <div></div>
-                <h3>Barang tidak ditemukan</h3>
-                <p>Coba gunakan kata kunci atau filter yang berbeda.</p>
-            </div>
-
         </section>
 
     </main>
 
     <!-- JAVASCRIPT -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="../js/cari-barang.js"></script>
+    <script src="../js/user.js"></script>
 
 </body>
 </html>

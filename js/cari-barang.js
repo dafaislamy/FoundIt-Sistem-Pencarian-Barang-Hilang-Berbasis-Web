@@ -1,132 +1,235 @@
-/* DATA USER */
-const dataUser = JSON.parse(
-    localStorage.getItem("dataUser")
-);
+document.addEventListener("DOMContentLoaded", function () {
 
-if (dataUser) {
+    /* ========================================
+        DATA USER
+    ======================================== */
 
-    document.getElementById("profileName").textContent =
-        dataUser.nama;
+    let dataUser = null;
 
-    document.getElementById("profileInitial").textContent =
-        dataUser.nama.charAt(0).toUpperCase();
+    try {
+        dataUser = JSON.parse(
+            localStorage.getItem("dataUser")
+        );
+    } catch (error) {
+        dataUser = null;
+    }
 
-}
+    const profileName = document.getElementById("profileName");
+    const profileInitial = document.getElementById("profileInitial");
 
-/* ELEMENT */
-const searchInput =
-    document.getElementById("searchInput");
+    if (dataUser && dataUser.nama) {
 
-const searchButton =
-    document.getElementById("searchButton");
-
-const statusFilter =
-    document.getElementById("statusFilter");
-
-const categoryFilter =
-    document.getElementById("categoryFilter");
-
-const barangCards =
-    document.querySelectorAll(".barang-card");
-
-const noResult =
-    document.getElementById("noResult");
-
-const resultCount =
-    document.getElementById("resultCount");
-
-/* FUNGSI PENCARIAN DAN FILTER BARANG */
-function filterBarang() {
-
-    const keyword =
-        searchInput.value
-            .toLowerCase()
-            .trim();
-
-    const status =
-        statusFilter.value;
-
-    const category =
-        categoryFilter.value;
-
-    let jumlah = 0;
-
-    barangCards.forEach(function (card) {
-
-        const nama =
-            card.dataset.name.toLowerCase();
-
-        const statusBarang =
-            card.dataset.status;
-
-        const kategoriBarang =
-            card.dataset.category;
-
-        const cocokNama =
-            nama.includes(keyword);
-
-        const cocokStatus =
-            status === "semua" ||
-            statusBarang === status;
-
-        const cocokKategori =
-            category === "semua" ||
-            kategoriBarang === category;
-
-        if (
-            cocokNama &&
-            cocokStatus &&
-            cocokKategori
-        ) {
-
-            card.style.display = "block";
-
-            jumlah++;
-
-        } else {
-
-            card.style.display = "none";
-
+        if (profileName) {
+            profileName.textContent = dataUser.nama;
         }
 
-    });
-
-    // MENAMPILKAN HASIL PENCARIAN
-    if (jumlah === 0) {
-
-        noResult.style.display = "block";
-
-        resultCount.textContent =
-            "Tidak ada barang yang sesuai";
-
-    } else {
-
-        noResult.style.display = "none";
-
-        resultCount.textContent =
-            "Menampilkan " + jumlah + " barang";
+        if (profileInitial) {
+            profileInitial.textContent =
+                dataUser.nama.charAt(0).toUpperCase();
+        }
 
     }
 
-}
+    /* ========================================
+        MENGAMBIL ELEMEN
+    ======================================== */
 
-/* EVENT */
-searchButton.addEventListener(
-    "click",
-    filterBarang
-);
+    const searchInput = document.getElementById("searchInput");
+    const clearSearch = document.getElementById("clearSearch");
+    const statusFilter = document.getElementById("statusFilter");
+    const categoryFilter = document.getElementById("categoryFilter");
+    const resetFilter = document.getElementById("resetFilter");
+    const barangCards = document.querySelectorAll(".barang-card");
+    const noResult = document.getElementById("noResult");
+    const resultCount = document.getElementById("resultCount");
 
-searchInput.addEventListener(
-    "keyup",
-    filterBarang
-);
+    /* ========================================
+        DEBOUNCE PENCARIAN
+    ======================================== */
 
-statusFilter.addEventListener(
-    "change",
-    filterBarang
-);
+    let debounceTimer;
+    const debounceDelay = 400;
 
-categoryFilter.addEventListener(
-    "change",
-    filterBarang
-);
+    /* ========================================
+        FUNGSI FILTER BARANG
+    ======================================== */
+
+    function filterBarang() {
+
+        const keyword = searchInput.value
+            .trim()
+            .toLowerCase();
+
+        const status = statusFilter.value;
+        const category = categoryFilter.value;
+
+        let jumlah = 0;
+
+        barangCards.forEach(function (card) {
+
+            const nama = (
+                card.dataset.name ||
+                card.querySelector("h3")?.textContent ||
+                ""
+            ).toLowerCase();
+
+            const statusBarang = (
+                card.dataset.status || ""
+            ).toLowerCase();
+
+            const kategoriBarang = (
+                card.dataset.category || ""
+            ).toLowerCase();
+
+            const cocokNama = nama.includes(keyword);
+
+            const cocokStatus =
+                status === "semua" ||
+                statusBarang === status;
+
+            const cocokKategori =
+                category === "semua" ||
+                kategoriBarang === category;
+
+            if (
+                cocokNama &&
+                cocokStatus &&
+                cocokKategori
+            ) {
+
+                card.style.display = "";
+                jumlah++;
+
+            } else {
+
+                card.style.display = "none";
+
+            }
+
+        });
+
+        /* MENAMPILKAN PESAN HASIL KOSONG */
+
+        if (noResult) {
+            noResult.style.display =
+                jumlah === 0 ? "block" : "none";
+        }
+
+        /* MEMPERBARUI JUMLAH HASIL */
+
+        if (resultCount) {
+
+            if (jumlah === 0) {
+
+                resultCount.textContent =
+                    "Tidak ada barang yang sesuai";
+
+            } else {
+
+                resultCount.textContent =
+                    "Menampilkan " + jumlah + " barang";
+
+            }
+
+        }
+
+    }
+
+    /* ========================================
+        TOMBOL X PADA INPUT
+    ======================================== */
+
+    function perbaruiTombolHapus() {
+
+        clearSearch.hidden =
+            searchInput.value.length === 0;
+
+    }
+
+    /* ========================================
+        DEBOUNCE
+    ======================================== */
+
+    function jadwalkanPencarian() {
+
+        clearTimeout(debounceTimer);
+
+        debounceTimer = setTimeout(function () {
+
+            filterBarang();
+
+        }, debounceDelay);
+
+    }
+
+    /* ========================================
+        EVENT PENCARIAN
+    ======================================== */
+
+    searchInput.addEventListener("input", function () {
+
+        perbaruiTombolHapus();
+        jadwalkanPencarian();
+
+    });
+
+    /* ========================================
+        EVENT TOMBOL X
+    ======================================== */
+
+    clearSearch.addEventListener("click", function () {
+
+        clearTimeout(debounceTimer);
+        searchInput.value = "";
+        perbaruiTombolHapus();
+        filterBarang();
+        searchInput.focus();
+
+    });
+
+    /* ========================================
+        EVENT FILTER STATUS
+    ======================================== */
+
+    statusFilter.addEventListener("change", function () {
+
+        clearTimeout(debounceTimer);
+        filterBarang();
+
+    });
+
+    /* ========================================
+        EVENT FILTER KATEGORI
+    ======================================== */
+
+    categoryFilter.addEventListener("change", function () {
+
+        clearTimeout(debounceTimer);
+        filterBarang();
+
+    });
+
+    /* ========================================
+        RESET SEMUA FILTER
+    ======================================== */
+
+    resetFilter.addEventListener("click", function () {
+
+        clearTimeout(debounceTimer);
+        searchInput.value = "";
+        statusFilter.value = "semua";
+        categoryFilter.value = "semua";
+        perbaruiTombolHapus();
+        filterBarang();
+        searchInput.focus();
+
+    });
+
+    /* ========================================
+        FILTER AWAL SAAT HALAMAN DIBUKA
+    ======================================== */
+
+    perbaruiTombolHapus();
+    filterBarang();
+
+});
