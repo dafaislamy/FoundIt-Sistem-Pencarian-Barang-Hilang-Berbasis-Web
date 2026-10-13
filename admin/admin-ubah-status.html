@@ -7,7 +7,7 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../css/bootstrap-override.css">
-    <link rel="stylesheet" href="../css/user.css">
+    <link rel="stylesheet" href="../css/admin.css">
 </head>
 <body>
 
@@ -44,25 +44,27 @@
             </div>
         </header>
 
-        <!-- FILTER & CARI BARANG -->
+<!-- FILTER & CARI BARANG -->
         <section class="card border-0 shadow-sm p-4 mb-4 rounded-3">
             <div class="row g-3 align-items-center">
-                <div class="col-md-5">
-                    <label class="form-label small fw-semibold">Pencarian</label>
-                    <input type="text" class="form-control" placeholder="Cari nama barang, pelapor, atau kode laporan...">
+                <!-- Pencarian -->
+                <div class="col-md-7">
+                    <label class="form-label small fw-semibold">Pencarian Barang</label>
+                    <div class="search-box">
+                        <input type="text" id="searchUbahStatus" class="form-control search-input" placeholder="Cari nama barang, pelapor, atau kode laporan (#BRG)..." autocomplete="off">
+                    </div>
                 </div>
-                <div class="col-md-4">
+
+                <!-- Filter Status -->
+                <div class="col-md-5">
                     <label class="form-label small fw-semibold">Filter Status Saat Ini</label>
-                    <select class="form-select">
+                    <select class="form-select" id="filterStatusUbah">
                         <option value="">Semua Status</option>
                         <option value="hilang">Hilang (Aktif)</option>
                         <option value="ditemukan">Ditemukan (Tersimpan di Posko)</option>
                         <option value="klaim">Dalam Proses Klaim</option>
-                        <option value="selesai">Telah Dikembalikan / Selesai</option>
+                        <option value="dikembalikan">Telah Dikembalikan / Selesai</option>
                     </select>
-                </div>
-                <div class="col-md-3 d-flex align-items-end">
-                    <button class="btn btn-primary w-100 py-2">Terapkan Filter</button>
                 </div>
             </div>
         </section>
@@ -206,20 +208,6 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // Logika pengisian otomatis data barang ke dalam Modal saat tombol diklik
-        const modalElement = document.getElementById('modalUpdateStatus');
-        modalElement.addEventListener('show.bs.modal', function (event) {
-            const button = event.relatedTarget;
-            const nama = button.getAttribute('data-nama');
-            const id = button.getAttribute('data-id');
-            const status = button.getAttribute('data-status');
-
-            document.getElementById('targetBarang').value = `${nama} (${id})`;
-            if (status) {
-                document.getElementById('statusPilihan').value = status;
-            }
-        });
-    </script>
+    <script src="../js/admin.js"></script>
 </body>
 </html>
