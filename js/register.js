@@ -1,34 +1,9 @@
-// MENYIMPAN DATA REGISTRASI
-document
-    .getElementById("registerForm")
-    .addEventListener("submit", function (event) {
 
-        event.preventDefault();
-
-        const dataUser = {
-            nama: document.getElementById("nama").value,
-            nim: document.getElementById("nim").value,
-            fakultas: document.getElementById("fakultas").value,
-            jurusan: document.getElementById("jurusan").value,
-            angkatan: document.getElementById("angkatan").value,
-            email: document.getElementById("email").value,
-            nohp: document.getElementById("nohp").value
-        };
-
-        localStorage.setItem(
-            "dataUser",
-            JSON.stringify(dataUser)
-        );
-
-        window.location.href = "dashboard.html";
-
-    });
-
-// PENGATURAN FORM REGISTRASI
 document.addEventListener("DOMContentLoaded", function () {
+
+    // Mengubah huruf awal nama menjadi kapital
     const nameInput = document.getElementById("nama");
 
-    // MENGUBAH HURUF AWAL MENJADI KAPITAL
     if (nameInput) {
         nameInput.addEventListener("input", function () {
             this.value = this.value.replace(/\b\w/g, function (char) {
@@ -37,34 +12,28 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    const fakultasSelect = document.getElementById("fakultas");
-    const prodiSelect = document.getElementById("prodi");
+    // Validasi password
+    const registerForm = document.getElementById("registerForm");
 
-    // DAFTAR PROGRAM STUDI BERDASARKAN FAKULTAS
-    const dataProdi = {
-        FTI: ["Teknik Informatika", "Sistem Informasi"],
-        FEB: ["Manajemen", "Akuntansi"]
-    };
+    if (registerForm) {
+        registerForm.addEventListener("submit", function (event) {
 
-    // MENAMPILKAN PILIHAN PRODI SESUAI FAKULTAS
-    if (fakultasSelect && prodiSelect) {
-        fakultasSelect.addEventListener("change", function () {
-            const selectedFakultas = this.value;
+            const password = document.getElementById("password").value;
 
-            prodiSelect.innerHTML = '<option value="">-- Pilih Prodi --</option>';
+            const hasLength = password.length >= 8;
+            const hasUppercase = /[A-Z]/.test(password);
+            const hasSymbol = /[^A-Za-z0-9]/.test(password);
 
-            if (selectedFakultas && dataProdi[selectedFakultas]) {
-                prodiSelect.disabled = false;
+            if (!hasLength || !hasUppercase || !hasSymbol) {
+                event.preventDefault();
 
-                dataProdi[selectedFakultas].forEach(function (prodi) {
-                    const option = document.createElement("option");
-                    option.value = prodi;
-                    option.textContent = prodi;
-                    prodiSelect.appendChild(option);
-                });
-            } else {
-                prodiSelect.disabled = true;
+                alert(
+                    "Password minimal 8 karakter, " +
+                    "mengandung huruf kapital dan simbol!"
+                );
             }
+
         });
     }
+
 });
