@@ -326,7 +326,6 @@ document.addEventListener("DOMContentLoaded", function () {
                         <strong>${input.value}</strong>
                         <div class="text-muted small">${textarea.value || "-"}</div>
                     </td>
-                    <td><span class="badge bg-light text-dark border">0 Barang</span></td>
                     <td class="text-end">
                         <button class="btn btn-sm btn-outline-primary">Edit</button>
                         <button class="btn btn-sm btn-outline-danger">Hapus</button>
