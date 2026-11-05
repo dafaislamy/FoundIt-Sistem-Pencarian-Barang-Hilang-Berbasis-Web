@@ -1,26 +1,20 @@
-<?php // Developed by Fasbir Sabran
-$host     = "localhost";
-$username = "root";
-$password = "";
-$dbname   = "foundit_web";
-$charset  = "utf8mb4";
+<?php
+$host       = "127.0.0.1"; 
+$port       = "1521";
+$service_name = "XE";       
+$username   = "FOUNDIT"; 
+$password   = "FOUNDIT";   
+$dsn = "oci:dbname=//{$host}:{$port}/{$service_name};charset=UTF8";
 
 try {
-    $dsn = "mysql:host={$host};dbname={$dbname};charset={$charset}";
-    $options = [
-        PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-        PDO::ATTR_EMULATE_PREPARES   => false,
-    ];
+    $conn = new PDO($dsn, $username, $password);
 
-    // Inisialisasi koneksi PDO
-    $pdo = new PDO($dsn, $username, $password, $options);
-    
-    // Alias $koneksi untuk kompatibilitas
-    $koneksi = $pdo;
-
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (PDOException $e) {
-    // Tangani kesalahan koneksi
-    die("Koneksi database gagal: " . $e->getMessage());
+    die("Koneksi Database Oracle Gagal: " . $e->getMessage());
+}
+
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
 }
 ?>

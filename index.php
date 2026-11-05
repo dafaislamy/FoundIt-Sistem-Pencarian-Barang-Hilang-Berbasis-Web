@@ -1,0 +1,459 @@
+<?php
+// index.php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+require_once 'config/koneksi.php';
+?>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoundIt - Platform Barang Hilang Kampus</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg bg-white sticky-top">
+        <div class="container-fluid">
+            <a class="navbar-brand logo" href="#">
+                <span>Found</span>It
+            </a>
+
+            <button class="navbar-toggler" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#navMenu"
+                    aria-controls="navMenu" aria-expanded="false"
+                    aria-label="Buka menu navigasi">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navMenu">
+                <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-4">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#beranda">Beranda</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#barang">Cari Barang</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#cara-kerja">Cara Kerja</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#tentang">Tentang</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="login.php" class="btn-login">Login</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- BAGIAN BERANDA -->
+    <section class="hero" id="beranda">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-9 hero-text">
+                    <span class="label">PLATFORM BARANG HILANG KAMPUS</span>
+
+                    <h1>
+                        Barang Hilang?<br>
+                        <span>Temukan Kembali.</span>
+                    </h1>
+
+                    <p>
+                        FoundIt membantu mahasiswa dan seluruh civitas kampus
+                        melaporkan, mencari, dan mengklaim barang yang hilang
+                        di lingkungan kampus.
+                    </p>
+
+                    <div class="hero-button">
+                        <a href="#barang" class="btn-utama">Cari Barang</a>
+                        <a href="#lapor" class="btn-outline">Lapor Barang</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FITUR UTAMA -->
+    <section class="fitur container">
+        <div class="row g-4">
+
+            <div class="col-md-4">
+                <div class="fitur-box">
+                    <div class="ikon">🔎</div>
+                    <h3>Cari Barang</h3>
+                    <p>
+                        Cari barang hilang berdasarkan nama, kategori,
+                        atau lokasi.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="fitur-box">
+                    <div class="ikon">📝</div>
+                    <h3>Buat Laporan</h3>
+                    <p>
+                        Laporkan barang yang hilang atau barang
+                        yang kamu temukan.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="fitur-box">
+                    <div class="ikon">✓</div>
+                    <h3>Ajukan Klaim</h3>
+                    <p>
+                        Ajukan klaim dan pantau status barang
+                        yang kamu laporkan.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- DAFTAR BARANG -->
+    <section id="barang">
+        <div class="container">
+
+            <div class="judul-section">
+                <span class="label-biru">BARANG TERBARU</span>
+                <h2>Barang Hilang &amp; Ditemukan</h2>
+                <p>
+                    Lihat laporan barang dari mahasiswa dan civitas
+                    kampus lainnya.
+                </p>
+            </div>
+
+            <!-- FILTER BARANG -->
+            <div class="filter">
+                <div class="row g-2 align-items-stretch">
+
+                    <!-- Pencarian nama barang -->
+                    <div class="col-md-5">
+                        <div class="search-box">
+                            <span class="search-icon" aria-hidden="true">
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                    width="20" height="20"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <circle cx="11" cy="11" r="8"></circle>
+                                    <line x1="16.65" y1="16.65"
+                                        x2="21" y2="21"></line>
+                                </svg>
+                            </span>
+
+                            <input
+                                type="text"
+                                id="searchInput"
+                                placeholder="Cari nama barang..."
+                                aria-label="Cari nama barang"
+                                autocomplete="off"
+                            >
+
+                            <button
+                                type="button"
+                                id="clearSearch"
+                                class="clear-search"
+                                aria-label="Hapus kata pencarian"
+                                title="Hapus pencarian"
+                                hidden
+                            >&times;</button>
+                        </div>
+                    </div>
+
+                    <!-- Filter status -->
+                    <div class="col-md-3">
+                        <select class="w-100" id="selectStatus"
+                                aria-label="Filter status barang">
+                            <option>Semua Status</option>
+                            <option>Hilang</option>
+                            <option>Ditemukan</option>
+                        </select>
+                    </div>
+
+                    <!-- Filter kategori -->
+                    <div class="col-md-3">
+                        <select class="w-100" id="selectKategori"
+                                aria-label="Filter kategori barang">
+                            <option>Semua Kategori</option>
+                            <option>Elektronik</option>
+                            <option>Dokumen</option>
+                            <option>Aksesoris</option>
+                            <option>Lainnya</option>
+                        </select>
+                    </div>
+
+                    <!-- Tombol Reset -->
+                    <div class="col-md-1">
+                        <div class="filter-actions">
+                            <button type="button" id="resetFilter"
+                                    class="reset-filter">
+                                Reset
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- DAFTAR KARTU BARANG -->
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 grid-barang">
+
+                <!-- BARANG 1: FLASHDISK -->
+                <div class="col">
+                    <div class="card">
+                        <div class="gambar-barang">
+                            <img
+                                src="https://images.pexels.com/photos/18641665/pexels-photo-18641665.png?auto=compress&cs=tinysrgb&w=600"
+                                alt="Flashdisk SanDisk 64GB"
+                                loading="lazy"
+                            >
+                        </div>
+
+                        <div class="card-body">
+                            <span class="badge hilang">Hilang</span>
+                            <h3>Flashdisk SanDisk 64GB</h3>
+                            <p>Lab RPL Gedung C</p>
+                            <p>9 September 2026</p>
+                            <p class="kategori">Elektronik</p>
+
+                            <button class="btn-detail"
+                                    onclick="window.location.href='login.php'">
+                                Lihat Detail
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BARANG 2: KUNCI MOTOR -->
+                <div class="col">
+                    <div class="card">
+                        <div class="gambar-barang">
+                            <img
+                                src="https://motosneno.cdn.magazord.com.br/img/2025/09/produto/48777/5sl8251108.jpg"
+                                alt="Kunci Motor Yamaha"
+                                loading="lazy"
+                            >
+                        </div>
+
+                        <div class="card-body">
+                            <span class="badge ditemukan">Ditemukan</span>
+                            <h3>Kunci Motor Yamaha</h3>
+                            <p>Parkiran Teknik</p>
+                            <p>8 September 2026</p>
+                            <p class="kategori">Aksesoris</p>
+
+                            <button class="btn-detail"
+                                    onclick="window.location.href='login.php'">
+                                Ajukan Klaim
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BARANG 3: HANDPHONE -->
+                <div class="col">
+                    <div class="card">
+                        <div class="gambar-barang">
+                            <img
+                                src="https://m.media-amazon.com/images/I/41Hh3xwzdFL._SL500_.jpg"
+                                alt="Handphone"
+                                loading="lazy"
+                            >
+                        </div>
+
+                        <div class="card-body">
+                            <span class="badge hilang">Hilang</span>
+                            <h3>Handphone</h3>
+                            <p>Ruang C.302</p>
+                            <p>7 September 2026</p>
+                            <p class="kategori">Elektronik</p>
+
+                            <button class="btn-detail"
+                                    onclick="window.location.href='login.php'">
+                                Lihat Detail
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- PESAN JIKA BARANG TIDAK DITEMUKAN -->
+            <p id="pesanKosong" role="status" aria-live="polite"
+                style="display: none; text-align: center; margin-top: 30px;">
+                Barang tidak ditemukan.
+            </p>
+
+        </div>
+    </section>
+
+    <!-- CARA KERJA -->
+    <section class="cara-kerja" id="cara-kerja">
+        <div class="container">
+
+            <div class="judul-section tengah">
+                <span class="label-biru">CARA KERJA</span>
+                <h2>Menemukan Barang Jadi Lebih Mudah</h2>
+                <p>
+                    FoundIt menghubungkan mahasiswa dan civitas kampus
+                    agar proses pelaporan dan pencarian barang menjadi lebih mudah.
+                </p>
+            </div>
+
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 langkah mt-4">
+
+                <div class="col">
+                    <div class="langkah-box">
+                        <span>01</span>
+                        <h3>Laporkan</h3>
+                        <p>
+                            Buat laporan jika kamu kehilangan
+                            atau menemukan barang.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="langkah-box">
+                        <span>02</span>
+                        <h3>Cari</h3>
+                        <p>
+                            Cari barang berdasarkan nama,
+                            kategori, lokasi, dan status.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="langkah-box">
+                        <span>03</span>
+                        <h3>Klaim</h3>
+                        <p>
+                            Ajukan klaim jika menemukan
+                            barang yang sesuai.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="langkah-box">
+                        <span>04</span>
+                        <h3>Selesai</h3>
+                        <p>
+                            Admin melakukan verifikasi
+                            sebelum barang dikembalikan.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- TENTANG FOUNDIT -->
+    <section class="tentang container" id="tentang">
+        <div class="row align-items-center g-5">
+
+            <div class="col-lg-8 tentang-text">
+                <span class="label-biru">TENTANG FoundIt</span>
+                <h2>Karena Barang Hilang Bisa Terjadi pada Siapa Saja</h2>
+
+                <p>
+                    Biasanya ketika ada mahasiswa yang kehilangan barang,
+                    informasi tersebut hanya dibagikan melalui grup tertentu,
+                    misalnya grup mahasiswa Teknik.
+                </p>
+
+                <p>
+                    Namun, bagaimana jika barang yang hilang bukan milik
+                    mahasiswa Teknik? Informasi tersebut mungkin tidak akan
+                    diketahui oleh mahasiswa atau civitas dari fakultas lain.
+                </p>
+
+                <p>
+                    Oleh karena itu, FoundIt dibuat sebagai platform yang
+                    memungkinkan barang hilang dan ditemukan dapat diketahui
+                    oleh seluruh civitas kampus.
+                </p>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="tentang-box">
+                    <div class="ikon-besar">🔍</div>
+                    <h3>Satu Platform</h3>
+                    <p>
+                        Menghubungkan seluruh civitas kampus
+                        dalam mencari dan menemukan barang.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- AJAKAN UNTUK MELAPOR -->
+    <section class="lapor" id="lapor">
+        <h2>Kehilangan atau Menemukan Barang?</h2>
+        <p>Bantu barang tersebut kembali kepada pemiliknya.</p>
+        <a href="login.php" class="btn-utama">Mulai Melapor</a>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row g-4">
+
+                <div class="col-md-6">
+                    <h2><span>Found</span>It</h2>
+                    <p>
+                        Platform barang hilang dan ditemukan
+                        untuk seluruh civitas kampus.
+                    </p>
+                </div>
+
+                <div class="col-md-3">
+                    <h3>Menu</h3>
+                    <p>Beranda</p>
+                    <p>Cari Barang</p>
+                    <p>Cara Kerja</p>
+                    <p>Tentang</p>
+                </div>
+
+                <div class="col-md-3">
+                    <h3>Teknologi</h3>
+                    <p>HTML &amp; CSS</p>
+                    <p>JavaScript</p>
+                </div>
+
+            </div>
+        </div>
+    </footer>
+
+    <!-- COPYRIGHT -->
+    <div class="copyright">
+        &copy; 2026 FoundIt. Platform Barang Hilang Kampus.
+    </div>
+
+    <!-- JAVASCRIPT -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/script.js"></script>
+
+</body>
+</html>
