@@ -2,7 +2,7 @@
 include 'koneksi.php';
 
 // AMBIL KATEGORI UNTUK FILTER DROPDOWN
-$categories = $pdo->query("SELECT * FROM categories")->fetchAll(PDO::FETCH_ASSOC);
+$categories = $conn->query("SELECT * FROM categories")->fetchAll(PDO::FETCH_ASSOC);
 
 // FILTERING LAPORAN
 $where_clauses = [];
@@ -28,7 +28,7 @@ if (count($where_clauses) > 0) {
 }
 $sql .= " ORDER BY items.created_at DESC";
 
-$stmt = $pdo->prepare($sql);
+$stmt = $conn->prepare($sql);
 $stmt->execute($params);
 $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>

@@ -6,7 +6,7 @@ if (isset($_GET['action']) && isset($_GET['id'])) {
     $item_id = $_GET['id'];
     $status = ($_GET['action'] == 'setuju') ? 'Terbit' : 'Ditolak';
 
-    $stmt = $pdo->prepare("UPDATE items SET status = ? WHERE id = ?");
+    $stmt = $conn->prepare("UPDATE items SET status = ? WHERE id = ?");
     $stmt->execute([$status, $item_id]);
 
     header("Location: admin-verifikasi-laporan.php");
@@ -20,7 +20,7 @@ $query = "SELECT items.*, categories.nama_kategori, users.nama AS pelapor_nama, 
           LEFT JOIN users ON items.users_id = users.id 
           WHERE items.status = 'Pending' 
           ORDER BY items.created_at DESC";
-$laporan = $pdo->query($query)->fetchAll(PDO::FETCH_ASSOC);
+$laporan = $conn->query($query)->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="id">

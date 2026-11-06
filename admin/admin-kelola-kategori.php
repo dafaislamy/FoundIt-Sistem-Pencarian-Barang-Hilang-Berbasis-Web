@@ -6,11 +6,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['tambah_kategori'])) {
     $nama_kategori = trim($_POST['nama_kategori']);
     if (!empty($nama_kategori)) {
         // Generate Auto ID CATxxx
-        $max_id = $pdo->query("SELECT MAX(id) FROM categories")->fetchColumn();
+        $max_id = $conn->query("SELECT MAX(id) FROM categories")->fetchColumn();
         $num = (int) substr($max_id, 3) + 1;
         $id = 'CAT' . str_pad($num, 3, '0', STR_PAD_LEFT);
 
-        $stmt = $pdo->prepare("INSERT INTO categories (id, nama_kategori) VALUES (?, ?)");
+        $stmt = $conn->prepare("INSERT INTO categories (id, nama_kategori) VALUES (?, ?)");
         $stmt->execute([$id, $nama_kategori]);
     }
     header("Location: admin-kelola-kategori.php");
@@ -20,13 +20,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['tambah_kategori'])) {
 // HAPUS KATEGORI
 if (isset($_GET['hapus'])) {
     $id_hapus = $_GET['hapus'];
-    $stmt = $pdo->prepare("DELETE FROM categories WHERE id = ?");
+    $stmt = $conn->prepare("DELETE FROM categories WHERE id = ?");
     $stmt->execute([$id_hapus]);
     header("Location: admin-kelola-kategori.php");
     exit();
 }
 
-$categories = $pdo->query("SELECT * FROM categories ORDER BY nama_kategori ASC")->fetchAll(PDO::FETCH_ASSOC);
+$categories = $conn->query("SELECT * FROM categories ORDER BY nama_kategori ASC")->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="id">

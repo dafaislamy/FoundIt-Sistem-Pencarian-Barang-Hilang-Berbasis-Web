@@ -7,7 +7,7 @@ if (isset($_GET['action']) && isset($_GET['id'])) {
     $admin_id = 'ADM001'; // ID admin default
     $status = ($_GET['action'] == 'setuju') ? 'Disetujui' : 'Ditolak';
 
-    $stmt = $pdo->prepare("UPDATE claims SET status_klaim = ?, admins_id = ? WHERE id = ?");
+    $stmt = $conn->prepare("UPDATE claims SET status_klaim = ?, admins_id = ? WHERE id = ?");
     $stmt->execute([$status, $admin_id, $claim_id]);
 
     header("Location: admin-verifikasi-klaim.php");
@@ -20,7 +20,7 @@ $query = "SELECT claims.*, items.judul AS barang, items.lokasi, users.nama AS pe
           JOIN items ON claims.items_id = items.id 
           JOIN users ON claims.users_id = users.id 
           WHERE claims.status_klaim = 'Menunggu'";
-$claims = $pdo->query($query)->fetchAll(PDO::FETCH_ASSOC);
+$claims = $conn->query($query)->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="id">

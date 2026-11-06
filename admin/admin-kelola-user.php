@@ -10,11 +10,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['tambah_user'])) {
     $password = password_hash('123456', PASSWORD_DEFAULT); // Default password
 
     // Auto generator USRxxx
-    $max_id = $pdo->query("SELECT MAX(id) FROM users")->fetchColumn();
+    $max_id = $conn->query("SELECT MAX(id) FROM users")->fetchColumn();
     $num = (int) substr($max_id, 3) + 1;
     $id = 'USR' . str_pad($num, 3, '0', STR_PAD_LEFT);
 
-    $stmt = $pdo->prepare("INSERT INTO users (id, nama, nomor_identitas, email, password, no_telp, role) VALUES (?, ?, ?, ?, ?, ?, 'user')");
+    $stmt = $conn->prepare("INSERT INTO users (id, nama, nomor_identitas, email, password, no_telp, role) VALUES (?, ?, ?, ?, ?, ?, 'user')");
     $stmt->execute([$id, $nama, $nim, $email, $password, $no_telp]);
 
     header("Location: admin-kelola-user.php");
@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['tambah_user'])) {
 
 // HAPUS PENGGUNA
 if (isset($_GET['hapus'])) {
-    $stmt = $pdo->prepare("DELETE FROM users WHERE id = ?");
+    $stmt = $conn->prepare("DELETE FROM users WHERE id = ?");
     $stmt->execute([$_GET['hapus']]);
     header("Location: admin-kelola-user.php");
     exit();
@@ -36,7 +36,7 @@ if (!empty($search)) {
     $query .= " AND (nama LIKE '%$search%' OR nomor_identitas LIKE '%$search%' OR email LIKE '%$search%')";
 }
 $query .= " ORDER BY created_at DESC";
-$users = $pdo->query($query)->fetchAll(PDO::FETCH_ASSOC);
+$users = $conn->query($query)->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="id">

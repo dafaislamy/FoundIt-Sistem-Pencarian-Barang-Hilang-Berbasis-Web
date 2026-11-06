@@ -2,13 +2,13 @@
 include 'koneksi.php';
 
 // Menghitung statistik riil
-$total_user = $pdo->query("SELECT COUNT(*) FROM users WHERE role = 'user'")->fetchColumn();
-$total_laporan = $pdo->query("SELECT COUNT(*) FROM items")->fetchColumn();
-$perlu_verifikasi = $pdo->query("SELECT COUNT(*) FROM items WHERE status = 'Pending'")->fetchColumn();
-$klaim_selesai = $pdo->query("SELECT COUNT(*) FROM claims WHERE status_klaim = 'Disetujui'")->fetchColumn();
+$total_user = $conn->query("SELECT COUNT(*) FROM users WHERE role = 'user'")->fetchColumn();
+$total_laporan = $conn->query("SELECT COUNT(*) FROM items")->fetchColumn();
+$perlu_verifikasi = $conn->query("SELECT COUNT(*) FROM items WHERE status = 'Pending'")->fetchColumn();
+$klaim_selesai = $conn->query("SELECT COUNT(*) FROM claims WHERE status_klaim = 'Disetujui'")->fetchColumn();
 
 // Mengambil laporan yang butuh verifikasi (Pending)
-$stmt_laporan = $pdo->query("
+$stmt_laporan = $conn->query("
     SELECT items.*, users.nama AS nama_pelapor 
     FROM items 
     LEFT JOIN users ON items.users_id = users.id 

@@ -6,14 +6,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_status'])) {
     $item_id = $_POST['item_id'];
     $status_baru = $_POST['status_baru'];
 
-    $stmt = $pdo->prepare("UPDATE items SET status = ? WHERE id = ?");
+    $stmt = $conn->prepare("UPDATE items SET status = ? WHERE id = ?");
     $stmt->execute([$status_baru, $item_id]);
 
     header("Location: admin-ubah-status.php");
     exit();
 }
 
-$items = $pdo->query("SELECT items.*, categories.nama_kategori FROM items JOIN categories ON items.categories_id = categories.id ORDER BY items.created_at DESC")->fetchAll(PDO::FETCH_ASSOC);
+$items = $conn->query("SELECT items.*, categories.nama_kategori FROM items JOIN categories ON items.categories_id = categories.id ORDER BY items.created_at DESC")->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="id">
