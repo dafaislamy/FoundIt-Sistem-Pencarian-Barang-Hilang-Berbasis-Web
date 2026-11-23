@@ -46,7 +46,7 @@ $inisial  = !empty($namaUser) ? strtoupper(substr($namaUser, 0, 1)) : 'U';
         <!-- Menu navigasi -->
         <nav>
             <a href="dashboard.php" class="active">Dashboard</a>
-            <a href="cari-barang.html">Cari Barang</a>
+            <a href="cari-barang.php">Cari Barang</a>
             <a href="lapor-hilang.html">Lapor Barang Hilang</a>
             <a href="lapor-ditemukan.html">Lapor Barang Ditemukan</a>
             <a href="klaim.html">Klaim Barang</a>
@@ -116,7 +116,7 @@ $inisial  = !empty($namaUser) ? strtoupper(substr($namaUser, 0, 1)) : 'U';
                 <div class="d-flex gap-3 flex-wrap">
                     <a href="lapor-hilang.html" class="btn btn-danger">Lapor Barang Hilang</a>
                     <a href="lapor-ditemukan.html" class="btn btn-success">Lapor Barang Ditemukan</a>
-                    <a href="cari-barang.html" class="btn btn-outline-primary">Cari Barang</a>
+                    <a href="cari-barang.php" class="btn btn-outline-primary">Cari Barang</a>
                 </div>
             </div>
         </section>

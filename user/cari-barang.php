@@ -1,110 +1,391 @@
+
 <?php
 // user/cari-barang.php
+
 require_once '../config/koneksi.php';
-require_once '../includes/functions.php';
 
-// Ambil parameter pencarian & filter jika ada
-$keyword = $_GET['keyword'] ?? '';
-$tipe    = $_GET['tipe'] ?? '';
-$kategori= $_GET['kategori'] ?? '';
+// Pengecekan session login
+if (
+    !isset($_SESSION['is_logged_in']) ||
+    $_SESSION['is_logged_in'] !== true ||
+    ($_SESSION['role'] ?? '') !== 'user'
+) {
+    header("Location: ../login.php");
+    exit;
+}
 
-// Ambil daftar kategori untuk filter dropdown
+// Mengambil nama pengguna dari session
+$namaUser = $_SESSION['nama'] ?? 'User';
+$inisial = strtoupper(substr($namaUser, 0, 1));
+
+// Mengambil parameter pencarian dan filter
+$keyword  = trim($_GET['keyword'] ?? '');
+$tipe     = $_GET['tipe'] ?? '';
+$kategori = $_GET['kategori'] ?? '';
+
+$categories = [];
+$items = [];
+$error = '';
+
+// Mengubah tipe barang menjadi label
+function labelTipe($tipe)
+{
+    $tipe = strtolower(trim($tipe));
+
+    if ($tipe === 'lost' || $tipe === 'hilang') {
+        return 'Hilang';
+    }
+
+    if ($tipe === 'found' || $tipe === 'ditemukan') {
+        return 'Ditemukan';
+    }
+
+    return ucfirst($tipe);
+}
+
 try {
-    $stmtCat = $conn->query("SELECT id, nama_kategori FROM categories ORDER BY nama_kategori ASC");
+    // Mengambil kategori dari Oracle
+    $stmtCat = $conn->query("
+        SELECT ID, NAMA_KATEGORI
+        FROM CATEGORIES
+        ORDER BY NAMA_KATEGORI ASC
+    ");
+
     $categories = $stmtCat->fetchAll(PDO::FETCH_ASSOC);
-} catch (PDOException $e) {
-    $categories = [];
-}
 
-// Query dasar untuk mencari barang yang statusnya 'Terbit' (sudah diverifikasi admin)
-$sql = "SELECT i.*, c.nama_kategori 
-        FROM items i 
-        JOIN categories c ON i.categories_id = c.id 
-        WHERE i.status = 'Terbit'";
-$params = [];
+    // Query dasar: hanya barang yang sudah diterbitkan
+    $sql = "
+        SELECT
+            I.ID,
+            I.JUDUL,
+            I.DESKRIPSI,
+            I.TIPE,
+            I.LOKASI,
+            I.TANGGAL_KEJADIAN,
+            I.FOTO,
+            I.STATUS,
+            C.NAMA_KATEGORI
+        FROM ITEMS I
+        JOIN CATEGORIES C
+            ON I.CATEGORIES_ID = C.ID
+        WHERE UPPER(TRIM(I.STATUS)) = 'TERBIT'
+    ";
 
-// Tambahkan filter keyword (judul / deskripsi / lokasi)
-if (!empty($keyword)) {
-    $sql .= " AND (LOWER(i.judul) LIKE LOWER(:keyword) OR LOWER(i.deskripsi) LIKE LOWER(:keyword) OR LOWER(i.lokasi) LIKE LOWER(:keyword))";
-    $params[':keyword'] = '%' . $keyword . '%';
-}
+    $params = [];
 
-// Tambahkan filter tipe (lost / found)
-if (!empty($tipe)) {
-    $sql .= " AND i.tipe = :tipe";
-    $params[':tipe'] = $tipe;
-}
+    // Filter pencarian
+    if ($keyword !== '') {
+        $sql .= "
+            AND (
+                LOWER(I.JUDUL) LIKE LOWER(:judul)
+                OR LOWER(I.DESKRIPSI) LIKE LOWER(:deskripsi)
+                OR LOWER(I.LOKASI) LIKE LOWER(:lokasi)
+            )
+        ";
 
-// Tambahkan filter kategori
-if (!empty($kategori)) {
-    $sql .= " AND i.categories_id = :kategori";
-    $params[':kategori'] = $kategori;
-}
+        $kataKunci = '%' . $keyword . '%';
 
-$sql .= " ORDER BY i.created_at DESC";
+        $params[':judul'] = $kataKunci;
+        $params[':deskripsi'] = $kataKunci;
+        $params[':lokasi'] = $kataKunci;
+    }
 
-try {
+    // Filter tipe barang
+    if ($tipe === 'hilang') {
+        $sql .= "
+            AND UPPER(TRIM(I.TIPE)) IN ('LOST', 'HILANG')
+        ";
+    } elseif ($tipe === 'ditemukan') {
+        $sql .= "
+            AND UPPER(TRIM(I.TIPE)) IN ('FOUND', 'DITEMUKAN')
+        ";
+    }
+
+    // Filter kategori
+    if ($kategori !== '') {
+        $sql .= " AND I.CATEGORIES_ID = :kategori";
+        $params[':kategori'] = $kategori;
+    }
+
+    $sql .= " ORDER BY I.CREATED_AT DESC";
+
     $stmt = $conn->prepare($sql);
     $stmt->execute($params);
-    $items = $stmt.fetchAll(PDO::FETCH_ASSOC);
+
+    $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 } catch (PDOException $e) {
-    $items = [];
+    error_log('Cari Barang FoundIt: ' . $e->getMessage());
+    $error = 'Terjadi kesalahan saat mengambil data barang dari database.';
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Cari Barang - FoundIt</title>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
     <link rel="stylesheet" href="../css/main.css">
 </head>
+
 <body>
-    <div class="container">
-        <h2>Cari Barang Hilang & Ditemukan</h2>
-        <p><a href="dashboard.php">&larr; Kembali ke Dashboard</a></p>
 
-        <!-- Form Pencarian & Filter -->
-        <form action="cari-barang.php" method="GET" style="margin-bottom: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
-            <input type="text" name="keyword" value="<?= htmlspecialchars($keyword); ?>" placeholder="Cari nama barang/lokasi..." class="form-control" style="flex: 2; min-width: 200px;">
-            
-            <select name="tipe" class="form-control" style="flex: 1; min-width: 130px;">
-                <option value="">-- Semua Tipe --</option>
-                <option value="lost" <?= $tipe === 'lost' ? 'selected' : ''; ?>>Barang Hilang</option>
-                <option value="found" <?= $tipe === 'found' ? 'selected' : ''; ?>>Barang Ditemukan</option>
-            </select>
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
 
-            <select name="kategori" class="form-control" style="flex: 1; min-width: 130px;">
-                <option value="">-- Semua Kategori --</option>
-                <?php foreach ($categories as $cat): ?>
-                    <option value="<?= $cat['ID']; ?>" <?= $kategori === $cat['ID'] ? 'selected' : ''; ?>><?= htmlspecialchars($cat['NAMA_KATEGORI']); ?></option>
-                <?php endforeach; ?>
-            </select>
-
-            <button type="submit" class="btn-primary" style="flex: 0.5;">Cari</button>
-        </form>
-
-        <!-- Daftar Hasil Pencarian -->
-        <div class="item-list" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px;">
-            <?php if (count($items) > 0): ?>
-                <?php foreach ($items as $item): ?>
-                    <div class="card" style="border: 1px solid #ddd; padding: 15px; border-radius: 5px;">
-                        <?php if (!empty($item['FOTO'])): ?>
-                            <img src="../uploads/<?= htmlspecialchars($item['FOTO']); ?>" alt="Foto Barang" style="width: 100%; height: 150px; object-fit: cover; border-radius: 4px;">
-                        <?php endif; ?>
-                        <span style="display: inline-block; padding: 3px 8px; font-size: 12px; background: <?= $item['TIPE'] === 'lost' ? '#ffcccc' : '#ccffcc'; ?>; color: #333; margin-top: 8px; border-radius: 3px;">
-                            <?= $item['TIPE'] === 'lost' ? 'Hilang' : 'Ditemukan'; ?>
-                        </span>
-                        <h3><?= htmlspecialchars($item['JUDUL']); ?></h3>
-                        <p><strong>Kategori:</strong> <?= htmlspecialchars($item['NAMA_KATEGORI']); ?></p>
-                        <p><strong>Lokasi:</strong> <?= htmlspecialchars($item['LOKASI']); ?></p>
-                        <p><a href="detail-barang.php?id=<?= $item['ID']; ?>">Lihat Detail &rarr;</a></p>
-                    </div>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <p>Tidak ada barang yang ditemukan.</p>
-            <?php endif; ?>
+        <div class="logo">
+            <span>Found</span>It
         </div>
-    </div>
+
+        <nav>
+            <a href="dashboard.php">Dashboard</a>
+            <a href="cari-barang.php" class="active">Cari Barang</a>
+            <a href="lapor-hilang.html">Lapor Barang Hilang</a>
+            <a href="lapor-ditemukan.html">Lapor Barang Ditemukan</a>
+            <a href="klaim.html">Klaim Barang</a>
+            <a href="status-klaim.html">Status Klaim</a>
+            <a href="riwayat-laporan.html">Riwayat Laporan</a>
+            <a href="profil.html">Profil</a>
+        </nav>
+
+        <a
+            href="dashboard.php?action=logout"
+            class="logout"
+            onclick="return confirm('Apakah Anda yakin ingin keluar?');"
+        >
+            Keluar
+        </a>
+
+    </aside>
+
+    <!-- KONTEN UTAMA -->
+    <main class="main-content">
+
+        <!-- HEADER -->
+        <header class="topbar">
+
+            <div>
+                <h1>Daftar Barang</h1>
+                <p>Jelajahi laporan barang hilang dan ditemukan di kampus.</p>
+            </div>
+
+            <div class="user-profile">
+                <div class="profile-icon">
+                    <?= htmlspecialchars($inisial, ENT_QUOTES, 'UTF-8'); ?>
+                </div>
+
+                <div>
+                    <strong>
+                        <?= htmlspecialchars($namaUser, ENT_QUOTES, 'UTF-8'); ?>
+                    </strong>
+                    <small>User</small>
+                </div>
+            </div>
+
+        </header>
+
+        <!-- PENCARIAN DAN FILTER -->
+        <section class="search-box">
+
+            <div class="search-title">
+                <h2>Cari Barang</h2>
+                <p>Temukan barang berdasarkan nama, status, atau kategori.</p>
+            </div>
+
+            <form
+                action="cari-barang.php"
+                method="GET"
+                class="search-filter-wrapper"
+            >
+
+                <div class="search-input-wrapper">
+                    <input
+                        type="text"
+                        name="keyword"
+                        placeholder="Cari nama barang..."
+                        value="<?= htmlspecialchars($keyword, ENT_QUOTES, 'UTF-8'); ?>"
+                        class="form-control"
+                    >
+                </div>
+
+                <select
+                    name="tipe"
+                    class="filter-select form-select"
+                >
+                    <option value="">Semua Status</option>
+
+                    <option
+                        value="hilang"
+                        <?= $tipe === 'hilang' ? 'selected' : ''; ?>
+                    >
+                        Hilang
+                    </option>
+
+                    <option
+                        value="ditemukan"
+                        <?= $tipe === 'ditemukan' ? 'selected' : ''; ?>
+                    >
+                        Ditemukan
+                    </option>
+                </select>
+
+                <select
+                    name="kategori"
+                    class="filter-select form-select"
+                >
+                    <option value="">Semua Kategori</option>
+
+                    <?php foreach ($categories as $cat): ?>
+                        <option
+                            value="<?= htmlspecialchars($cat['ID'], ENT_QUOTES, 'UTF-8'); ?>"
+                            <?= $kategori === $cat['ID'] ? 'selected' : ''; ?>
+                        >
+                            <?= htmlspecialchars($cat['NAMA_KATEGORI'], ENT_QUOTES, 'UTF-8'); ?>
+                        </option>
+                    <?php endforeach; ?>
+
+                </select>
+
+                <button type="submit" class="btn btn-primary">
+                    Cari
+                </button>
+
+                <a
+                    href="cari-barang.php"
+                    class="btn btn-outline-secondary"
+                >
+                    Reset
+                </a>
+
+            </form>
+
+        </section>
+
+        <!-- HASIL PENCARIAN -->
+        <section class="result-section">
+
+            <div class="result-header">
+                <div>
+                    <h2>Daftar Barang</h2>
+
+                    <p>
+                        Menampilkan <?= count($items); ?> barang.
+                    </p>
+                </div>
+            </div>
+
+            <?php if ($error !== ''): ?>
+
+                <div class="alert alert-danger">
+                    <?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8'); ?>
+                </div>
+
+            <?php elseif (count($items) > 0): ?>
+
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+
+                    <?php foreach ($items as $item): ?>
+
+                        <?php
+                        $label = labelTipe($item['TIPE']);
+                        $isFound = ($label === 'Ditemukan');
+                        ?>
+
+                        <div class="col">
+
+                            <div class="barang-card">
+
+                                <?php if (!empty($item['FOTO'])): ?>
+
+                                    <div class="barang-image">
+                                        <img
+                                            src="../uploads/<?= htmlspecialchars($item['FOTO'], ENT_QUOTES, 'UTF-8'); ?>"
+                                            alt="<?= htmlspecialchars($item['JUDUL'], ENT_QUOTES, 'UTF-8'); ?>"
+                                            loading="lazy"
+                                        >
+                                    </div>
+
+                                <?php endif; ?>
+
+                                <div class="barang-content">
+
+                                    <span class="status-badge <?= $isFound ? 'ditemukan' : 'hilang'; ?>">
+                                        <?= htmlspecialchars($label, ENT_QUOTES, 'UTF-8'); ?>
+                                    </span>
+
+                                    <h3>
+                                        <?= htmlspecialchars($item['JUDUL'], ENT_QUOTES, 'UTF-8'); ?>
+                                    </h3>
+
+                                    <p>
+                                        <?= htmlspecialchars($item['DESKRIPSI'], ENT_QUOTES, 'UTF-8'); ?>
+                                    </p>
+
+                                    <p>
+                                        <strong>Lokasi:</strong>
+                                        <?= htmlspecialchars($item['LOKASI'], ENT_QUOTES, 'UTF-8'); ?>
+                                    </p>
+
+                                    <span class="category">
+                                        <?= htmlspecialchars($item['NAMA_KATEGORI'], ENT_QUOTES, 'UTF-8'); ?>
+                                    </span>
+
+                                    <div class="barang-actions">
+
+                                        <a
+                                            href="detail-barang.php?id=<?= urlencode($item['ID']); ?>"
+                                            class="btn-detail"
+                                        >
+                                            Lihat Detail
+                                        </a>
+
+                                        <?php if ($isFound): ?>
+
+                                            <a
+                                                href="klaim.php?id=<?= urlencode($item['ID']); ?>"
+                                                class="btn-klaim"
+                                            >
+                                                Klaim
+                                            </a>
+
+                                        <?php endif; ?>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    <?php endforeach; ?>
+
+                </div>
+
+            <?php else: ?>
+
+                <div class="no-result">
+                    <h3>Barang tidak ditemukan</h3>
+                    <p>
+                        Coba gunakan kata kunci atau filter yang berbeda.
+                    </p>
+                </div>
+
+            <?php endif; ?>
+
+        </section>
+
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>
