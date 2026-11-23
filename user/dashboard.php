@@ -1,4 +1,3 @@
-
 <?php
 // Developed by Fasbir Sabran
 
@@ -47,6 +46,27 @@ if (isset($_GET['action']) && $_GET['action'] === 'logout') {
 }
 
 // ==========================================
+// FUNGSI ALAMAT FOTO
+// ==========================================
+
+function dashboardFotoPath($foto)
+{
+    $foto = trim((string) $foto);
+
+    if ($foto === '') {
+        return '../uploads/no-image.svg';
+    }
+
+    // Menyesuaikan tanda garis miring
+    $foto = str_replace('\\', '/', $foto);
+
+    // Mengambil nama file saja
+    $namaFile = basename($foto);
+
+    return '../uploads/' . rawurlencode($namaFile);
+}
+
+// ==========================================
 // DATA USER
 // ==========================================
 
@@ -76,21 +96,20 @@ $pesanDatabase = '';
 try {
 
     // --------------------------------------
-    // 1. TOTAL BARANG HILANG MILIK USER
+    // 1. TOTAL BARANG HILANG
     // --------------------------------------
 
-// TOTAL BARANG HILANG YANG SUDAH TERBIT
-$stmt = $conn->query("
-    SELECT COUNT(*)
-    FROM ITEMS
-    WHERE LOWER(TRIM(TIPE)) = 'lost'
-    AND LOWER(TRIM(STATUS)) = 'terbit'
-");
+    $stmt = $conn->query("
+        SELECT COUNT(*)
+        FROM ITEMS
+        WHERE LOWER(TRIM(TIPE)) = 'lost'
+        AND LOWER(TRIM(STATUS)) = 'terbit'
+    ");
 
-$totalHilang = (int) $stmt->fetchColumn();
+    $totalHilang = (int) $stmt->fetchColumn();
 
     // --------------------------------------
-    // 2. TOTAL BARANG DITEMUKAN YANG TERBIT
+    // 2. TOTAL BARANG DITEMUKAN
     // --------------------------------------
 
     $stmt = $conn->query("
@@ -101,7 +120,6 @@ $totalHilang = (int) $stmt->fetchColumn();
     ");
 
     $totalDitemukan = (int) $stmt->fetchColumn();
-
 
     // --------------------------------------
     // 3. TOTAL KLAIM MILIK USER
@@ -118,7 +136,6 @@ $totalHilang = (int) $stmt->fetchColumn();
     ]);
 
     $totalKlaim = (int) $stmt->fetchColumn();
-
 
     // --------------------------------------
     // 4. TOTAL KLAIM YANG DISETUJUI
@@ -137,10 +154,8 @@ $totalHilang = (int) $stmt->fetchColumn();
 
     $totalDikembalikan = (int) $stmt->fetchColumn();
 
-
     // --------------------------------------
-    // 5. LAPORAN TERBARU SELURUH PENGGUNA
-    // Hanya menampilkan barang berstatus Terbit
+    // 5. LAPORAN TERBARU
     // --------------------------------------
 
     $stmt = $conn->query("
@@ -255,13 +270,11 @@ $totalHilang = (int) $stmt->fetchColumn();
 
     </aside>
 
-
     <!-- ================================== -->
     <!-- MAIN CONTENT -->
     <!-- ================================== -->
 
     <main class="main-content">
-
 
         <!-- TOPBAR -->
 
@@ -289,7 +302,6 @@ $totalHilang = (int) $stmt->fetchColumn();
                 </p>
 
             </div>
-
 
             <!-- PROFIL USER -->
 
@@ -327,7 +339,6 @@ $totalHilang = (int) $stmt->fetchColumn();
 
         </header>
 
-
         <!-- PESAN DATABASE -->
 
         <?php if (!empty($pesanDatabase)): ?>
@@ -344,7 +355,6 @@ $totalHilang = (int) $stmt->fetchColumn();
 
         <?php endif; ?>
 
-
         <!-- ================================== -->
         <!-- STATISTIK -->
         <!-- ================================== -->
@@ -352,9 +362,6 @@ $totalHilang = (int) $stmt->fetchColumn();
         <section class="mb-4">
 
             <div class="row row-cols-1 row-cols-md-4 g-4">
-
-
-                <!-- BARANG HILANG -->
 
                 <div class="col">
 
@@ -365,17 +372,12 @@ $totalHilang = (int) $stmt->fetchColumn();
                         </p>
 
                         <h3 class="fw-bold mb-0">
-
                             <?= $totalHilang; ?>
-
                         </h3>
 
                     </div>
 
                 </div>
-
-
-                <!-- BARANG DITEMUKAN -->
 
                 <div class="col">
 
@@ -386,17 +388,12 @@ $totalHilang = (int) $stmt->fetchColumn();
                         </p>
 
                         <h3 class="fw-bold mb-0">
-
                             <?= $totalDitemukan; ?>
-
                         </h3>
 
                     </div>
 
                 </div>
-
-
-                <!-- KLAIM SAYA -->
 
                 <div class="col">
 
@@ -407,17 +404,12 @@ $totalHilang = (int) $stmt->fetchColumn();
                         </p>
 
                         <h3 class="fw-bold mb-0">
-
                             <?= $totalKlaim; ?>
-
                         </h3>
 
                     </div>
 
                 </div>
-
-
-                <!-- DIKEMBALIKAN -->
 
                 <div class="col">
 
@@ -428,9 +420,7 @@ $totalHilang = (int) $stmt->fetchColumn();
                         </p>
 
                         <h3 class="fw-bold mb-0">
-
                             <?= $totalDikembalikan; ?>
-
                         </h3>
 
                     </div>
@@ -440,7 +430,6 @@ $totalHilang = (int) $stmt->fetchColumn();
             </div>
 
         </section>
-
 
         <!-- ================================== -->
         <!-- AKSI CEPAT -->
@@ -483,7 +472,6 @@ $totalHilang = (int) $stmt->fetchColumn();
 
         </section>
 
-
         <!-- ================================== -->
         <!-- LAPORAN TERBARU -->
         <!-- ================================== -->
@@ -516,17 +504,15 @@ $totalHilang = (int) $stmt->fetchColumn();
 
             </div>
 
-
             <div class="card border-0 shadow-sm p-4">
 
-                <div class="report-list">
-
+                <div class="report-list border-0">
 
                     <!-- JIKA BELUM ADA LAPORAN -->
 
                     <?php if (empty($laporanTerbaru)): ?>
 
-                        <div class="text-center py-4">
+                        <div class="text-center py-4 px-3">
 
                             <p class="text-muted mb-0">
 
@@ -536,58 +522,46 @@ $totalHilang = (int) $stmt->fetchColumn();
 
                         </div>
 
-
                     <!-- JIKA ADA LAPORAN -->
 
                     <?php else: ?>
 
                         <?php foreach ($laporanTerbaru as $laporan): ?>
 
-                            <div class="d-flex align-items-center gap-3 border-bottom py-3">
-
+                            <div class="d-flex align-items-center gap-4 border-bottom py-3 px-3">
 
                                 <!-- FOTO BARANG -->
 
-                                <?php if (!empty($laporan['FOTO'])): ?>
+                                <?php
+                                $fotoBarang = dashboardFotoPath(
+                                    $laporan['FOTO'] ?? ''
+                                );
+                                ?>
 
-                                    <img
-                                        src="../<?= htmlspecialchars(
-                                            ltrim($laporan['FOTO'], '/'),
-                                            ENT_QUOTES,
-                                            'UTF-8'
-                                        ); ?>"
-                                        alt="Foto barang"
-                                        style="
-                                            width: 75px;
-                                            height: 75px;
-                                            object-fit: cover;
-                                            border-radius: 8px;
-                                        "
-                                    >
-
-                                <?php else: ?>
-
-                                    <div
-                                        class="bg-light d-flex align-items-center justify-content-center"
-                                        style="
-                                            width: 75px;
-                                            height: 75px;
-                                            border-radius: 8px;
-                                        "
-                                    >
-
-                                        <span class="text-muted">
-                                            No Foto
-                                        </span>
-
-                                    </div>
-
-                                <?php endif; ?>
-
+                                <img
+                                    src="<?= htmlspecialchars(
+                                        $fotoBarang,
+                                        ENT_QUOTES,
+                                        'UTF-8'
+                                    ); ?>"
+                                    alt="<?= htmlspecialchars(
+                                        $laporan['JUDUL'] ?? 'Foto barang',
+                                        ENT_QUOTES,
+                                        'UTF-8'
+                                    ); ?>"
+                                    style="
+                                        width: 75px;
+                                        height: 75px;
+                                        object-fit: cover;
+                                        border-radius: 8px;
+                                        flex-shrink: 0;
+                                    "
+                                    onerror="this.onerror=null; this.src='../uploads/no-image.svg';"
+                                >
 
                                 <!-- INFORMASI BARANG -->
 
-                                <div class="flex-grow-1">
+                                <div class="flex-grow-1 min-w-0">
 
                                     <h6 class="fw-bold mb-1">
 
@@ -599,7 +573,6 @@ $totalHilang = (int) $stmt->fetchColumn();
 
                                     </h6>
 
-
                                     <small class="text-muted">
 
                                         <?= htmlspecialchars(
@@ -608,7 +581,7 @@ $totalHilang = (int) $stmt->fetchColumn();
                                             'UTF-8'
                                         ); ?>
 
-                                        &nbsp;•&nbsp;
+                                         • 
 
                                         <?= htmlspecialchars(
                                             $laporan['LOKASI'] ?? '-',
@@ -617,7 +590,6 @@ $totalHilang = (int) $stmt->fetchColumn();
                                         ); ?>
 
                                     </small>
-
 
                                     <!-- JENIS BARANG -->
 
@@ -639,7 +611,6 @@ $totalHilang = (int) $stmt->fetchColumn();
 
                                         <?php endif; ?>
 
-
                                         <!-- STATUS -->
 
                                         <span class="badge bg-secondary">
@@ -656,10 +627,9 @@ $totalHilang = (int) $stmt->fetchColumn();
 
                                 </div>
 
-
                                 <!-- TANGGAL -->
 
-                                <div class="text-end">
+                                <div class="text-end ms-3 flex-shrink-0">
 
                                     <small class="text-muted">
 
@@ -698,10 +668,9 @@ $totalHilang = (int) $stmt->fetchColumn();
 
     </main>
 
-
     <!-- JAVASCRIPT -->
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>

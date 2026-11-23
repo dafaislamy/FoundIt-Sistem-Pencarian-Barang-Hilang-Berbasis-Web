@@ -1,8 +1,8 @@
-
 <?php
 // user/cari-barang.php
 
 require_once '../config/koneksi.php';
+require_once '../includes/functions.php';
 
 // ==========================================
 // PENGECEKAN LOGIN USER
@@ -166,6 +166,75 @@ try {
     >
 
     <link rel="stylesheet" href="../css/main.css">
+
+    <style>
+        .barang-card {
+            display: flex !important;
+            flex-direction: column !important;
+            height: 100% !important;
+        }
+
+        .barang-content {
+            display: flex !important;
+            flex-direction: column !important;
+            flex: 1 1 auto !important;
+        }
+
+        .barang-content .category {
+            align-self: flex-start !important;
+        }
+
+        .barang-actions {
+            display: flex !important;
+            align-items: center !important;
+            gap: 10px !important;
+            margin-top: auto !important;
+            padding-top: 16px !important;
+        }
+
+        .barang-actions a {
+            flex: 1 1 0 !important;
+            width: auto !important;
+            height: 40px !important;
+            min-height: 40px !important;
+            max-height: 40px !important;
+            padding: 8px 14px !important;
+            margin-top: 0 !important;
+            border-radius: 8px !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            font-size: 14px !important;
+            font-weight: 600 !important;
+            line-height: 1.2 !important;
+            white-space: nowrap !important;
+            text-decoration: none !important;
+            box-sizing: border-box !important;
+        }
+
+        .barang-actions .btn-detail {
+            background-color: #ffffff !important;
+            color: #3498db !important;
+            border: 1px solid #3498db !important;
+        }
+
+        .barang-actions .btn-detail:hover {
+            background-color: #3498db !important;
+            color: #ffffff !important;
+        }
+
+        .barang-actions .btn-klaim {
+            background-color: #3498db !important;
+            color: #ffffff !important;
+            border: 1px solid #3498db !important;
+        }
+
+        .barang-actions .btn-klaim:hover {
+            background-color: #2980b9 !important;
+            border-color: #2980b9 !important;
+            color: #ffffff !important;
+        }
+    </style>
 
 </head>
 
@@ -445,26 +514,8 @@ try {
 
                         $isFound = ($label === 'Ditemukan');
 
-                        // Menentukan alamat gambar
-                        $foto = trim($item['FOTO'] ?? '');
-
-                        if ($foto !== '') {
-
-                            if (strpos($foto, 'uploads/') === 0) {
-
-                                $fotoPath = '../' . $foto;
-
-                            } else {
-
-                                $fotoPath = '../uploads/' . $foto;
-
-                            }
-
-                        } else {
-
-                            $fotoPath = '';
-
-                        }
+                        // Menentukan alamat gambar dan fallback jika file tidak tersedia
+                        $fotoPath = foundit_image_path($item['FOTO'] ?? '');
 
                         ?>
 
@@ -475,27 +526,24 @@ try {
 
                                 <!-- GAMBAR BARANG -->
 
-                                <?php if ($fotoPath !== ''): ?>
+                                <div class="barang-image">
 
-                                    <div class="barang-image">
+                                    <img
+                                        src="<?= htmlspecialchars(
+                                            $fotoPath,
+                                            ENT_QUOTES,
+                                            'UTF-8'
+                                        ); ?>"
+                                        alt="<?= htmlspecialchars(
+                                            $item['JUDUL'],
+                                            ENT_QUOTES,
+                                            'UTF-8'
+                                        ); ?>"
+                                        loading="lazy"
+                                        onerror="this.onerror=null; this.src='../uploads/no-image.svg';"
+                                    >
 
-                                        <img
-                                            src="<?= htmlspecialchars(
-                                                $fotoPath,
-                                                ENT_QUOTES,
-                                                'UTF-8'
-                                            ); ?>"
-                                            alt="<?= htmlspecialchars(
-                                                $item['JUDUL'],
-                                                ENT_QUOTES,
-                                                'UTF-8'
-                                            ); ?>"
-                                            loading="lazy"
-                                        >
-
-                                    </div>
-
-                                <?php endif; ?>
+                                </div>
 
 
                                 <!-- INFORMASI BARANG -->
