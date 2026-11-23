@@ -1,32 +1,92 @@
 <?php
-include 'koneksi.php';
+require_once __DIR__ . '/../config/koneksi.php';
 
-// TAMBAH KATEGORI BARU
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['tambah_kategori'])) {
-    $nama_kategori = trim($_POST['nama_kategori']);
-    if (!empty($nama_kategori)) {
-        // Generate Auto ID CATxxx
-        $max_id = $conn->query("SELECT MAX(id) FROM categories")->fetchColumn();
-        $num = (int) substr($max_id, 3) + 1;
-        $id = 'CAT' . str_pad($num, 3, '0', STR_PAD_LEFT);
+if (!isset($_SESSION['is_logged_in'])) {
+    header('Location: ../login.php');
+    exit;
+}
+if ($_SESSION['is_logged_in'] !== true) {
+    header('Location: ../login.php');
+    exit;
+}
+if (($_SESSION['role'] ?? '') !== 'admin') {
+    header('Location: ../login.php');
+    exit;
+}
 
-        $stmt = $conn->prepare("INSERT INTO categories (id, nama_kategori) VALUES (?, ?)");
-        $stmt->execute([$id, $nama_kategori]);
+$pesan = '';
+$error = '';
+
+if (isset($_GET['status'])) {
+    if ($_GET['status'] === 'sukses') {
+        $pesan = 'Kategori baru berhasil ditambahkan.';
     }
-    header("Location: admin-kelola-kategori.php");
-    exit();
+    if ($_GET['status'] === 'dihapus') {
+        $pesan = 'Kategori berhasil dihapus.';
+    }
 }
 
-// HAPUS KATEGORI
-if (isset($_GET['hapus'])) {
-    $id_hapus = $_GET['hapus'];
-    $stmt = $conn->prepare("DELETE FROM categories WHERE id = ?");
-    $stmt->execute([$id_hapus]);
-    header("Location: admin-kelola-kategori.php");
-    exit();
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['tambah_kategori'])) {
+    $nama_kategori = trim($_POST['nama_kategori'] ?? '');
+
+    if ($nama_kategori === '') {
+        $error = 'Nama kategori wajib diisi.';
+    } else {
+        try {
+            $max_id = $conn->query("
+                SELECT MAX(ID)
+                FROM CATEGORIES
+                WHERE REGEXP_LIKE(ID, '^CAT[0-9]+$')
+            ")->fetchColumn();
+            $num = $max_id ? ((int) substr((string) $max_id, 3) + 1) : 1;
+            $id = 'CAT' . str_pad($num, 3, '0', STR_PAD_LEFT);
+
+            $stmt = $conn->prepare("
+                INSERT INTO CATEGORIES (ID, NAMA_KATEGORI)
+                VALUES (:id, :nama_kategori)
+            ");
+            $stmt->execute([
+                ':id' => $id,
+                ':nama_kategori' => $nama_kategori
+            ]);
+
+            header("Location: admin-kelola-kategori.php?status=sukses");
+            exit;
+        } catch (PDOException $e) {
+            error_log($e->getMessage());
+            $error = 'Gagal menambahkan kategori ke database Oracle.';
+        }
+    }
 }
 
-$categories = $conn->query("SELECT * FROM categories ORDER BY nama_kategori ASC")->fetchAll(PDO::FETCH_ASSOC);
+if (isset($_GET['hapus']) && trim($_GET['hapus']) !== '') {
+    $id_hapus = trim($_GET['hapus']);
+    try {
+        $stmt = $conn->prepare("DELETE FROM CATEGORIES WHERE ID = :id");
+        $stmt->execute([':id' => $id_hapus]);
+
+        header("Location: admin-kelola-kategori.php?status=dihapus");
+        exit;
+    } catch (PDOException $e) {
+        error_log($e->getMessage());
+        $error = 'Kategori tidak dapat dihapus karena masih digunakan pada data barang.';
+    }
+}
+
+$categories = [];
+try {
+    $categories = $conn->query("
+        SELECT ID, NAMA_KATEGORI
+        FROM CATEGORIES
+        ORDER BY NAMA_KATEGORI ASC
+    ")->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    error_log($e->getMessage());
+    $error = 'Gagal mengambil daftar kategori.';
+}
+
+$namaAdmin = $_SESSION['nama'] ?? 'Administrator';
+$inisialAdmin = strtoupper(substr($namaAdmin, 0, 1)) ?: 'A';
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -38,7 +98,6 @@ $categories = $conn->query("SELECT * FROM categories ORDER BY nama_kategori ASC"
     <link rel="stylesheet" href="../css/main.css">
 </head>
 <body>
-
     <aside class="sidebar">
         <div class="logo"><span>Found</span>It</div>
         <nav>
@@ -50,7 +109,7 @@ $categories = $conn->query("SELECT * FROM categories ORDER BY nama_kategori ASC"
             <a href="admin-verifikasi-klaim.php">Verifikasi Klaim</a>
             <a href="admin-verifikasi-laporan.php">Verifikasi Laporan</a>
         </nav>
-        <a href="../login.php" class="logout">Keluar</a>
+        <a href="../logout.php" class="logout">Keluar</a>
     </aside>
 
     <main class="main-content">
@@ -60,51 +119,64 @@ $categories = $conn->query("SELECT * FROM categories ORDER BY nama_kategori ASC"
                 <p>Atur kategori barang untuk mempermudah pencarian dan filter pengguna.</p>
             </div>
             <div class="user-profile">
-                <div class="profile-icon bg-primary text-white">A</div>
+                <div class="profile-icon bg-primary text-white"><?= htmlspecialchars($inisialAdmin, ENT_QUOTES, 'UTF-8'); ?></div>
                 <div>
-                    <strong>Administrator</strong>
+                    <strong><?= htmlspecialchars($namaAdmin, ENT_QUOTES, 'UTF-8'); ?></strong>
                     <small>Super Admin</small>
                 </div>
             </div>
         </header>
 
+        <?php if ($pesan !== ''): ?>
+            <div class="alert alert-success"><?= htmlspecialchars($pesan, ENT_QUOTES, 'UTF-8'); ?></div>
+        <?php endif; ?>
+        <?php if ($error !== ''): ?>
+            <div class="alert alert-danger"><?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8'); ?></div>
+        <?php endif; ?>
+
         <div class="row g-4">
-            <!-- FORM TAMBAH KATEGORI -->
             <div class="col-lg-4">
                 <div class="card border-0 shadow-sm p-4 rounded-3">
                     <h5 class="mb-3">Tambah Kategori Baru</h5>
-                    <form method="POST">
+                    <form method="post" action="admin-kelola-kategori.php">
                         <div class="mb-3">
-                            <label class="form-label">Nama Kategori</label>
-                            <input type="text" name="nama_kategori" class="form-control" placeholder="Contoh: Alat Tulis & Buku" required>
+                            <label class="form-label" for="nama_kategori">Nama Kategori</label>
+                            <input type="text" id="nama_kategori" name="nama_kategori" class="form-control" placeholder="Contoh: Alat Tulis &amp; Buku" required>
                         </div>
-                        <button type="submit" name="tambah_kategori" class="btn btn-primary w-100">Simpan Kategori</button>
+                        <button type="submit" name="tambah_kategori" value="1" class="btn btn-primary w-100">Simpan Kategori</button>
                     </form>
                 </div>
             </div>
 
-            <!-- TABEL DAFTAR KATEGORI -->
             <div class="col-lg-8">
                 <div class="card border-0 shadow-sm rounded-3">
                     <div class="table-responsive">
                         <table class="table align-middle mb-0">
                             <thead class="table-light">
                                 <tr>
-                                    <th>ID Kategori</th>
+                                    <th>ID</th>
                                     <th>Nama Kategori</th>
                                     <th class="text-end">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php foreach ($categories as $cat): ?>
-                                <tr>
-                                    <td><code><?= $cat['id'] ?></code></td>
-                                    <td><strong><?= htmlspecialchars($cat['nama_kategori']) ?></strong></td>
-                                    <td class="text-end">
-                                        <a href="admin-kelola-kategori.php?hapus=<?= $cat['id'] ?>" class="btn btn-sm btn-outline-danger" onclick="return confirm('Yakin menghapus kategori ini?')">Hapus</a>
-                                    </td>
-                                </tr>
-                                <?php endforeach; ?>
+                                <?php if (!empty($categories)): ?>
+                                    <?php foreach ($categories as $cat): ?>
+                                        <tr>
+                                            <td><code><?= htmlspecialchars((string) $cat['ID'], ENT_QUOTES, 'UTF-8'); ?></code></td>
+                                            <td><strong><?= htmlspecialchars((string) $cat['NAMA_KATEGORI'], ENT_QUOTES, 'UTF-8'); ?></strong></td>
+                                            <td class="text-end">
+                                                <a href="admin-kelola-kategori.php?hapus=<?= urlencode((string) $cat['ID']); ?>"
+                                                   class="btn btn-sm btn-outline-danger"
+                                                   onclick="return confirm('Hapus kategori ini?');">Hapus</a>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <tr>
+                                        <td colspan="3" class="text-center text-muted py-4">Belum ada kategori terdaftar.</td>
+                                    </tr>
+                                <?php endif; ?>
                             </tbody>
                         </table>
                     </div>
@@ -114,6 +186,5 @@ $categories = $conn->query("SELECT * FROM categories ORDER BY nama_kategori ASC"
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="../js/admin.js"></script>
 </body>
 </html>

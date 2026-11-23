@@ -1,19 +1,70 @@
 <?php
-include 'koneksi.php';
+require_once __DIR__ . '/../config/koneksi.php';
 
-// PROSES UPDATE STATUS BARANG
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_status'])) {
-    $item_id = $_POST['item_id'];
-    $status_baru = $_POST['status_baru'];
-
-    $stmt = $conn->prepare("UPDATE items SET status = ? WHERE id = ?");
-    $stmt->execute([$status_baru, $item_id]);
-
-    header("Location: admin-ubah-status.php");
-    exit();
+if (!isset($_SESSION['is_logged_in'])) {
+    header('Location: ../login.php');
+    exit;
+}
+if ($_SESSION['is_logged_in'] !== true) {
+    header('Location: ../login.php');
+    exit;
+}
+if (($_SESSION['role'] ?? '') !== 'admin') {
+    header('Location: ../login.php');
+    exit;
 }
 
-$items = $conn->query("SELECT items.*, categories.nama_kategori FROM items JOIN categories ON items.categories_id = categories.id ORDER BY items.created_at DESC")->fetchAll(PDO::FETCH_ASSOC);
+$error = '';
+$pesan = '';
+$allowed_statuses = ['Pending', 'Terbit', 'Selesai', 'Ditolak', 'Arsip'];
+
+if (isset($_GET['status']) && $_GET['status'] === 'updated') {
+    $pesan = 'Status barang berhasil diperbarui.';
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_status'])) {
+    $item_id = trim($_POST['item_id'] ?? '');
+    $status_baru = trim($_POST['status_baru'] ?? '');
+
+    if ($item_id === '' || !in_array($status_baru, $allowed_statuses, true)) {
+        $error = 'Data ID barang atau status baru tidak valid.';
+    } else {
+        try {
+            $stmt = $conn->prepare("
+                UPDATE ITEMS
+                SET STATUS = :status_baru
+                WHERE ID = :item_id
+            ");
+            $stmt->execute([
+                ':status_baru' => $status_baru,
+                ':item_id' => $item_id
+            ]);
+
+            header("Location: admin-ubah-status.php?status=updated");
+            exit;
+        } catch (PDOException $e) {
+            error_log($e->getMessage());
+            $error = 'Gagal memperbarui status barang.';
+        }
+    }
+}
+
+$items = [];
+try {
+    $items = $conn->query("
+        SELECT I.ID, I.JUDUL, I.LOKASI, I.STATUS, I.CREATED_AT,
+               C.NAMA_KATEGORI
+        FROM ITEMS I
+        JOIN CATEGORIES C ON I.CATEGORIES_ID = C.ID
+        ORDER BY I.CREATED_AT DESC
+    ")->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    error_log($e->getMessage());
+    $error = 'Gagal memuat daftar barang.';
+}
+
+$namaAdmin = $_SESSION['nama'] ?? 'Administrator';
+$inisialAdmin = strtoupper(substr($namaAdmin, 0, 1)) ?: 'A';
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -25,7 +76,6 @@ $items = $conn->query("SELECT items.*, categories.nama_kategori FROM items JOIN 
     <link rel="stylesheet" href="../css/main.css">
 </head>
 <body>
-
     <aside class="sidebar">
         <div class="logo"><span>Found</span>It</div>
         <nav>
@@ -37,106 +87,78 @@ $items = $conn->query("SELECT items.*, categories.nama_kategori FROM items JOIN 
             <a href="admin-verifikasi-klaim.php">Verifikasi Klaim</a>
             <a href="admin-verifikasi-laporan.php">Verifikasi Laporan</a>
         </nav>
-        <a href="../login.php" class="logout">Keluar</a>
+        <a href="../logout.php" class="logout">Keluar</a>
     </aside>
 
     <main class="main-content">
         <header class="topbar">
             <div>
                 <h1>Ubah Status Barang</h1>
-                <p>Perbarui siklus status barang (Pending, Terbit, Selesai, Ditolak, Arsip).</p>
+                <p>Perbarui status siklus barang di database sistem FoundIt.</p>
             </div>
             <div class="user-profile">
-                <div class="profile-icon bg-primary text-white">A</div>
+                <div class="profile-icon bg-primary text-white"><?= htmlspecialchars($inisialAdmin, ENT_QUOTES, 'UTF-8'); ?></div>
                 <div>
-                    <strong>Administrator</strong>
+                    <strong><?= htmlspecialchars($namaAdmin, ENT_QUOTES, 'UTF-8'); ?></strong>
                     <small>Super Admin</small>
                 </div>
             </div>
         </header>
+
+        <?php if ($pesan !== ''): ?>
+            <div class="alert alert-success"><?= htmlspecialchars($pesan, ENT_QUOTES, 'UTF-8'); ?></div>
+        <?php endif; ?>
+        <?php if ($error !== ''): ?>
+            <div class="alert alert-danger"><?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8'); ?></div>
+        <?php endif; ?>
 
         <section class="card border-0 shadow-sm rounded-3">
             <div class="table-responsive">
                 <table class="table align-middle mb-0">
                     <thead class="table-light">
                         <tr>
-                            <th>Barang</th>
+                            <th>ID &amp; Barang</th>
                             <th>Kategori</th>
-                            <th>Lokasi Kejadian</th>
+                            <th>Lokasi</th>
                             <th>Status Saat Ini</th>
-                            <th class="text-end">Tindakan</th>
+                            <th class="text-end">Ubah Status</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($items as $item): ?>
-                        <tr>
-                            <td>
-                                <strong><?= htmlspecialchars($item['judul']) ?></strong>
-                                <div class="text-muted small">ID: #<?= $item['id'] ?></div>
-                            </td>
-                            <td><?= htmlspecialchars($item['nama_kategori']) ?></td>
-                            <td><?= htmlspecialchars($item['lokasi']) ?></td>
-                            <td><span class="badge bg-primary"><?= $item['status'] ?></span></td>
-                            <td class="text-end">
-                                <button class="btn btn-sm btn-primary btn-trigger-modal" 
-                                    data-bs-toggle="modal" data-bs-target="#modalUpdateStatus" 
-                                    data-id="<?= $item['id'] ?>" data-nama="<?= htmlspecialchars($item['judul']) ?>" data-status="<?= $item['status'] ?>">
-                                    Perbarui Status
-                                </button>
-                            </td>
-                        </tr>
-                        <?php endforeach; ?>
+                        <?php if (!empty($items)): ?>
+                            <?php foreach ($items as $item): ?>
+                                <tr>
+                                    <td>
+                                        <strong><?= htmlspecialchars((string) $item['JUDUL'], ENT_QUOTES, 'UTF-8'); ?></strong>
+                                        <div class="text-muted small"><?= htmlspecialchars((string) $item['ID'], ENT_QUOTES, 'UTF-8'); ?></div>
+                                    </td>
+                                    <td><?= htmlspecialchars((string) $item['NAMA_KATEGORI'], ENT_QUOTES, 'UTF-8'); ?></td>
+                                    <td><?= htmlspecialchars((string) $item['LOKASI'], ENT_QUOTES, 'UTF-8'); ?></td>
+                                    <td><span class="badge bg-secondary"><?= htmlspecialchars((string) $item['STATUS'], ENT_QUOTES, 'UTF-8'); ?></span></td>
+                                    <td class="text-end">
+                                        <form method="post" action="admin-ubah-status.php" class="d-inline-flex gap-2 justify-content-end">
+                                            <input type="hidden" name="item_id" value="<?= htmlspecialchars((string) $item['ID'], ENT_QUOTES, 'UTF-8'); ?>">
+                                            <select name="status_baru" class="form-select form-select-sm" style="width: auto;">
+                                                <?php foreach ($allowed_statuses as $st): ?>
+                                                    <option value="<?= $st; ?>" <?= $item['STATUS'] === $st ? 'selected' : ''; ?>><?= $st; ?></option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                            <button type="submit" name="update_status" value="1" class="btn btn-sm btn-primary">Simpan</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <tr>
+                                <td colspan="5" class="text-center text-muted py-4">Belum ada data barang.</td>
+                            </tr>
+                        <?php endif; ?>
                     </tbody>
                 </table>
             </div>
         </section>
     </main>
 
-    <!-- MODAL DIALOG UPDATE STATUS BARANG -->
-    <div class="modal fade" id="modalUpdateStatus" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <form method="POST">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Pembaruan Status Barang</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-                    <div class="modal-body">
-                        <input type="hidden" name="item_id" id="modalItemId">
-                        <div class="mb-3">
-                            <label class="form-label text-muted small">Barang yang Dipilih</label>
-                            <input type="text" id="modalItemNama" class="form-control bg-light" readonly>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label fw-semibold">Pilih Status Baru</label>
-                            <select name="status_baru" id="modalStatusSelect" class="form-select" required>
-                                <option value="Pending">Pending (Verifikasi Admin)</option>
-                                <option value="Terbit">Terbit (Ditampilkan di Publik)</option>
-                                <option value="Selesai">Selesai (Sudah Dikembalikan)</option>
-                                <option value="Ditolak">Ditolak</option>
-                                <option value="Arsip">Arsip</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" name="update_status" class="btn btn-primary">Simpan Status</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // Tangkap data tombol ke dalam modal
-        document.querySelectorAll('.btn-trigger-modal').forEach(button => {
-            button.addEventListener('click', function() {
-                document.getElementById('modalItemId').value = this.getAttribute('data-id');
-                document.getElementById('modalItemNama').value = this.getAttribute('data-nama') + ' (' + this.getAttribute('data-id') + ')';
-                document.getElementById('modalStatusSelect').value = this.getAttribute('data-status');
-            });
-        });
-    </script>
 </body>
 </html>
