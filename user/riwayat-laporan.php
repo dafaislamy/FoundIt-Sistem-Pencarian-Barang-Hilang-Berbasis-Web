@@ -1,62 +1,68 @@
+
 <?php
-session_start();
+require_once '../config/koneksi.php';
 
-// ==========================================================================
-// 1. MENGAMBIL DATA PENGGUNA (Menggantikan localStorage "dataUser")
-// ==========================================================================
-// Mengambil dari session jika ada, atau gunakan nilai default "User"
-$namaUser = isset($_SESSION['dataUser']['nama']) ? $_SESSION['dataUser']['nama'] : 'User';
-$inisialUser = strtoupper(substr($namaUser, 0, 1));
+// ==========================================
+// 1. CEK LOGIN USER
+// ==========================================
 
-
-// ==========================================================================
-// 2. MENGAMBIL DATA LAPORAN (Menggantikan localStorage "daftarLaporan")
-// ==========================================================================
-
-/* --- OPSI A: Jika menggunakan Session / Data Dummy (Aktif) --- */
-$daftarLaporan = isset($_SESSION['daftarLaporan']) ? $_SESSION['daftarLaporan'] : [
-    // Contoh data (hapus atau kosongkan array ini untuk mengetes tampilan "Belum Ada Laporan")
-    [
-        'namaBarang'   => 'Dompet Kulit Hitam',
-        'jenisLaporan' => 'Laporan Barang Hilang',
-        'status'       => 'Menunggu Verifikasi',
-        'kategori'     => 'Dompet / Tas',
-        'lokasi'       => 'Perpustakaan Lantai 2',
-        'tanggal'      => '2025-05-10'
-    ],
-    [
-        'namaBarang'   => 'Kunci Motor Honda',
-        'jenisLaporan' => 'Laporan Barang Ditemukan',
-        'status'       => 'Terverifikasi',
-        'kategori'     => 'Kunci',
-        'lokasi'       => 'Parkiran Gedung B',
-        'tanggal'      => '2025-05-12'
-    ]
-];
-
-// Membalik urutan array agar laporan terbaru tampil di paling atas (seperti .slice().reverse() di JS)
-$daftarLaporanTerbaru = array_reverse($daftarLaporan);
-$totalLaporan = count($daftarLaporanTerbaru);
-
-
-/* --- OPSI B: Jika menggunakan Database MySQL (Uncomment jika pakai DB) ---
-include '../config/koneksi.php'; // Sesuaikan path koneksi database kamu
-$id_user = $_SESSION['user_id'];
-$query = mysqli_query($conn, "SELECT * FROM laporan WHERE user_id = '$id_user' ORDER BY id DESC");
-$daftarLaporanTerbaru = [];
-while ($row = mysqli_fetch_assoc($query)) {
-    $daftarLaporanTerbaru[] = [
-        'namaBarang'   => $row['nama_barang'],
-        'jenisLaporan' => $row['jenis_laporan'],
-        'status'       => $row['status'],
-        'kategori'     => $row['kategori'],
-        'lokasi'       => $row['lokasi'],
-        'tanggal'      => $row['tanggal']
-    ];
+if (
+    !isset($_SESSION['is_logged_in']) ||
+    $_SESSION['is_logged_in'] !== true ||
+    ($_SESSION['role'] ?? '') !== 'user'
+) {
+    header('Location: ../login.php');
+    exit;
 }
-$totalLaporan = count($daftarLaporanTerbaru);
-------------------------------------------------------------------------- */
+
+$namaUser = $_SESSION['nama'] ?? 'User';
+$inisialUser = strtoupper(substr($namaUser, 0, 1));
+$idUser = $_SESSION['id_user'] ?? '';
+
+$daftarLaporan = [];
+$error = '';
+
+// ==========================================
+// 2. AMBIL RIWAYAT LAPORAN DARI ORACLE
+// ==========================================
+
+try {
+
+    $sql = "
+        SELECT
+            i.ID,
+            i.JUDUL,
+            i.TIPE,
+            i.LOKASI,
+            TO_CHAR(i.TANGGAL_KEJADIAN, 'DD-MM-YYYY') AS TANGGAL,
+            i.STATUS,
+            c.NAMA_KATEGORI
+        FROM ITEMS i
+        LEFT JOIN CATEGORIES c
+            ON i.CATEGORIES_ID = c.ID
+        WHERE i.USERS_ID = :id_user
+        ORDER BY i.CREATED_AT DESC
+    ";
+
+    $stmt = $conn->prepare($sql);
+    $stmt->execute([
+        ':id_user' => $idUser
+    ]);
+
+    $daftarLaporan = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $totalLaporan = count($daftarLaporan);
+
+} catch (PDOException $e) {
+
+    error_log($e->getMessage());
+    $totalLaporan = 0;
+    $error = 'Gagal mengambil riwayat laporan dari database Oracle.';
+
+}
+
 ?>
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -64,16 +70,16 @@ $totalLaporan = count($daftarLaporanTerbaru);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Riwayat Laporan - FoundIt</title>
 
-    <!-- Bootstrap dan CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../css/main.css">
 </head>
+
 <body>
 
     <!-- SIDEBAR -->
     <aside class="sidebar">
         <div class="logo"><span>Found</span>It</div>
-        <!-- Menu navigasi -->
+
         <nav>
             <a href="dashboard.php">Dashboard</a>
             <a href="cari-barang.php">Cari Barang</a>
@@ -84,7 +90,7 @@ $totalLaporan = count($daftarLaporanTerbaru);
             <a href="riwayat-laporan.php" class="active">Riwayat Laporan</a>
             <a href="profil.php">Profil</a>
         </nav>
-        <!-- Tombol keluar -->
+
         <a href="../logout.php" class="logout">Keluar</a>
     </aside>
 
@@ -97,11 +103,14 @@ $totalLaporan = count($daftarLaporanTerbaru);
                 <h1>Riwayat Laporan</h1>
                 <p>Lihat laporan barang yang pernah kamu buat.</p>
             </div>
-            <!-- Profil pengguna -->
+
             <div class="user-profile">
-                <div class="profile-icon" id="profileInitial"><?= htmlspecialchars($inisialUser); ?></div>
+                <div class="profile-icon">
+                    <?= htmlspecialchars($inisialUser, ENT_QUOTES, 'UTF-8'); ?>
+                </div>
+
                 <div>
-                    <strong id="profileName"><?= htmlspecialchars($namaUser); ?></strong>
+                    <strong><?= htmlspecialchars($namaUser, ENT_QUOTES, 'UTF-8'); ?></strong>
                     <small>User</small>
                 </div>
             </div>
@@ -109,64 +118,100 @@ $totalLaporan = count($daftarLaporanTerbaru);
 
         <!-- DAFTAR RIWAYAT LAPORAN -->
         <section class="history-container">
+
             <div class="history-header">
                 <div>
                     <h2>Daftar Laporan</h2>
-                    <p id="jumlahLaporan"><?= $totalLaporan; ?> laporan ditemukan</p>
+                    <p><?= $totalLaporan; ?> laporan ditemukan</p>
                 </div>
-                <!-- Tombol buat laporan -->
-                <a href="lapor-hilang.php" class="btn-report">+ Buat Laporan</a>
+
+                <a href="lapor-hilang.php" class="btn-report">
+                    + Buat Laporan
+                </a>
             </div>
 
-            <!-- Daftar laporan dirender oleh PHP -->
-            <div id="riwayatList">
-                <?php if ($totalLaporan > 0): ?>
-                    <?php foreach ($daftarLaporanTerbaru as $laporan): ?>
+            <?php if ($error !== ''): ?>
+
+                <div class="alert alert-danger">
+                    <?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8'); ?>
+                </div>
+
+            <?php elseif ($totalLaporan > 0): ?>
+
+                <div id="riwayatList">
+
+                    <?php foreach ($daftarLaporan as $laporan): ?>
+
                         <div class="history-card">
+
                             <div class="history-top">
+
                                 <div class="history-title">
-                                    <h3><?= htmlspecialchars($laporan['namaBarang']); ?></h3>
-                                    <p><?= htmlspecialchars($laporan['jenisLaporan']); ?></p>
+                                    <h3>
+                                        <?= htmlspecialchars($laporan['JUDUL'], ENT_QUOTES, 'UTF-8'); ?>
+                                    </h3>
+
+                                    <p>
+                                        <?= $laporan['TIPE'] === 'lost'
+                                            ? 'Laporan Barang Hilang'
+                                            : 'Laporan Barang Ditemukan'; ?>
+                                    </p>
                                 </div>
+
                                 <span class="history-status">
-                                    <?= htmlspecialchars($laporan['status']); ?>
+                                    <?= htmlspecialchars($laporan['STATUS'], ENT_QUOTES, 'UTF-8'); ?>
                                 </span>
+
                             </div>
 
                             <div class="history-detail">
+
                                 <div class="history-detail-item">
                                     <span>Kategori</span>
-                                    <strong><?= htmlspecialchars($laporan['kategori']); ?></strong>
+                                    <strong>
+                                        <?= htmlspecialchars($laporan['NAMA_KATEGORI'] ?? '-', ENT_QUOTES, 'UTF-8'); ?>
+                                    </strong>
                                 </div>
 
                                 <div class="history-detail-item">
                                     <span>Lokasi</span>
-                                    <strong><?= htmlspecialchars($laporan['lokasi']); ?></strong>
+                                    <strong>
+                                        <?= htmlspecialchars($laporan['LOKASI'], ENT_QUOTES, 'UTF-8'); ?>
+                                    </strong>
                                 </div>
 
                                 <div class="history-detail-item">
                                     <span>Tanggal</span>
-                                    <strong><?= htmlspecialchars($laporan['tanggal']); ?></strong>
+                                    <strong>
+                                        <?= htmlspecialchars($laporan['TANGGAL'], ENT_QUOTES, 'UTF-8'); ?>
+                                    </strong>
                                 </div>
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
-                <?php endif; ?>
-            </div>
 
-            <!-- Tampilan jika belum ada laporan -->
-            <?php if ($totalLaporan === 0): ?>
+                            </div>
+
+                        </div>
+
+                    <?php endforeach; ?>
+
+                </div>
+
+            <?php else: ?>
+
                 <div id="emptyHistory" class="empty-history" style="display: block;">
                     <h3>Belum Ada Laporan</h3>
                     <p>Kamu belum membuat laporan barang.</p>
-                    <a href="lapor-hilang.php" class="btn-report">Buat Laporan</a>
+                    <a href="lapor-hilang.php" class="btn-report">
+                        Buat Laporan
+                    </a>
                 </div>
+
             <?php endif; ?>
+
         </section>
 
     </main>
 
-    <!-- JAVASCRIPT BOOTSTRAP -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>

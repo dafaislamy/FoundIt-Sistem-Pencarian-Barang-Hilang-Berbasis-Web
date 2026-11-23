@@ -4,7 +4,10 @@
 
 require_once '../config/koneksi.php';
 
-// Pengecekan session login
+// ==========================================
+// PENGECEKAN LOGIN USER
+// ==========================================
+
 if (
     !isset($_SESSION['is_logged_in']) ||
     $_SESSION['is_logged_in'] !== true ||
@@ -14,11 +17,17 @@ if (
     exit;
 }
 
-// Mengambil nama pengguna dari session
+// ==========================================
+// DATA PENGGUNA
+// ==========================================
+
 $namaUser = $_SESSION['nama'] ?? 'User';
 $inisial = strtoupper(substr($namaUser, 0, 1));
 
-// Mengambil parameter pencarian dan filter
+// ==========================================
+// PARAMETER PENCARIAN DAN FILTER
+// ==========================================
+
 $keyword  = trim($_GET['keyword'] ?? '');
 $tipe     = $_GET['tipe'] ?? '';
 $kategori = $_GET['kategori'] ?? '';
@@ -27,7 +36,10 @@ $categories = [];
 $items = [];
 $error = '';
 
-// Mengubah tipe barang menjadi label
+// ==========================================
+// FUNGSI LABEL TIPE BARANG
+// ==========================================
+
 function labelTipe($tipe)
 {
     $tipe = strtolower(trim($tipe));
@@ -43,8 +55,13 @@ function labelTipe($tipe)
     return ucfirst($tipe);
 }
 
+// ==========================================
+// MENGAMBIL DATA DARI ORACLE
+// ==========================================
+
 try {
-    // Mengambil kategori dari Oracle
+
+    // Mengambil kategori
     $stmtCat = $conn->query("
         SELECT ID, NAMA_KATEGORI
         FROM CATEGORIES
@@ -53,7 +70,7 @@ try {
 
     $categories = $stmtCat->fetchAll(PDO::FETCH_ASSOC);
 
-    // Query dasar: hanya barang yang sudah diterbitkan
+    // Query dasar barang yang sudah diterbitkan
     $sql = "
         SELECT
             I.ID,
@@ -75,6 +92,7 @@ try {
 
     // Filter pencarian
     if ($keyword !== '') {
+
         $sql .= "
             AND (
                 LOWER(I.JUDUL) LIKE LOWER(:judul)
@@ -92,10 +110,13 @@ try {
 
     // Filter tipe barang
     if ($tipe === 'hilang') {
+
         $sql .= "
             AND UPPER(TRIM(I.TIPE)) IN ('LOST', 'HILANG')
         ";
+
     } elseif ($tipe === 'ditemukan') {
+
         $sql .= "
             AND UPPER(TRIM(I.TIPE)) IN ('FOUND', 'DITEMUKAN')
         ";
@@ -103,10 +124,15 @@ try {
 
     // Filter kategori
     if ($kategori !== '') {
-        $sql .= " AND I.CATEGORIES_ID = :kategori";
+
+        $sql .= "
+            AND I.CATEGORIES_ID = :kategori
+        ";
+
         $params[':kategori'] = $kategori;
     }
 
+    // Urutan data terbaru
     $sql .= " ORDER BY I.CREATED_AT DESC";
 
     $stmt = $conn->prepare($sql);
@@ -115,15 +141,21 @@ try {
     $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 } catch (PDOException $e) {
+
     error_log('Cari Barang FoundIt: ' . $e->getMessage());
+
     $error = 'Terjadi kesalahan saat mengambil data barang dari database.';
 }
+
 ?>
 
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Cari Barang - FoundIt</title>
@@ -134,11 +166,13 @@ try {
     >
 
     <link rel="stylesheet" href="../css/main.css">
+
 </head>
 
 <body>
 
     <!-- SIDEBAR -->
+
     <aside class="sidebar">
 
         <div class="logo">
@@ -146,14 +180,39 @@ try {
         </div>
 
         <nav>
-            <a href="dashboard.php">Dashboard</a>
-            <a href="cari-barang.php" class="active">Cari Barang</a>
-            <a href="lapor-hilang.html">Lapor Barang Hilang</a>
-            <a href="lapor-ditemukan.html">Lapor Barang Ditemukan</a>
-            <a href="klaim.html">Klaim Barang</a>
-            <a href="status-klaim.html">Status Klaim</a>
-            <a href="riwayat-laporan.html">Riwayat Laporan</a>
-            <a href="profil.html">Profil</a>
+
+            <a href="dashboard.php">
+                Dashboard
+            </a>
+
+            <a href="cari-barang.php" class="active">
+                Cari Barang
+            </a>
+
+            <a href="lapor-hilang.php">
+                Lapor Barang Hilang
+            </a>
+
+            <a href="lapor-ditemukan.php">
+                Lapor Barang Ditemukan
+            </a>
+
+            <a href="klaim.php">
+                Klaim Barang
+            </a>
+
+            <a href="status-klaim.php">
+                Status Klaim
+            </a>
+
+            <a href="riwayat-laporan.php">
+                Riwayat Laporan
+            </a>
+
+            <a href="profil.php">
+                Profil
+            </a>
+
         </nav>
 
         <a
@@ -166,38 +225,68 @@ try {
 
     </aside>
 
+
     <!-- KONTEN UTAMA -->
+
     <main class="main-content">
 
         <!-- HEADER -->
+
         <header class="topbar">
 
             <div>
+
                 <h1>Daftar Barang</h1>
-                <p>Jelajahi laporan barang hilang dan ditemukan di kampus.</p>
+
+                <p>
+                    Jelajahi laporan barang hilang dan ditemukan di kampus.
+                </p>
+
             </div>
 
             <div class="user-profile">
+
                 <div class="profile-icon">
-                    <?= htmlspecialchars($inisial, ENT_QUOTES, 'UTF-8'); ?>
+
+                    <?= htmlspecialchars(
+                        $inisial,
+                        ENT_QUOTES,
+                        'UTF-8'
+                    ); ?>
+
                 </div>
 
                 <div>
+
                     <strong>
-                        <?= htmlspecialchars($namaUser, ENT_QUOTES, 'UTF-8'); ?>
+                        <?= htmlspecialchars(
+                            $namaUser,
+                            ENT_QUOTES,
+                            'UTF-8'
+                        ); ?>
                     </strong>
+
                     <small>User</small>
+
                 </div>
+
             </div>
 
         </header>
 
+
         <!-- PENCARIAN DAN FILTER -->
+
         <section class="search-box">
 
             <div class="search-title">
+
                 <h2>Cari Barang</h2>
-                <p>Temukan barang berdasarkan nama, status, atau kategori.</p>
+
+                <p>
+                    Temukan barang berdasarkan nama, status, atau kategori.
+                </p>
+
             </div>
 
             <form
@@ -206,21 +295,35 @@ try {
                 class="search-filter-wrapper"
             >
 
+                <!-- INPUT PENCARIAN -->
+
                 <div class="search-input-wrapper">
+
                     <input
                         type="text"
                         name="keyword"
                         placeholder="Cari nama barang..."
-                        value="<?= htmlspecialchars($keyword, ENT_QUOTES, 'UTF-8'); ?>"
+                        value="<?= htmlspecialchars(
+                            $keyword,
+                            ENT_QUOTES,
+                            'UTF-8'
+                        ); ?>"
                         class="form-control"
                     >
+
                 </div>
+
+
+                <!-- FILTER TIPE -->
 
                 <select
                     name="tipe"
                     class="filter-select form-select"
                 >
-                    <option value="">Semua Status</option>
+
+                    <option value="">
+                        Semua Status
+                    </option>
 
                     <option
                         value="hilang"
@@ -235,28 +338,56 @@ try {
                     >
                         Ditemukan
                     </option>
+
                 </select>
+
+
+                <!-- FILTER KATEGORI -->
 
                 <select
                     name="kategori"
                     class="filter-select form-select"
                 >
-                    <option value="">Semua Kategori</option>
+
+                    <option value="">
+                        Semua Kategori
+                    </option>
 
                     <?php foreach ($categories as $cat): ?>
+
                         <option
-                            value="<?= htmlspecialchars($cat['ID'], ENT_QUOTES, 'UTF-8'); ?>"
+                            value="<?= htmlspecialchars(
+                                $cat['ID'],
+                                ENT_QUOTES,
+                                'UTF-8'
+                            ); ?>"
                             <?= $kategori === $cat['ID'] ? 'selected' : ''; ?>
                         >
-                            <?= htmlspecialchars($cat['NAMA_KATEGORI'], ENT_QUOTES, 'UTF-8'); ?>
+
+                            <?= htmlspecialchars(
+                                $cat['NAMA_KATEGORI'],
+                                ENT_QUOTES,
+                                'UTF-8'
+                            ); ?>
+
                         </option>
+
                     <?php endforeach; ?>
 
                 </select>
 
-                <button type="submit" class="btn btn-primary">
+
+                <!-- TOMBOL CARI -->
+
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                >
                     Cari
                 </button>
+
+
+                <!-- TOMBOL RESET -->
 
                 <a
                     href="cari-barang.php"
@@ -269,24 +400,38 @@ try {
 
         </section>
 
+
         <!-- HASIL PENCARIAN -->
+
         <section class="result-section">
 
             <div class="result-header">
+
                 <div>
+
                     <h2>Daftar Barang</h2>
 
                     <p>
                         Menampilkan <?= count($items); ?> barang.
                     </p>
+
                 </div>
+
             </div>
+
 
             <?php if ($error !== ''): ?>
 
                 <div class="alert alert-danger">
-                    <?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8'); ?>
+
+                    <?= htmlspecialchars(
+                        $error,
+                        ENT_QUOTES,
+                        'UTF-8'
+                    ); ?>
+
                 </div>
+
 
             <?php elseif (count($items) > 0): ?>
 
@@ -295,48 +440,126 @@ try {
                     <?php foreach ($items as $item): ?>
 
                         <?php
+
                         $label = labelTipe($item['TIPE']);
+
                         $isFound = ($label === 'Ditemukan');
+
+                        // Menentukan alamat gambar
+                        $foto = trim($item['FOTO'] ?? '');
+
+                        if ($foto !== '') {
+
+                            if (strpos($foto, 'uploads/') === 0) {
+
+                                $fotoPath = '../' . $foto;
+
+                            } else {
+
+                                $fotoPath = '../uploads/' . $foto;
+
+                            }
+
+                        } else {
+
+                            $fotoPath = '';
+
+                        }
+
                         ?>
 
                         <div class="col">
 
                             <div class="barang-card">
 
-                                <?php if (!empty($item['FOTO'])): ?>
+
+                                <!-- GAMBAR BARANG -->
+
+                                <?php if ($fotoPath !== ''): ?>
 
                                     <div class="barang-image">
+
                                         <img
-                                            src="../uploads/<?= htmlspecialchars($item['FOTO'], ENT_QUOTES, 'UTF-8'); ?>"
-                                            alt="<?= htmlspecialchars($item['JUDUL'], ENT_QUOTES, 'UTF-8'); ?>"
+                                            src="<?= htmlspecialchars(
+                                                $fotoPath,
+                                                ENT_QUOTES,
+                                                'UTF-8'
+                                            ); ?>"
+                                            alt="<?= htmlspecialchars(
+                                                $item['JUDUL'],
+                                                ENT_QUOTES,
+                                                'UTF-8'
+                                            ); ?>"
                                             loading="lazy"
                                         >
+
                                     </div>
 
                                 <?php endif; ?>
 
+
+                                <!-- INFORMASI BARANG -->
+
                                 <div class="barang-content">
 
                                     <span class="status-badge <?= $isFound ? 'ditemukan' : 'hilang'; ?>">
-                                        <?= htmlspecialchars($label, ENT_QUOTES, 'UTF-8'); ?>
+
+                                        <?= htmlspecialchars(
+                                            $label,
+                                            ENT_QUOTES,
+                                            'UTF-8'
+                                        ); ?>
+
                                     </span>
+
 
                                     <h3>
-                                        <?= htmlspecialchars($item['JUDUL'], ENT_QUOTES, 'UTF-8'); ?>
+
+                                        <?= htmlspecialchars(
+                                            $item['JUDUL'],
+                                            ENT_QUOTES,
+                                            'UTF-8'
+                                        ); ?>
+
                                     </h3>
 
-                                    <p>
-                                        <?= htmlspecialchars($item['DESKRIPSI'], ENT_QUOTES, 'UTF-8'); ?>
-                                    </p>
 
                                     <p>
-                                        <strong>Lokasi:</strong>
-                                        <?= htmlspecialchars($item['LOKASI'], ENT_QUOTES, 'UTF-8'); ?>
+
+                                        <?= htmlspecialchars(
+                                            $item['DESKRIPSI'],
+                                            ENT_QUOTES,
+                                            'UTF-8'
+                                        ); ?>
+
                                     </p>
+
+
+                                    <p>
+
+                                        <strong>Lokasi:</strong>
+
+                                        <?= htmlspecialchars(
+                                            $item['LOKASI'],
+                                            ENT_QUOTES,
+                                            'UTF-8'
+                                        ); ?>
+
+                                    </p>
+
 
                                     <span class="category">
-                                        <?= htmlspecialchars($item['NAMA_KATEGORI'], ENT_QUOTES, 'UTF-8'); ?>
+
+                                        <?= htmlspecialchars(
+                                            $item['NAMA_KATEGORI'],
+                                            ENT_QUOTES,
+                                            'UTF-8'
+                                        ); ?>
+
                                     </span>
+
+
+                                    <!-- TOMBOL AKSI -->
 
                                     <div class="barang-actions">
 
@@ -346,6 +569,7 @@ try {
                                         >
                                             Lihat Detail
                                         </a>
+
 
                                         <?php if ($isFound): ?>
 
@@ -370,13 +594,17 @@ try {
 
                 </div>
 
+
             <?php else: ?>
 
                 <div class="no-result">
+
                     <h3>Barang tidak ditemukan</h3>
+
                     <p>
                         Coba gunakan kata kunci atau filter yang berbeda.
                     </p>
+
                 </div>
 
             <?php endif; ?>
@@ -385,7 +613,11 @@ try {
 
     </main>
 
+
+    <!-- JAVASCRIPT BOOTSTRAP -->
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
+
 </html>

@@ -1,183 +1,587 @@
-<?php // Form klaim barang temuan
-require_once __DIR__ . '/_init.php';
 
-$id = trim($_GET['id'] ?? $_POST['id'] ?? '');
+<?php
+require_once '../config/koneksi.php';
 
-// Tanpa id: arahkan user memilih barang dulu
-if ($id === '') {
-    flash_set('info', 'Pilih barang temuan yang ingin diklaim, lalu tekan tombol Klaim.');
+// ==========================================
+// 1. CEK LOGIN USER
+// ==========================================
+
+if (
+    !isset($_SESSION['is_logged_in']) ||
+    $_SESSION['is_logged_in'] !== true ||
+    ($_SESSION['role'] ?? '') !== 'user'
+) {
+    header('Location: ../login.php');
+    exit;
+}
+
+$idUser = $_SESSION['id_user'] ?? '';
+$namaUser = $_SESSION['nama'] ?? 'User';
+$inisialUser = strtoupper(substr($namaUser, 0, 1));
+
+$error = '';
+$bukti = '';
+$bolehAjukan = true;
+
+// ==========================================
+// 2. AMBIL ID BARANG
+// ==========================================
+
+$idItem = trim($_GET['id'] ?? $_POST['id'] ?? '');
+
+if ($idItem === '') {
     header('Location: cari-barang.php?tipe=found');
     exit;
 }
 
-$stmt = $pdo->prepare(
-    "SELECT i.*, c.nama_kategori
-     FROM items i JOIN categories c ON c.id = i.categories_id
-     WHERE i.id = :id LIMIT 1"
-);
-$stmt->execute([':id' => $id]);
-$item = $stmt->fetch();
+// ==========================================
+// 3. AMBIL DATA BARANG
+// ==========================================
 
-if (!$item || $item['status'] !== 'Terbit') {
-    flash_set('warning', 'Barang tidak ditemukan atau belum bisa diklaim.');
-    header('Location: cari-barang.php');
-    exit;
-}
-if ($item['tipe'] !== 'found') {
-    flash_set('warning', 'Hanya barang yang berstatus "Ditemukan" yang dapat diklaim.');
-    header('Location: detail-barang.php?id=' . urlencode($item['id']));
-    exit;
-}
-if ($item['users_id'] === $currentUser['id']) {
-    flash_set('warning', 'Anda tidak dapat mengklaim laporan Anda sendiri.');
-    header('Location: detail-barang.php?id=' . urlencode($item['id']));
-    exit;
-}
+try {
 
-// Cegah klaim ganda yang masih aktif
-$stmtDup = $pdo->prepare(
-    "SELECT status_klaim FROM claims
-     WHERE items_id = :item AND users_id = :uid AND status_klaim IN ('Menunggu','Disetujui') LIMIT 1"
-);
-$stmtDup->execute([':item' => $item['id'], ':uid' => $currentUser['id']]);
-if ($stmtDup->fetch()) {
-    flash_set('info', 'Anda sudah memiliki klaim aktif untuk barang ini.');
-    header('Location: detail-barang.php?id=' . urlencode($item['id']));
-    exit;
-}
+    $stmt = $conn->prepare("
+        SELECT
+            I.ID,
+            I.JUDUL,
+            I.DESKRIPSI,
+            I.TIPE,
+            I.LOKASI,
+            I.TANGGAL_KEJADIAN,
+            I.FOTO,
+            I.STATUS,
+            I.USERS_ID,
+            C.NAMA_KATEGORI
+        FROM ITEMS I
+        JOIN CATEGORIES C
+            ON C.ID = I.CATEGORIES_ID
+        WHERE I.ID = :p_item_id
+    ");
 
-$errors = [];
-$bukti  = '';
+    $stmt->bindValue(':p_item_id', $idItem, PDO::PARAM_STR);
+    $stmt->execute();
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (!csrf_valid()) {
-        $errors[] = 'Sesi formulir tidak valid. Muat ulang halaman lalu coba lagi.';
+    $item = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$item) {
+        header('Location: cari-barang.php');
+        exit;
     }
+
+    if (
+        strtolower(trim($item['TIPE'])) !== 'found' ||
+        strtolower(trim($item['STATUS'])) !== 'terbit'
+    ) {
+        $error = 'Barang ini belum tersedia untuk diklaim.';
+        $bolehAjukan = false;
+    }
+
+    if ((string)$item['USERS_ID'] === (string)$idUser) {
+        $error = 'Kamu tidak dapat mengklaim laporan barang milikmu sendiri.';
+        $bolehAjukan = false;
+    }
+
+} catch (PDOException $e) {
+
+    error_log($e->getMessage());
+
+    die(
+        'Error mengambil data barang: ' .
+        htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8')
+    );
+}
+
+// ==========================================
+// 4. CEK KLAIM GANDA
+// ==========================================
+
+if ($bolehAjukan) {
+
+    try {
+
+        $stmtDup = $conn->prepare("
+            SELECT COUNT(*)
+            FROM CLAIMS
+            WHERE ITEMS_ID = :p_items_id
+              AND USERS_ID = :p_users_id
+              AND STATUS_KLAIM IN ('Menunggu', 'Disetujui')
+        ");
+
+        $stmtDup->bindValue(':p_items_id', $idItem, PDO::PARAM_STR);
+        $stmtDup->bindValue(':p_users_id', $idUser, PDO::PARAM_STR);
+
+        $stmtDup->execute();
+
+        $jumlahKlaim = (int)$stmtDup->fetchColumn();
+
+        if ($jumlahKlaim > 0) {
+            $error = 'Kamu sudah memiliki klaim aktif untuk barang ini.';
+            $bolehAjukan = false;
+        }
+
+    } catch (PDOException $e) {
+
+        error_log($e->getMessage());
+
+        $error = 'Error Oracle saat memeriksa klaim: ' .
+            $e->getMessage();
+
+        $bolehAjukan = false;
+    }
+}
+
+// ==========================================
+// 5. PROSES PENGAJUAN KLAIM
+// ==========================================
+
+if (
+    $_SERVER['REQUEST_METHOD'] === 'POST' &&
+    $bolehAjukan
+) {
 
     $bukti = trim($_POST['bukti_kepemilikan'] ?? '');
-    $len   = mb_strlen($bukti);
-    if ($len < 20) {
-        $errors[] = 'Bukti kepemilikan minimal 20 karakter agar admin dapat memverifikasi.';
-    } elseif ($len > 1000) {
-        $errors[] = 'Bukti kepemilikan maksimal 1000 karakter.';
-    }
 
-    // Lampiran foto (opsional)
-    $fileExt = null;
-    $file    = $_FILES['lampiran_foto'] ?? null;
-    if ($file && $file['error'] !== UPLOAD_ERR_NO_FILE) {
-        if ($file['error'] !== UPLOAD_ERR_OK) {
-            $errors[] = 'Upload foto gagal. Coba lagi dengan file yang lebih kecil.';
-        } elseif ($file['size'] > 2 * 1024 * 1024) {
-            $errors[] = 'Ukuran foto maksimal 2 MB.';
-        } else {
-            $mime = (new finfo(FILEINFO_MIME_TYPE))->file($file['tmp_name']);
-            $allowed = ['image/jpeg' => 'jpg', 'image/png' => 'png', 'image/webp' => 'webp'];
-            if (!isset($allowed[$mime])) {
-                $errors[] = 'Format foto harus JPG, PNG, atau WEBP.';
-            } else {
-                $fileExt = $allowed[$mime];
-            }
+    $fileTersimpan = false;
+    $tujuanFoto = null;
+
+    try {
+
+        // Validasi bukti kepemilikan
+        $panjangBukti = mb_strlen($bukti);
+
+        if ($panjangBukti < 20) {
+            throw new Exception(
+                'Bukti kepemilikan minimal 20 karakter.'
+            );
         }
-    }
 
-    if (!$errors) {
-        $newId = null;
-        for ($try = 0; $try < 3 && $newId === null; $try++) {
-            $last = $pdo->query("SELECT id FROM claims WHERE id LIKE 'CLM%' ORDER BY CAST(SUBSTRING(id, 4) AS UNSIGNED) DESC LIMIT 1")->fetchColumn();
-            $candidate = $last ? 'CLM' . str_pad((int)substr($last, 3) + 1, 3, '0', STR_PAD_LEFT) : 'CLM001';
+        if ($panjangBukti > 1000) {
+            throw new Exception(
+                'Bukti kepemilikan maksimal 1000 karakter.'
+            );
+        }
 
-            $namaFile = null;
-            if ($fileExt) {
-                $namaFile = 'bukti_' . strtolower($candidate) . '.' . $fileExt;
+        // ======================================
+        // 6. VALIDASI FOTO
+        // ======================================
+
+        $file = $_FILES['lampiran_foto'] ?? null;
+
+        $formatDiizinkan = [
+            'image/jpeg' => 'jpg',
+            'image/png' => 'png',
+            'image/webp' => 'webp'
+        ];
+
+        $ekstensi = null;
+
+        if (
+            $file &&
+            $file['error'] !== UPLOAD_ERR_NO_FILE
+        ) {
+
+            if ($file['error'] !== UPLOAD_ERR_OK) {
+                throw new Exception('Upload foto gagal.');
             }
 
-            try {
-                $ins = $pdo->prepare(
-                    "INSERT INTO claims (id, bukti_kepemilikan, lampiran_foto, status_klaim, items_id, users_id)
-                     VALUES (:id, :bukti, :foto, 'Menunggu', :item, :uid)"
+            if ($file['size'] > 2 * 1024 * 1024) {
+                throw new Exception('Ukuran foto maksimal 2 MB.');
+            }
+
+            $finfo = new finfo(FILEINFO_MIME_TYPE);
+            $mime = $finfo->file($file['tmp_name']);
+
+            if (!isset($formatDiizinkan[$mime])) {
+                throw new Exception(
+                    'Format foto harus JPG, PNG, atau WEBP.'
                 );
-                $ins->execute([
-                    ':id'    => $candidate,
-                    ':bukti' => $bukti,
-                    ':foto'  => $namaFile,
-                    ':item'  => $item['id'],
-                    ':uid'   => $currentUser['id'],
-                ]);
-                $newId = $candidate;
-            } catch (PDOException $ex) {
-                if ($ex->getCode() !== '23000') throw $ex; // selain ID bentrok, lempar ulang
             }
+
+            $ekstensi = $formatDiizinkan[$mime];
         }
 
-        if ($newId === null) {
-            $errors[] = 'Gagal menyimpan klaim. Silakan coba lagi.';
-        } else {
-            if ($fileExt) {
-                $dir = __DIR__ . '/../uploads/bukti';
-                if (!is_dir($dir)) mkdir($dir, 0755, true);
-                move_uploaded_file($_FILES['lampiran_foto']['tmp_name'], $dir . '/' . $namaFile);
+        // ======================================
+        // 7. BUAT ID KLAIM
+        // ======================================
+
+        $stmtID = $conn->query("
+            SELECT NVL(MAX(TO_NUMBER(SUBSTR(ID, 4))), 0) + 1
+            FROM CLAIMS
+            WHERE REGEXP_LIKE(ID, '^CLM[0-9]+$')
+        ");
+
+        $nomorBaru = (int)$stmtID->fetchColumn();
+
+        $idKlaim = 'CLM' . str_pad(
+            $nomorBaru,
+            3,
+            '0',
+            STR_PAD_LEFT
+        );
+
+        // ======================================
+        // 8. SIMPAN FOTO LAMPIRAN
+        // ======================================
+
+        $fotoDatabase = null;
+
+        if ($ekstensi !== null) {
+
+            $folderUpload = dirname(__DIR__) . '/uploads/bukti';
+
+            if (!is_dir($folderUpload)) {
+                if (!mkdir($folderUpload, 0775, true)) {
+                    throw new Exception(
+                        'Folder uploads/bukti gagal dibuat.'
+                    );
+                }
             }
-            flash_set('success', 'Klaim ' . $newId . ' berhasil diajukan. Admin akan memverifikasi bukti Anda.');
-            header('Location: detail-barang.php?id=' . urlencode($item['id']));
-            exit;
+
+            if (!is_writable($folderUpload)) {
+                throw new Exception(
+                    'Folder uploads/bukti tidak dapat ditulisi.'
+                );
+            }
+
+            $namaFoto = 'bukti_' .
+                strtolower($idKlaim) . '_' .
+                bin2hex(random_bytes(4)) . '.' .
+                $ekstensi;
+
+            $tujuanFoto = $folderUpload . '/' . $namaFoto;
+
+            if (!move_uploaded_file(
+                $file['tmp_name'],
+                $tujuanFoto
+            )) {
+                throw new Exception(
+                    'Foto lampiran gagal disimpan.'
+                );
+            }
+
+            $fileTersimpan = true;
+
+            $fotoDatabase = 'uploads/bukti/' . $namaFoto;
         }
+
+        // ======================================
+        // 9. SIMPAN KE ORACLE
+        // ======================================
+
+        $conn->beginTransaction();
+
+        $stmtInsert = $conn->prepare("
+            INSERT INTO CLAIMS (
+                ID,
+                BUKTI_KEPEMILIKAN,
+                LAMPIRAN_FOTO,
+                STATUS_KLAIM,
+                CREATED_AT,
+                ITEMS_ID,
+                USERS_ID
+            ) VALUES (
+                :p_claim_id,
+                :p_bukti,
+                :p_foto,
+                'Menunggu',
+                SYSTIMESTAMP,
+                :p_items_id,
+                :p_users_id
+            )
+        ");
+
+        $stmtInsert->bindValue(':p_claim_id', $idKlaim, PDO::PARAM_STR);
+        $stmtInsert->bindValue(':p_bukti', $bukti, PDO::PARAM_STR);
+
+        if ($fotoDatabase === null) {
+            $stmtInsert->bindValue(':p_foto', null, PDO::PARAM_NULL);
+        } else {
+            $stmtInsert->bindValue(':p_foto', $fotoDatabase, PDO::PARAM_STR);
+        }
+
+        $stmtInsert->bindValue(':p_items_id', $idItem, PDO::PARAM_STR);
+        $stmtInsert->bindValue(':p_users_id', $idUser, PDO::PARAM_STR);
+
+        $stmtInsert->execute();
+
+        $conn->commit();
+
+        // ======================================
+        // 10. BERHASIL
+        // ======================================
+
+        echo "<script>
+            alert('Klaim berhasil diajukan! Menunggu verifikasi admin.');
+            window.location.href = 'status-klaim.php';
+        </script>";
+
+        exit;
+
+    } catch (PDOException $e) {
+
+        if ($conn->inTransaction()) {
+            $conn->rollBack();
+        }
+
+        if (
+            $fileTersimpan &&
+            $tujuanFoto &&
+            file_exists($tujuanFoto)
+        ) {
+            unlink($tujuanFoto);
+        }
+
+        error_log($e->getMessage());
+
+        $error = 'Error Oracle saat menyimpan klaim: ' .
+            $e->getMessage();
+
+    } catch (Exception $e) {
+
+        if ($conn->inTransaction()) {
+            $conn->rollBack();
+        }
+
+        if (
+            $fileTersimpan &&
+            $tujuanFoto &&
+            file_exists($tujuanFoto)
+        ) {
+            unlink($tujuanFoto);
+        }
+
+        $error = $e->getMessage();
     }
 }
 
-$pageTitle  = 'Klaim Barang';
-$activeMenu = 'klaim';
-$heading    = 'Klaim Barang';
-$subheading = 'Ajukan klaim untuk barang yang kamu kenali.';
-require __DIR__ . '/_header.php';
+// ==========================================
+// 11. FOTO BARANG
+// ==========================================
+
+$fotoBarang = trim($item['FOTO'] ?? '');
+
+if ($fotoBarang === '') {
+    $fotoBarang = '../uploads/no-image.svg';
+} elseif (strpos($fotoBarang, 'uploads/') === 0) {
+    $fotoBarang = '../' . $fotoBarang;
+} else {
+    $fotoBarang = '../uploads/' . basename($fotoBarang);
+}
+
 ?>
 
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Klaim Barang - FoundIt</title>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <link rel="stylesheet" href="../css/main.css">
+</head>
+
+<body>
+
+    <aside class="sidebar">
+
+        <div class="logo">
+            <span>Found</span>It
+        </div>
+
+        <nav>
+            <a href="dashboard.php">Dashboard</a>
+            <a href="cari-barang.php">Cari Barang</a>
+            <a href="lapor-hilang.php">Lapor Barang Hilang</a>
+            <a href="lapor-ditemukan.php">Lapor Barang Ditemukan</a>
+            <a href="klaim.php" class="active">Klaim Barang</a>
+            <a href="status-klaim.php">Status Klaim</a>
+            <a href="riwayat-laporan.php">Riwayat Laporan</a>
+            <a href="profil.php">Profil</a>
+        </nav>
+
+        <a href="../logout.php" class="logout">
+            Keluar
+        </a>
+
+    </aside>
+
+    <main class="main-content">
+
+        <header class="topbar">
+
+            <div>
+                <h1>Klaim Barang</h1>
+                <p>Ajukan klaim untuk barang yang kamu kenali.</p>
+            </div>
+
+            <div class="user-profile">
+
+                <div class="profile-icon">
+                    <?= htmlspecialchars($inisialUser, ENT_QUOTES, 'UTF-8'); ?>
+                </div>
+
+                <div>
+                    <strong>
+                        <?= htmlspecialchars($namaUser, ENT_QUOTES, 'UTF-8'); ?>
+                    </strong>
+
+                    <small>User</small>
+                </div>
+
+            </div>
+
+        </header>
+
         <section class="claim-container">
+
             <div class="claim-header">
                 <h2>Form Pengajuan Klaim</h2>
-                <p>Jelaskan bukti kepemilikan agar admin dapat memverifikasi bahwa barang ini milik Anda.</p>
+                <p>
+                    Jelaskan bukti kepemilikan agar admin dapat
+                    memverifikasi bahwa barang ini milik Anda.
+                </p>
             </div>
 
-            <?php if ($errors): ?>
+            <?php if ($error !== ''): ?>
+
                 <div class="alert alert-danger">
-                    <ul class="mb-0">
-                        <?php foreach ($errors as $err): ?><li><?= e($err) ?></li><?php endforeach; ?>
-                    </ul>
+                    <?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8'); ?>
                 </div>
+
             <?php endif; ?>
 
-            <!-- Ringkasan barang yang diklaim -->
             <div class="d-flex gap-3 align-items-center mb-4 p-3 border rounded">
-                <img src="<?= e(foto_url($item['foto'])) ?>" alt="" style="width:90px;height:90px;object-fit:cover;border-radius:8px;">
+
+                <img
+                    src="<?= htmlspecialchars($fotoBarang, ENT_QUOTES, 'UTF-8'); ?>"
+                    alt="Foto barang"
+                    style="width:90px;height:90px;object-fit:cover;border-radius:8px;"
+                >
+
                 <div>
-                    <span class="status-badge ditemukan">Ditemukan</span>
-                    <h5 class="mb-1 mt-1"><?= e($item['judul']) ?></h5>
-                    <small class="text-muted"><?= e($item['nama_kategori']) ?> &middot; <?= e($item['lokasi']) ?> &middot; <?= e(tgl_indo($item['tanggal_kejadian'])) ?></small>
+
+                    <span class="status-badge ditemukan">
+                        Ditemukan
+                    </span>
+
+                    <h5 class="mb-1 mt-1">
+                        <?= htmlspecialchars($item['JUDUL'], ENT_QUOTES, 'UTF-8'); ?>
+                    </h5>
+
+                    <small class="text-muted">
+                        <?= htmlspecialchars($item['NAMA_KATEGORI'], ENT_QUOTES, 'UTF-8'); ?>
+                        &middot;
+                        <?= htmlspecialchars($item['LOKASI'], ENT_QUOTES, 'UTF-8'); ?>
+                        &middot;
+                        <?= htmlspecialchars(
+                            $item['TANGGAL_KEJADIAN'] instanceof DateTimeInterface
+                                ? $item['TANGGAL_KEJADIAN']->format('d-m-Y')
+                                : (string)$item['TANGGAL_KEJADIAN'],
+                            ENT_QUOTES,
+                            'UTF-8'
+                        ); ?>
+                    </small>
+
                 </div>
+
             </div>
 
-            <form method="post" action="klaim.php?id=<?= urlencode($item['id']) ?>" enctype="multipart/form-data">
-                <?= csrf_field() ?>
-                <input type="hidden" name="id" value="<?= e($item['id']) ?>">
+            <?php if ($bolehAjukan): ?>
 
-                <div class="form-group">
-                    <label for="bukti">Bukti Kepemilikan</label>
-                    <textarea id="bukti" name="bukti_kepemilikan" class="form-control" rows="6" maxlength="1000" required
-                        placeholder="Sebutkan ciri khusus yang tidak tercantum di deskripsi publik, isi/bagian dalam barang, kapan dan di mana terakhir terlihat, dll."><?= e($bukti) ?></textarea>
-                    <small class="text-muted">Minimal 20 karakter, maksimal 1000.</small>
-                </div>
+                <form
+                    method="POST"
+                    action="klaim.php?id=<?= urlencode($item['ID']); ?>"
+                    enctype="multipart/form-data"
+                >
 
-                <div class="form-group">
-                    <label for="lampiran">Lampiran Foto (opsional)</label>
-                    <input type="file" id="lampiran" name="lampiran_foto" class="form-control" accept="image/jpeg,image/png,image/webp">
-                    <small class="text-muted">Contoh: foto barang serupa, struk, atau kotak pembelian. JPG/PNG/WEBP, maks. 2 MB.</small>
-                </div>
+                    <input
+                        type="hidden"
+                        name="id"
+                        value="<?= htmlspecialchars($item['ID'], ENT_QUOTES, 'UTF-8'); ?>"
+                    >
 
-                <div class="form-actions">
-                    <a href="detail-barang.php?id=<?= urlencode($item['id']) ?>" class="btn-cancel">Batal</a>
-                    <button type="submit" class="btn-submit">Ajukan Klaim</button>
-                </div>
-            </form>
+                    <div class="form-group">
+
+                        <label for="bukti">
+                            Bukti Kepemilikan
+                        </label>
+
+                        <textarea
+                            id="bukti"
+                            name="bukti_kepemilikan"
+                            class="form-control"
+                            rows="6"
+                            maxlength="1000"
+                            required
+                            placeholder="Sebutkan ciri khusus yang membuktikan barang tersebut milik Anda..."
+                        ><?= htmlspecialchars($bukti, ENT_QUOTES, 'UTF-8'); ?></textarea>
+
+                        <small class="text-muted">
+                            Minimal 20 karakter, maksimal 1000 karakter.
+                        </small>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="lampiran">
+                            Lampiran Foto (opsional)
+                        </label>
+
+                        <input
+                            type="file"
+                            id="lampiran"
+                            name="lampiran_foto"
+                            class="form-control"
+                            accept="image/jpeg,image/png,image/webp"
+                        >
+
+                        <small class="text-muted">
+                            JPG, PNG, atau WEBP. Maksimal 2 MB.
+                        </small>
+
+                    </div>
+
+                    <div class="form-actions">
+
+                        <a
+                            href="detail-barang.php?id=<?= urlencode($item['ID']); ?>"
+                            class="btn-cancel"
+                        >
+                            Batal
+                        </a>
+
+                        <button type="submit" class="btn-submit">
+                            Ajukan Klaim
+                        </button>
+
+                    </div>
+
+                </form>
+
+            <?php else: ?>
+
+                <a
+                    href="detail-barang.php?id=<?= urlencode($item['ID']); ?>"
+                    class="btn-cancel"
+                >
+                    Kembali ke Detail Barang
+                </a>
+
+            <?php endif; ?>
+
         </section>
 
-<?php require __DIR__ . '/_footer.php'; ?>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

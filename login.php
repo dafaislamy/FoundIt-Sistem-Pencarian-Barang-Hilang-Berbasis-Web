@@ -24,7 +24,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             if ($role === 'user') {
 
-                // MENCARI AKUN USER
                 $stmt = $conn->prepare("
                     SELECT ID, NAMA, EMAIL, PASSWORD, ROLE
                     FROM USERS
@@ -42,7 +41,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             } else {
 
-                // MENCARI AKUN ADMIN
                 $stmt = $conn->prepare("
                     SELECT ID, NAMA, EMAIL, PASSWORD
                     FROM ADMINS
@@ -106,6 +104,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link
         href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
         rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
     >
 
     <link rel="stylesheet" href="css/main.css">
@@ -188,6 +191,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <div class="form-group mb-3">
                     <label for="email">Email</label>
+
                     <input
                         type="email"
                         id="email"
@@ -201,20 +205,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <div class="form-group mb-3">
                     <label for="password">Password</label>
-                    <input
-                        type="password"
-                        id="password"
-                        name="password"
-                        class="form-control"
-                        placeholder="Masukkan password"
-                        minlength="8"
-                        required
-                    >
 
-                    <div class="password-requirements">
-                        <p id="lengthCheck">✕ Minimal 8 karakter</p>
-                        <p id="uppercaseCheck">✕ Mengandung huruf kapital (A-Z)</p>
-                        <p id="symbolCheck">✕ Mengandung simbol (!@#$%^&*)</p>
+                    <div class="input-group">
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            class="form-control"
+                            placeholder="Masukkan password"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            class="btn btn-outline-secondary"
+                            id="togglePassword"
+                            aria-label="Tampilkan password"
+                        >
+                            <i class="bi bi-eye" id="eyeIcon"></i>
+                        </button>
                     </div>
                 </div>
 
@@ -236,7 +245,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="js/login.js"></script>
+<script src="js/login.js?v=2"></script>
 
 </body>
 </html>

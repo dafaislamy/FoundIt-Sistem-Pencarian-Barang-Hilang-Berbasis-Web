@@ -3,7 +3,6 @@
 require_once '../config/koneksi.php';
 
 $error = '';
-$success = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
@@ -59,9 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ]);
 
         if ((int)$cek->fetchColumn() > 0) {
-            throw new Exception(
-                'Email atau NIM sudah terdaftar!'
-            );
+            throw new Exception('Email atau NIM sudah terdaftar!');
         }
 
         // Membuat ID user otomatis
@@ -85,6 +82,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $password,
             PASSWORD_BCRYPT
         );
+
+        if ($passwordHash === false) {
+            throw new Exception('Gagal mengenkripsi password!');
+        }
+
+        // Memulai transaksi
+        $conn->beginTransaction();
 
         // Menyimpan data ke tabel USERS
         $sql = "
@@ -130,6 +134,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ':angkatan' => $angkatan
         ]);
 
+        // Menyimpan transaksi secara permanen
+        $conn->commit();
+
         // Jika berhasil
         echo "
             <script>
@@ -139,14 +146,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ";
         exit;
 
-    } catch (Exception $e) {
+    } catch (Throwable $e) {
 
-        $error = $e->getMessage();
+        // Membatalkan transaksi jika terjadi kesalahan
+        if ($conn->inTransaction()) {
+            $conn->rollBack();
+        }
 
-    } catch (PDOException $e) {
-
-        $error = 'Registrasi gagal: ' . $e->getMessage();
-
+        $error = ($e instanceof PDOException)
+            ? 'Registrasi gagal: ' . $e->getMessage()
+            : $e->getMessage();
     }
 }
 ?>
@@ -211,7 +220,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         </div>
 
-
         <!-- BAGIAN KANAN -->
         <div class="col-lg-7 col-xl-8 register-box">
 
@@ -225,7 +233,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             </div>
 
-
             <!-- PESAN ERROR -->
             <?php if (!empty($error)): ?>
 
@@ -234,7 +241,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
 
             <?php endif; ?>
-
 
             <!-- FORM REGISTRASI -->
             <form
@@ -260,7 +266,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 </div>
 
-
                 <!-- NIM -->
                 <div class="form-group">
 
@@ -277,7 +282,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     >
 
                 </div>
-
 
                 <!-- FAKULTAS DAN JURUSAN -->
                 <div class="row">
@@ -309,6 +313,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 ];
 
                                 foreach ($daftarFakultas as $f) {
+
                                     $selected = (
                                         ($_POST['fakultas'] ?? '') === $f
                                     ) ? 'selected' : '';
@@ -326,7 +331,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </div>
 
                     </div>
-
 
                     <div class="col-md-6">
 
@@ -349,7 +353,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
 
                 </div>
-
 
                 <!-- ANGKATAN -->
                 <div class="form-group">
@@ -380,7 +383,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 </div>
 
-
                 <!-- EMAIL -->
                 <div class="form-group">
 
@@ -398,7 +400,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 </div>
 
-
                 <!-- NOMOR TELEPON -->
                 <div class="form-group">
 
@@ -415,7 +416,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     >
 
                 </div>
-
 
                 <!-- PASSWORD -->
                 <div class="form-group">
@@ -438,7 +438,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 </div>
 
-
                 <!-- TOMBOL -->
                 <button
                     type="submit"
@@ -454,7 +453,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 
 </div>
-
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
