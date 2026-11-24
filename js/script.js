@@ -9,18 +9,27 @@ document.addEventListener("DOMContentLoaded", function () {
     const clearSearch = document.getElementById("clearSearch");
     const selectStatus = document.getElementById("selectStatus");
     const selectKategori = document.getElementById("selectKategori");
-    const cols = document.querySelectorAll(".grid-barang .col");
     const pesanKosong = document.getElementById("pesanKosong");
 
     /* ========================================
        FUNGSI PENCARIAN DAN FILTER BARANG
     ======================================== */
     function filterBarang() {
-        if (!searchInput || !selectStatus || !selectKategori) return;
+        const currentSearchInput = document.getElementById("searchInput");
+        const currentSelectStatus = document.getElementById("selectStatus");
+        const currentSelectKategori = document.getElementById("selectKategori");
+        const currentPesanKosong = document.getElementById("pesanKosong");
+        const cols = document.querySelectorAll(".grid-barang .col");
 
-        const keyword = searchInput.value.trim().toLowerCase();
-        const statusRaw = selectStatus.value.trim().toLowerCase();
-        const kategoriRaw = selectKategori.value.trim().toLowerCase();
+        if (!currentSearchInput || !currentSelectStatus || !currentSelectKategori) return;
+
+        const keyword = currentSearchInput.value.trim().toLowerCase();
+        const statusRaw = currentSelectStatus.value.trim().toLowerCase();
+        const kategoriRaw = currentSelectKategori.value.trim().toLowerCase();
+
+        // Ambil juga teks label dari opsi kategori yang aktif (misal "Buku", "Aksesoris")
+        const selectedCatOpt = currentSelectKategori.options[currentSelectKategori.selectedIndex];
+        const kategoriText = selectedCatOpt ? selectedCatOpt.text.trim().toLowerCase() : "";
 
         let jumlahDitemukan = 0;
 
@@ -28,63 +37,96 @@ document.addEventListener("DOMContentLoaded", function () {
             const card = col.querySelector(".card");
             if (!card) return;
 
+            // Nama barang dari data-name atau heading kartu
             const namaBarang = (
+                col.getAttribute("data-name") ||
                 col.dataset.name ||
                 card.querySelector("h3")?.innerText ||
                 ""
             ).toLowerCase();
 
+            // Status barang dari data-status atau badge
             const statusBarang = (
+                col.getAttribute("data-status") ||
                 col.dataset.status ||
                 card.querySelector(".badge-status, .badge")?.innerText ||
                 ""
-            ).toLowerCase();
+            ).toLowerCase().trim();
 
-            const kategoriId = (col.dataset.kategoriId || "").toLowerCase();
+            // Kategori barang (ID dan Nama)
+            const kategoriAttr = (
+                col.getAttribute("data-kategori") ||
+                col.dataset.kategori ||
+                ""
+            ).toLowerCase().trim();
+
+            const kategoriId = (
+                col.getAttribute("data-kategori-id") ||
+                col.dataset.kategoriId ||
+                ""
+            ).toLowerCase().trim();
+
             const kategoriNama = (
+                col.getAttribute("data-kategori-name") ||
                 col.dataset.kategoriName ||
                 card.querySelector(".kategori")?.innerText ||
                 ""
-            ).toLowerCase();
+            ).toLowerCase().trim();
 
-            /* 1. KECOCOKAN KATA KUNCI */
-            const matchKeyword = (keyword === "" || namaBarang.includes(keyword));
+            /* 1. KECOCOKAN KATA KUNCI (NAMA BARANG / TEKS KARTU) */
+            const cardAllText = (card.innerText || "").toLowerCase();
+            const matchKeyword = (keyword === "" || namaBarang.includes(keyword) || cardAllText.includes(keyword));
 
-            /* 2. KECOCOKAN STATUS */
+            /* 2. KECOCOKAN STATUS (HILANG / DITEMUKAN - CASE-INSENSITIVE) */
             let matchStatus = true;
             if (statusRaw !== "" && statusRaw !== "semua status") {
                 if (statusRaw === "hilang" || statusRaw === "lost") {
-                    matchStatus = (statusBarang === "hilang" || statusBarang === "lost");
+                    matchStatus = (statusBarang.includes("hilang") || statusBarang.includes("lost"));
                 } else if (statusRaw === "ditemukan" || statusRaw === "found") {
-                    matchStatus = (statusBarang === "ditemukan" || statusBarang === "found");
+                    matchStatus = (statusBarang.includes("ditemukan") || statusBarang.includes("found"));
                 } else {
                     matchStatus = (statusBarang === statusRaw);
                 }
             }
 
-            /* 3. KECOCOKAN KATEGORI */
+            /* 3. KECOCOKAN KATEGORI (ID MAUPUN NAMA KATEGORI) */
             let matchKategori = true;
             if (kategoriRaw !== "" && kategoriRaw !== "semua kategori") {
                 matchKategori = (
                     kategoriId === kategoriRaw ||
-                    kategoriNama === kategoriRaw
+                    kategoriNama === kategoriRaw ||
+                    kategoriAttr === kategoriRaw ||
+                    kategoriNama === kategoriText ||
+                    kategoriAttr === kategoriText ||
+                    (kategoriText !== "" && (kategoriNama.includes(kategoriText) || kategoriAttr.includes(kategoriText)))
                 );
             }
 
-            /* TAMPILKAN / SEMBUNYIKAN KARTU */
+            /* TAMPILKAN ATAU SEMBUNYIKAN KARTU (DENGAN KELAS & DISPLAY !IMPORTANT) */
             if (matchKeyword && matchStatus && matchKategori) {
-                col.style.display = "";
+                col.classList.remove("filter-hidden", "d-none");
+                col.style.setProperty("display", "flex", "important");
                 jumlahDitemukan++;
             } else {
-                col.style.display = "none";
+                col.classList.add("filter-hidden", "d-none");
+                col.style.setProperty("display", "none", "important");
             }
         });
 
-        /* TAMPILKAN EMPTY STATE BILA HASIL 0 */
-        if (pesanKosong) {
-            pesanKosong.style.display = (jumlahDitemukan === 0) ? "block" : "none";
+        /* TAMPILKAN PESAN KOSONG JIKA TIDAK ADA BARANG YANG COCOK */
+        if (currentPesanKosong) {
+            if (jumlahDitemukan === 0) {
+                currentPesanKosong.classList.remove("d-none");
+                currentPesanKosong.style.setProperty("display", "block", "important");
+            } else {
+                currentPesanKosong.classList.add("d-none");
+                currentPesanKosong.style.setProperty("display", "none", "important");
+            }
         }
     }
+
+    // Ekspor fungsi ke window agar dapat dipanggil dari inline event handler
+    window.filterBarang = filterBarang;
 
     /* ========================================
        DEBOUNCE UNTUK SEARCH REAL-TIME
@@ -95,7 +137,7 @@ document.addEventListener("DOMContentLoaded", function () {
         clearTimeout(debounceTimer);
         debounceTimer = setTimeout(function () {
             filterBarang();
-        }, 250);
+        }, 150);
     }
 
     /* ========================================
@@ -148,9 +190,11 @@ document.addEventListener("DOMContentLoaded", function () {
             }
             if (selectStatus) {
                 selectStatus.selectedIndex = 0;
+                selectStatus.value = "";
             }
             if (selectKategori) {
                 selectKategori.selectedIndex = 0;
+                selectKategori.value = "";
             }
 
             // Bersihkan URL parameter tanpa reload halaman

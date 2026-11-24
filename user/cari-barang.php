@@ -109,13 +109,13 @@ try {
     }
 
     // Filter tipe barang
-    if ($tipe === 'hilang') {
+    if ($tipe === 'hilang' || $tipe === 'lost') {
 
         $sql .= "
             AND UPPER(TRIM(I.TIPE)) IN ('LOST', 'HILANG')
         ";
 
-    } elseif ($tipe === 'ditemukan') {
+    } elseif ($tipe === 'ditemukan' || $tipe === 'found') {
 
         $sql .= "
             AND UPPER(TRIM(I.TIPE)) IN ('FOUND', 'DITEMUKAN')
@@ -126,10 +126,11 @@ try {
     if ($kategori !== '') {
 
         $sql .= "
-            AND I.CATEGORIES_ID = :kategori
+            AND (I.CATEGORIES_ID = :kategori OR LOWER(C.NAMA_KATEGORI) = LOWER(:kategoriNama))
         ";
 
         $params[':kategori'] = $kategori;
+        $params[':kategoriNama'] = $kategori;
     }
 
     // Urutan data terbaru
@@ -388,6 +389,7 @@ try {
                 <select
                     name="tipe"
                     class="filter-select form-select"
+                    onchange="this.form.submit()"
                 >
 
                     <option value="">
@@ -396,14 +398,14 @@ try {
 
                     <option
                         value="hilang"
-                        <?= $tipe === 'hilang' ? 'selected' : ''; ?>
+                        <?= ($tipe === 'hilang' || $tipe === 'lost') ? 'selected' : ''; ?>
                     >
                         Hilang
                     </option>
 
                     <option
                         value="ditemukan"
-                        <?= $tipe === 'ditemukan' ? 'selected' : ''; ?>
+                        <?= ($tipe === 'ditemukan' || $tipe === 'found') ? 'selected' : ''; ?>
                     >
                         Ditemukan
                     </option>
@@ -416,6 +418,7 @@ try {
                 <select
                     name="kategori"
                     class="filter-select form-select"
+                    onchange="this.form.submit()"
                 >
 
                     <option value="">
@@ -430,7 +433,7 @@ try {
                                 ENT_QUOTES,
                                 'UTF-8'
                             ); ?>"
-                            <?= $kategori === $cat['ID'] ? 'selected' : ''; ?>
+                            <?= ($kategori === $cat['ID'] || strtolower($kategori) === strtolower($cat['NAMA_KATEGORI'])) ? 'selected' : ''; ?>
                         >
 
                             <?= htmlspecialchars(

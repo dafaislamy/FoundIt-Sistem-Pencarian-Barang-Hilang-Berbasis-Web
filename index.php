@@ -97,16 +97,17 @@ try {
     }
 
     // Filter tipe status (Hilang vs Ditemukan)
-    if ($tipe === 'hilang') {
+    if ($tipe === 'hilang' || $tipe === 'lost') {
         $sql .= " AND UPPER(TRIM(I.TIPE)) IN ('LOST', 'HILANG')";
-    } elseif ($tipe === 'ditemukan') {
+    } elseif ($tipe === 'ditemukan' || $tipe === 'found') {
         $sql .= " AND UPPER(TRIM(I.TIPE)) IN ('FOUND', 'DITEMUKAN')";
     }
 
     // Filter kategori
     if ($kategori !== '') {
-        $sql .= " AND I.CATEGORIES_ID = :kategori";
+        $sql .= " AND (I.CATEGORIES_ID = :kategori OR LOWER(C.NAMA_KATEGORI) = LOWER(:kategoriNama))";
         $params[':kategori'] = $kategori;
+        $params[':kategoriNama'] = $kategori;
     }
 
     // Urutan data terbaru
@@ -660,7 +661,12 @@ try {
         }
 
         .grid-barang .col {
-            display: flex !important;
+            display: flex;
+        }
+
+        .grid-barang .col.filter-hidden,
+        .grid-barang .col.d-none {
+            display: none !important;
         }
 
         .grid-barang .card {
@@ -1152,7 +1158,7 @@ try {
 
                     <!-- Filter Dropdown Status -->
                     <div class="filter-select-wrapper">
-                        <select id="selectStatus" name="tipe" aria-label="Filter status barang">
+                        <select id="selectStatus" name="tipe" aria-label="Filter status barang" onchange="if (typeof filterBarang === 'function') { filterBarang(); }">
                             <option value="">Semua Status</option>
                             <option value="hilang" <?= ($tipe === 'hilang' || $tipe === 'lost') ? 'selected' : ''; ?>>Hilang</option>
                             <option value="ditemukan" <?= ($tipe === 'ditemukan' || $tipe === 'found') ? 'selected' : ''; ?>>Ditemukan</option>
@@ -1161,7 +1167,7 @@ try {
 
                     <!-- Filter Dropdown Kategori (Dinamis dari Database) -->
                     <div class="filter-select-wrapper">
-                        <select id="selectKategori" name="kategori" aria-label="Filter kategori barang">
+                        <select id="selectKategori" name="kategori" aria-label="Filter kategori barang" onchange="if (typeof filterBarang === 'function') { filterBarang(); }">
                             <option value="">Semua Kategori</option>
                             <?php foreach ($categories as $cat): ?>
                                 <?php
@@ -1169,7 +1175,8 @@ try {
                                 $catNama = $cat['NAMA_KATEGORI'] ?? $cat['nama_kategori'] ?? '';
                                 ?>
                                 <option value="<?= htmlspecialchars($catId, ENT_QUOTES, 'UTF-8'); ?>"
-                                    <?= ($kategori === $catId) ? 'selected' : ''; ?>>
+                                    data-nama="<?= htmlspecialchars(strtolower($catNama), ENT_QUOTES, 'UTF-8'); ?>"
+                                    <?= ($kategori === $catId || strtolower($kategori) === strtolower($catNama)) ? 'selected' : ''; ?>>
                                     <?= htmlspecialchars($catNama, ENT_QUOTES, 'UTF-8'); ?>
                                 </option>
                             <?php endforeach; ?>
@@ -1207,6 +1214,7 @@ try {
                     <div class="col"
                          data-name="<?= htmlspecialchars(strtolower($itemJudul), ENT_QUOTES, 'UTF-8'); ?>"
                          data-status="<?= $isFound ? 'ditemukan' : 'hilang'; ?>"
+                         data-kategori="<?= htmlspecialchars(strtolower($kategoriNama), ENT_QUOTES, 'UTF-8'); ?>"
                          data-kategori-id="<?= htmlspecialchars(strtolower($kategoriId), ENT_QUOTES, 'UTF-8'); ?>"
                          data-kategori-name="<?= htmlspecialchars(strtolower($kategoriNama), ENT_QUOTES, 'UTF-8'); ?>">
 
@@ -1453,7 +1461,213 @@ try {
 
     <!-- JAVASCRIPT BOOTSTRAP & SCRIPT -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="js/script.js?v=<?= filemtime(__DIR__ . '/js/script.js') ?? time(); ?>"></script>
+    <script src="js/script.js?v=<?= time(); ?>"></script>
+
+    <!-- INLINE FILTER SCRIPT UNTUK MEMASTIKAN FITUR FILTER BERFUNGSI 100% BEBAS MASALAH CACHE BROWSER -->
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const filterForm = document.getElementById("filterForm");
+        const resetFilter = document.getElementById("resetFilter");
+        const searchInput = document.getElementById("searchInput");
+        const clearSearch = document.getElementById("clearSearch");
+        const selectStatus = document.getElementById("selectStatus");
+        const selectKategori = document.getElementById("selectKategori");
+        const pesanKosong = document.getElementById("pesanKosong");
+
+        function filterBarang() {
+            const currentSearchInput = document.getElementById("searchInput");
+            const currentSelectStatus = document.getElementById("selectStatus");
+            const currentSelectKategori = document.getElementById("selectKategori");
+            const currentPesanKosong = document.getElementById("pesanKosong");
+            const cols = document.querySelectorAll(".grid-barang .col");
+
+            if (!currentSearchInput || !currentSelectStatus || !currentSelectKategori) return;
+
+            const keyword = currentSearchInput.value.trim().toLowerCase();
+            const statusRaw = currentSelectStatus.value.trim().toLowerCase();
+            const kategoriRaw = currentSelectKategori.value.trim().toLowerCase();
+
+            const selectedCatOpt = currentSelectKategori.options[currentSelectKategori.selectedIndex];
+            const kategoriText = selectedCatOpt ? selectedCatOpt.text.trim().toLowerCase() : "";
+
+            let jumlahDitemukan = 0;
+
+            cols.forEach(function (col) {
+                const card = col.querySelector(".card");
+                if (!card) return;
+
+                const namaBarang = (
+                    col.getAttribute("data-name") ||
+                    col.dataset.name ||
+                    card.querySelector("h3")?.innerText ||
+                    ""
+                ).toLowerCase();
+
+                const statusBarang = (
+                    col.getAttribute("data-status") ||
+                    col.dataset.status ||
+                    card.querySelector(".badge-status, .badge")?.innerText ||
+                    ""
+                ).toLowerCase().trim();
+
+                const kategoriAttr = (
+                    col.getAttribute("data-kategori") ||
+                    col.dataset.kategori ||
+                    ""
+                ).toLowerCase().trim();
+
+                const kategoriId = (
+                    col.getAttribute("data-kategori-id") ||
+                    col.dataset.kategoriId ||
+                    ""
+                ).toLowerCase().trim();
+
+                const kategoriNama = (
+                    col.getAttribute("data-kategori-name") ||
+                    col.dataset.kategoriName ||
+                    card.querySelector(".kategori")?.innerText ||
+                    ""
+                ).toLowerCase().trim();
+
+                /* 1. KECOCOKAN KATA KUNCI (NAMA BARANG / TEKS KARTU) */
+                const cardAllText = (card.innerText || "").toLowerCase();
+                const matchKeyword = (keyword === "" || namaBarang.includes(keyword) || cardAllText.includes(keyword));
+
+                /* 2. KECOCOKAN STATUS (HILANG / DITEMUKAN) */
+                let matchStatus = true;
+                if (statusRaw !== "" && statusRaw !== "semua status") {
+                    if (statusRaw === "hilang" || statusRaw === "lost") {
+                        matchStatus = (statusBarang.includes("hilang") || statusBarang.includes("lost"));
+                    } else if (statusRaw === "ditemukan" || statusRaw === "found") {
+                        matchStatus = (statusBarang.includes("ditemukan") || statusBarang.includes("found"));
+                    } else {
+                        matchStatus = (statusBarang === statusRaw);
+                    }
+                }
+
+                /* 3. KECOCOKAN KATEGORI (ID DAN NAMA) */
+                let matchKategori = true;
+                if (kategoriRaw !== "" && kategoriRaw !== "semua kategori") {
+                    matchKategori = (
+                        kategoriId === kategoriRaw ||
+                        kategoriNama === kategoriRaw ||
+                        kategoriAttr === kategoriRaw ||
+                        kategoriNama === kategoriText ||
+                        kategoriAttr === kategoriText ||
+                        (kategoriText !== "" && (kategoriNama.includes(kategoriText) || kategoriAttr.includes(kategoriText)))
+                    );
+                }
+
+                /* TAMPILKAN / SEMBUNYIKAN (DENGAN KELAS & DISPLAY !IMPORTANT) */
+                if (matchKeyword && matchStatus && matchKategori) {
+                    col.classList.remove("filter-hidden", "d-none");
+                    col.style.setProperty("display", "flex", "important");
+                    jumlahDitemukan++;
+                } else {
+                    col.classList.add("filter-hidden", "d-none");
+                    col.style.setProperty("display", "none", "important");
+                }
+            });
+
+            if (currentPesanKosong) {
+                if (jumlahDitemukan === 0) {
+                    currentPesanKosong.classList.remove("d-none");
+                    currentPesanKosong.style.setProperty("display", "block", "important");
+                } else {
+                    currentPesanKosong.classList.add("d-none");
+                    currentPesanKosong.style.setProperty("display", "none", "important");
+                }
+            }
+        }
+
+        window.filterBarang = filterBarang;
+
+        let debounceTimer;
+        function debounceFilter() {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(function () {
+                filterBarang();
+            }, 200);
+        }
+
+        if (searchInput) {
+            searchInput.addEventListener("input", function () {
+                if (clearSearch) {
+                    clearSearch.hidden = searchInput.value.length === 0;
+                }
+                debounceFilter();
+            });
+        }
+
+        if (clearSearch) {
+            clearSearch.addEventListener("click", function () {
+                clearTimeout(debounceTimer);
+                if (searchInput) {
+                    searchInput.value = "";
+                    searchInput.focus();
+                }
+                clearSearch.hidden = true;
+                filterBarang();
+            });
+        }
+
+        if (selectStatus) {
+            selectStatus.addEventListener("change", function () {
+                clearTimeout(debounceTimer);
+                filterBarang();
+            });
+        }
+
+        if (selectKategori) {
+            selectKategori.addEventListener("change", function () {
+                clearTimeout(debounceTimer);
+                filterBarang();
+            });
+        }
+
+        if (resetFilter) {
+            resetFilter.addEventListener("click", function () {
+                clearTimeout(debounceTimer);
+
+                if (searchInput) {
+                    searchInput.value = "";
+                }
+                if (clearSearch) {
+                    clearSearch.hidden = true;
+                }
+                if (selectStatus) {
+                    selectStatus.selectedIndex = 0;
+                    selectStatus.value = "";
+                }
+                if (selectKategori) {
+                    selectKategori.selectedIndex = 0;
+                    selectKategori.value = "";
+                }
+
+                if (window.history && window.history.replaceState) {
+                    const cleanUrl = window.location.pathname + "#barang";
+                    window.history.replaceState(null, "", cleanUrl);
+                }
+
+                filterBarang();
+
+                if (searchInput) {
+                    searchInput.focus();
+                }
+            });
+        }
+
+        if (filterForm) {
+            filterForm.addEventListener("submit", function (e) {
+                e.preventDefault();
+                clearTimeout(debounceTimer);
+                filterBarang();
+            });
+        }
+
+        filterBarang();
+    });
+    </script>
 
 </body>
 </html>
