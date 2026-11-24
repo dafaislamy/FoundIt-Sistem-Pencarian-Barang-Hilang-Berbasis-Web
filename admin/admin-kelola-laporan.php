@@ -136,12 +136,6 @@ $inisialAdmin = strtoupper(substr($namaAdmin, 0, 1)) ?: 'A';
             </div>
         </header>
 
-        <?php if ($error !== ''): ?>
-            <div class="alert alert-danger border-0 shadow-sm rounded-3 mb-4">
-                <?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8'); ?>
-            </div>
-        <?php endif; ?>
-
         <!-- FILTER BAR SATU BARIS HORIZONTAL -->
         <section class="admin-filter-card">
             <form method="get" action="admin-kelola-laporan.php" class="admin-filter-bar">

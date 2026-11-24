@@ -126,12 +126,6 @@ $inisialAdmin = strtoupper(substr($namaAdmin, 0, 1)) ?: 'A';
             </div>
         </header>
 
-        <?php if ($db_error !== ''): ?>
-            <div class="alert alert-danger border-0 shadow-sm rounded-3 mb-4">
-                <?= htmlspecialchars($db_error, ENT_QUOTES, 'UTF-8'); ?>
-            </div>
-        <?php endif; ?>
-
         <!-- WELCOME BANNER -->
         <section class="welcome-card mb-4">
             <div>

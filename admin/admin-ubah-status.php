@@ -140,13 +140,6 @@ $inisialAdmin = strtoupper(substr($namaAdmin, 0, 1)) ?: 'A';
                 <div><?= htmlspecialchars($pesan, ENT_QUOTES, 'UTF-8'); ?></div>
             </div>
         <?php endif; ?>
-        <?php if ($error !== ''): ?>
-            <div class="alert alert-danger border-0 shadow-sm rounded-3 mb-4 d-flex align-items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                <div><?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8'); ?></div>
-            </div>
-        <?php endif; ?>
-
         <!-- TABEL UBAH STATUS -->
         <section class="admin-card-table">
             <div class="p-3 px-4 border-bottom d-flex justify-content-between align-items-center" style="background-color: #ffffff;">
