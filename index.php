@@ -408,32 +408,50 @@ try {
 
         .fitur-box {
             background-color: #ffffff !important;
-            padding: 32px 26px !important;
+            padding: 34px 26px !important;
             text-align: center !important;
-            border-radius: 16px !important;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08) !important;
-            border: 1px solid #f1f5f9 !important;
+            border-radius: 18px !important;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.07) !important;
+            border: 1.5px solid #e2e8f0 !important;
             transition: all 0.25s ease !important;
             height: 100% !important;
             display: flex !important;
             flex-direction: column !important;
             align-items: center !important;
+            position: relative !important;
+            overflow: hidden !important;
+        }
+
+        .fitur-box::before {
+            content: '' !important;
+            position: absolute !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            height: 3.5px !important;
+            background: linear-gradient(90deg, #38bdf8, #1e3a8a) !important;
+            opacity: 0 !important;
+            transition: opacity 0.25s ease !important;
+        }
+
+        .fitur-box:hover::before {
+            opacity: 1 !important;
         }
 
         .fitur-box:hover {
-            transform: translateY(-4px) !important;
-            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.12) !important;
-            border-color: #e2e8f0 !important;
+            transform: translateY(-5px) !important;
+            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.12) !important;
+            border-color: #bae6fd !important;
         }
 
         .ikon-circle {
-            width: 64px !important;
-            height: 64px !important;
+            width: 66px !important;
+            height: 66px !important;
             border-radius: 50% !important;
             display: flex !important;
             align-items: center !important;
             justify-content: center !important;
-            margin-bottom: 18px !important;
+            margin-bottom: 20px !important;
             transition: transform 0.25s ease !important;
         }
 
@@ -441,19 +459,25 @@ try {
             transform: scale(1.08) !important;
         }
 
+        /* WARNA TIAP FITUR DISELARASKAN 100% DENGAN WARNA HALAMAN UTAMA (HERO SECTION) */
         .ikon-blue {
-            background-color: #e0f2fe !important;
+            background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%) !important;
             color: #0284c7 !important;
+            box-shadow: 0 4px 14px rgba(2, 132, 199, 0.22) !important;
         }
 
-        .ikon-amber {
-            background-color: #fef3c7 !important;
-            color: #d97706 !important;
+        .ikon-amber,
+        .ikon-royal {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%) !important;
+            color: #1d4ed8 !important;
+            box-shadow: 0 4px 14px rgba(29, 78, 216, 0.22) !important;
         }
 
-        .ikon-emerald {
-            background-color: #dcfce7 !important;
-            color: #16a34a !important;
+        .ikon-emerald,
+        .ikon-navy {
+            background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%) !important;
+            color: #4338ca !important;
+            box-shadow: 0 4px 14px rgba(67, 56, 202, 0.22) !important;
         }
 
         .fitur-box h3 {
@@ -818,27 +842,134 @@ try {
             transition: all 0.2s ease !important;
         }
 
+        .label-biru {
+            display: inline-block !important;
+            background: #e0f2fe !important;
+            color: #0284c7 !important;
+            border: 1px solid #bae6fd !important;
+            padding: 5px 16px !important;
+            border-radius: 20px !important;
+            font-size: 11px !important;
+            font-weight: 700 !important;
+            letter-spacing: 1.5px !important;
+            margin-bottom: 12px !important;
+            text-transform: uppercase !important;
+        }
+
         .btn-card-detail {
             background-color: #ffffff !important;
-            color: #3498db !important;
-            border: 1.5px solid #3498db !important;
+            color: #0284c7 !important;
+            border: 1.5px solid #0284c7 !important;
         }
 
         .btn-card-detail:hover {
-            background-color: #3498db !important;
+            background-color: #0284c7 !important;
             color: #ffffff !important;
         }
 
         .btn-card-klaim {
-            background-color: #3498db !important;
+            background-color: #0284c7 !important;
             color: #ffffff !important;
-            border: 1.5px solid #3498db !important;
+            border: 1.5px solid #0284c7 !important;
         }
 
         .btn-card-klaim:hover {
-            background-color: #2980b9 !important;
-            border-color: #2980b9 !important;
+            background-color: #0369a1 !important;
+            border-color: #0369a1 !important;
             color: #ffffff !important;
+        }
+
+        /* ========================================
+           BAGIAN CARA KERJA & TENTANG (SELARAS HERO)
+        ======================================== */
+        .cara-kerja {
+            background-color: #ffffff !important;
+        }
+
+        .langkah-box {
+            background-color: #ffffff !important;
+            padding: 30px 22px !important;
+            border: 1.5px solid #eef2f6 !important;
+            border-radius: 16px !important;
+            text-align: center !important;
+            transition: all 0.25s ease !important;
+            height: 100% !important;
+            position: relative !important;
+        }
+
+        .langkah-box:hover {
+            transform: translateY(-5px) !important;
+            border-color: #bae6fd !important;
+            box-shadow: 0 14px 30px rgba(2, 132, 199, 0.1) !important;
+        }
+
+        .langkah-box span {
+            display: inline-block !important;
+            font-size: 28px !important;
+            font-weight: 800 !important;
+            line-height: 1 !important;
+            margin-bottom: 12px !important;
+            background: linear-gradient(135deg, #0284c7 0%, #1e3a8a 100%) !important;
+            -webkit-background-clip: text !important;
+            -webkit-text-fill-color: transparent !important;
+        }
+
+        .langkah-box h3 {
+            font-size: 18px !important;
+            font-weight: 700 !important;
+            color: #0f172a !important;
+            margin-bottom: 10px !important;
+        }
+
+        .langkah-box p {
+            color: #64748b !important;
+            font-size: 13.5px !important;
+            line-height: 1.6 !important;
+            margin: 0 !important;
+        }
+
+        .tentang-box {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%) !important;
+            border: 1.5px solid #bae6fd !important;
+            border-radius: 20px !important;
+            padding: 42px 28px !important;
+            text-align: center !important;
+            box-shadow: 0 10px 28px rgba(2, 132, 199, 0.08) !important;
+            height: 100% !important;
+        }
+
+        /* BAGIAN AJAKAN LAPOR (SAMA DENGAN WARNA HERO HALAMAN UTAMA) */
+        .lapor {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 45%, #1e3a8a 100%) !important;
+            color: #ffffff !important;
+            text-align: center !important;
+            padding: 85px 20px !important;
+            position: relative !important;
+            overflow: hidden !important;
+        }
+
+        .lapor::before {
+            content: '' !important;
+            position: absolute !important;
+            top: -40% !important;
+            left: 10% !important;
+            width: 450px !important;
+            height: 450px !important;
+            background: radial-gradient(circle, rgba(56, 189, 248, 0.15) 0%, transparent 70%) !important;
+            pointer-events: none !important;
+        }
+
+        .lapor h2 {
+            font-size: 34px !important;
+            font-weight: 800 !important;
+            color: #ffffff !important;
+            margin-bottom: 14px !important;
+        }
+
+        .lapor p {
+            color: #cbd5e1 !important;
+            font-size: 16px !important;
+            margin-bottom: 30px !important;
         }
 
         /* EMPTY STATE */
@@ -1061,7 +1192,7 @@ try {
             <!-- FITUR 2: BUAT LAPORAN -->
             <div class="col-md-4">
                 <div class="fitur-box">
-                    <div class="ikon-circle ikon-amber">
+                    <div class="ikon-circle ikon-royal">
                         <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
                             <polyline points="14 2 14 8 20 8"></polyline>
@@ -1081,7 +1212,7 @@ try {
             <!-- FITUR 3: AJUKAN KLAIM -->
             <div class="col-md-4">
                 <div class="fitur-box">
-                    <div class="ikon-circle ikon-emerald">
+                    <div class="ikon-circle ikon-navy">
                         <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
                             <polyline points="9 12 11 14 15 10"></polyline>

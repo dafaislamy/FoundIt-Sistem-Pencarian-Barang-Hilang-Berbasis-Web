@@ -258,32 +258,50 @@ a {
 
 .fitur-box {
     background-color: #ffffff;
-    padding: 32px 26px;
+    padding: 34px 26px;
     text-align: center;
-    border-radius: 16px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-    border: 1px solid #f1f5f9;
+    border-radius: 18px;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.07);
+    border: 1.5px solid #e2e8f0;
     transition: all 0.25s ease;
     height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.fitur-box::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3.5px;
+    background: linear-gradient(90deg, #38bdf8, #1e3a8a);
+    opacity: 0;
+    transition: opacity 0.25s ease;
+}
+
+.fitur-box:hover::before {
+    opacity: 1;
 }
 
 .fitur-box:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.12);
-    border-color: #e2e8f0;
+    transform: translateY(-5px);
+    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
+    border-color: #bae6fd;
 }
 
 .ikon-circle {
-    width: 64px;
-    height: 64px;
+    width: 66px;
+    height: 66px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 18px;
+    margin-bottom: 20px;
     transition: transform 0.25s ease;
 }
 
@@ -291,25 +309,31 @@ a {
     transform: scale(1.08);
 }
 
+/* WARNA TIAP FITUR DISELARASKAN 100% DENGAN WARNA HALAMAN UTAMA (HERO SECTION) */
 .ikon-blue {
-    background-color: #e0f2fe;
+    background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
     color: #0284c7;
+    box-shadow: 0 4px 14px rgba(2, 132, 199, 0.22);
 }
 
-.ikon-amber {
-    background-color: #fef3c7;
-    color: #d97706;
+.ikon-amber,
+.ikon-royal {
+    background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+    color: #1d4ed8;
+    box-shadow: 0 4px 14px rgba(29, 78, 216, 0.22);
 }
 
-.ikon-emerald {
-    background-color: #dcfce7;
-    color: #16a34a;
+.ikon-emerald,
+.ikon-navy {
+    background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
+    color: #4338ca;
+    box-shadow: 0 4px 14px rgba(67, 56, 202, 0.22);
 }
 
 .fitur-box h3 {
     font-size: 19px;
     font-weight: 700;
-    color: #1e293b;
+    color: #0f172a;
     margin-bottom: 8px;
 }
 
@@ -322,15 +346,22 @@ a {
 
 /* BAGIAN PENCARIAN BARANG */
 #barang {
-    background-color: #eef6fc;
+    background-color: #f8fafc;
     padding: 70px 0;
 }
 
 .label-biru {
-    color: #3498db;
-    font-size: 12px;
-    font-weight: bold;
+    display: inline-block;
+    background: #e0f2fe;
+    color: #0284c7;
+    border: 1px solid #bae6fd;
+    padding: 5px 16px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
     letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
 }
 
 .judul-section h2 {
@@ -748,23 +779,32 @@ a {
 }
 
 .langkah-box:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.06);
+    transform: translateY(-5px);
+    border-color: #bae6fd;
+    box-shadow: 0 14px 30px rgba(2, 132, 199, 0.1);
 }
 
 .langkah-box span {
-    color: #3498db;
-    font-size: 25px;
-    font-weight: bold;
+    display: inline-block;
+    font-size: 28px;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 12px;
+    background: linear-gradient(135deg, #0284c7 0%, #1e3a8a 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 .langkah-box h3 {
-    margin-bottom: 8px;
+    font-size: 18px;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 10px;
 }
 
 .langkah-box p {
-    color: #777;
-    font-size: 13px;
+    color: #64748b;
+    font-size: 13.5px;
     line-height: 1.6;
 }
 
@@ -774,22 +814,25 @@ a {
 }
 
 .tentang-text h2 {
-    font-size: 30px;
+    font-size: 32px;
     line-height: 1.3;
+    font-weight: 800;
+    color: #0f172a;
 }
 
 .tentang-text p {
-    color: #666;
-    line-height: 1.7;
-    font-size: 14px;
+    color: #475569;
+    line-height: 1.75;
+    font-size: 15px;
 }
 
 .tentang-box {
-    background-color: #eef7fd;
-    padding: 40px 25px;
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    padding: 42px 28px;
     text-align: center;
-    border-radius: 15px;
-    border: 1px solid #d9edf9;
+    border-radius: 20px;
+    border: 1.5px solid #bae6fd;
+    box-shadow: 0 10px 28px rgba(2, 132, 199, 0.08);
     height: 100%;
 }
 
@@ -797,57 +840,72 @@ a {
     font-size: 50px;
 }
 
+.tentang-box h3 {
+    color: #0f172a;
+    font-size: 20px;
+    font-weight: 700;
+}
+
 .tentang-box p {
-    color: #666;
-    font-size: 13px;
+    color: #475569;
+    font-size: 13.5px;
     line-height: 1.6;
 }
 
-/* BAGIAN AJAKAN MEMBUAT LAPORAN */
+/* BAGIAN AJAKAN MEMBUAT LAPORAN (SELARAS HERO HALAMAN UTAMA) */
 .lapor {
-    background: linear-gradient(135deg, #2c3e50, #3498db);
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 45%, #1e3a8a 100%);
     color: white;
     text-align: center;
-    padding: 70px 20px;
+    padding: 85px 20px;
+    position: relative;
+    overflow: hidden;
 }
 
 .lapor h2 {
-    font-size: 30px;
+    font-size: 34px;
+    font-weight: 800;
+    margin-bottom: 14px;
+    color: #ffffff;
 }
 
 .lapor p {
-    color: #eaf5fc;
-    margin-bottom: 25px;
+    color: #cbd5e1;
+    font-size: 16px;
+    margin-bottom: 30px;
 }
 
 /* BAGIAN FOOTER */
 .footer {
-    background-color: #1a252f;
+    background-color: #0f172a;
     color: white;
     padding: 45px 0;
 }
 
 .footer h2 {
     font-size: 24px;
+    font-weight: 800;
 }
 
 .footer h2 span {
-    color: #3498db;
+    color: #38bdf8;
 }
 
 .footer h3 {
     font-size: 15px;
+    font-weight: 700;
+    color: #f8fafc;
 }
 
 .footer p {
-    color: #bdc3c7;
+    color: #94a3b8;
     font-size: 13px;
     line-height: 1.6;
 }
 
 .copyright {
-    background-color: #111b22;
-    color: #95a5a6;
+    background-color: #0b1120;
+    color: #64748b;
     text-align: center;
     padding: 15px;
     font-size: 12px;
@@ -1831,7 +1889,7 @@ body {
 
 /* BAGIAN INFORMASI LOGIN */
 .login-info {
-    background: linear-gradient(135deg, #2c3e50, #3498db);
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 45%, #1e3a8a 100%);
     color: white;
     display: flex;
     flex-direction: column;
@@ -1842,24 +1900,24 @@ body {
 
 .login-info .logo { font-size: 30px; font-weight: bold; margin-bottom: 50px; }
 
-.logo span { color: #3498db; }
+.logo span { color: #38bdf8; }
 
-.login-info h1 { font-size: 48px; line-height: 1.2; margin-bottom: 20px; }
+.login-info h1 { font-size: 48px; line-height: 1.2; margin-bottom: 20px; font-weight: 800; }
 
 .login-info p {
     max-width: 450px;
-    color: #eaf5fc;
+    color: #cbd5e1;
     line-height: 1.7;
     margin-bottom: 35px;
 }
 
 .back-home {
-    color: white;
+    color: #bae6fd;
     text-decoration: none;
     font-weight: 600;
 }
 
-.back-home:hover { text-decoration: underline; }
+.back-home:hover { text-decoration: underline; color: #ffffff; }
 
 /* FORM LOGIN */
 .login-box {
@@ -1873,9 +1931,9 @@ body {
 
 .login-header { margin-bottom: 30px; }
 
-.login-header h2 { font-size: 30px; margin-bottom: 8px; }
+.login-header h2 { font-size: 30px; margin-bottom: 8px; color: #0f172a; font-weight: 700; }
 
-.login-header p { color: #777; }
+.login-header p { color: #64748b; }
 
 /* PEMILIHAN ROLE */
 .role-selection { display: flex; gap: 15px; margin-bottom: 30px; }
@@ -1887,26 +1945,26 @@ body {
     gap: 12px;
     padding: 15px;
     background-color: white;
-    border: 1px solid #ddd;
-    border-radius: 10px;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 12px;
     cursor: pointer;
     text-align: left;
-    transition: 0.2s;
+    transition: 0.2s ease;
     font-family: inherit;
 }
 
-.role-card:hover { border-color: #3498db; }
+.role-card:hover { border-color: #0284c7; }
 
 .role-card.active {
-    border: 2px solid #3498db;
-    background-color: #eef6fc;
+    border: 2px solid #0284c7;
+    background-color: #f0f9ff;
 }
 
 .role-icon { font-size: 25px; }
 
-.role-card h3 { font-size: 15px; margin-bottom: 3px; }
+.role-card h3 { font-size: 15px; margin-bottom: 3px; color: #0f172a; font-weight: 700; }
 
-.role-card p { font-size: 11px; color: #777; }
+.role-card p { font-size: 11px; color: #64748b; margin: 0; }
 
 .form-group { margin-bottom: 18px; }
 
@@ -1915,47 +1973,54 @@ body {
     font-size: 14px;
     font-weight: 600;
     margin-bottom: 7px;
+    color: #334155;
 }
 
 .form-group input {
     width: 100%;
     padding: 13px;
-    border: 1px solid #ddd;
-    border-radius: 7px;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 10px;
     font-family: inherit;
     font-size: 14px;
     box-sizing: border-box;
+    transition: all 0.2s ease;
 }
 
-.form-group input:focus { outline: none; border-color: #3498db; }
+.form-group input:focus { outline: none; border-color: #0284c7; box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15); }
 
 /* TOMBOL LOGIN DAN LINK REGISTRASI */
 .btn-login {
     width: 100%;
     padding: 13px;
     border: none;
-    border-radius: 7px;
-    background-color: #3498db !important;
+    border-radius: 10px;
+    background-color: #0284c7 !important;
     color: white !important;
     font-size: 14px;
     font-weight: bold;
     cursor: pointer;
-    transition: 0.2s;
+    transition: 0.2s ease;
 }
 
-.btn-login:hover { background-color: #2980b9 !important; }
+.btn-login:hover { background-color: #0369a1 !important; }
 
 .login-note {
     margin-top: 20px;
     text-align: center;
-    color: #777;
+    color: #64748b;
     font-size: 13px;
 }
 
 .login-note a {
-    color: #3498db;
+    color: #0284c7;
     font-weight: 600;
     text-decoration: none;
+}
+
+.login-note a:hover {
+    text-decoration: underline;
+    color: #0369a1;
 }
 
 /* TAMPILAN RESPONSIF */
