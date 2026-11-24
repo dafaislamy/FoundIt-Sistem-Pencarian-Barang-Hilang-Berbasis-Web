@@ -6,7 +6,18 @@
  * Menentukan lokasi gambar barang.
  * Jika gambar tidak ditemukan, gunakan no-image.svg.
  */
-function foundit_image_path($storedPath, $fallback = '../uploads/no-image.svg') {
+function foundit_image_path($storedPath, $fallback = null, $prefix = null) {
+
+    if ($prefix === null) {
+        $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1);
+        $callerFile = $backtrace[0]['file'] ?? '';
+        $isRoot = (dirname($callerFile) === dirname(__DIR__));
+        $prefix = $isRoot ? '' : '../';
+    }
+
+    if ($fallback === null) {
+        $fallback = $prefix . 'uploads/no-image.svg';
+    }
 
     $storedPath = trim((string) ($storedPath ?? ''));
 
@@ -35,7 +46,7 @@ function foundit_image_path($storedPath, $fallback = '../uploads/no-image.svg') 
         str_replace('/', DIRECTORY_SEPARATOR, $normalized);
 
     if (is_file($absolutePath)) {
-        return '../' . $normalized;
+        return $prefix . $normalized;
     }
 
     return $fallback;

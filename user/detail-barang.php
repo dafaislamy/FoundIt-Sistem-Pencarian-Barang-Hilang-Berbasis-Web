@@ -323,7 +323,7 @@ $isBarangDitemukan =
                         <div class="d-flex gap-3 flex-wrap detail-actions">
 
                             <a
-                                href="cari-barang.php"
+                                href="<?= is_logged_in() ? 'cari-barang.php' : '../index.php#barang'; ?>"
                                 class="btn-secondary"
                             >
                                 Kembali
@@ -335,7 +335,7 @@ $isBarangDitemukan =
                                 <?php if (is_logged_in()): ?>
 
                                     <a
-                                        href="klaim.php?items_id=<?= urlencode($item['ID']); ?>"
+                                        href="klaim.php?id=<?= urlencode($item['ID']); ?>"
                                         class="btn-primary"
                                     >
                                         Ajukan Klaim

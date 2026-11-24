@@ -27,7 +27,7 @@ $bolehAjukan = true;
 // 2. AMBIL ID BARANG
 // ==========================================
 
-$idItem = trim($_GET['id'] ?? $_POST['id'] ?? '');
+$idItem = trim($_GET['id'] ?? $_GET['items_id'] ?? $_POST['id'] ?? '');
 
 if ($idItem === '') {
     header('Location: cari-barang.php?tipe=found');

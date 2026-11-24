@@ -1,6 +1,9 @@
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
 
-    /* MENGAMBIL ELEMEN FILTER */
+    /* ========================================
+       MENGAMBIL ELEMEN FILTER
+    ======================================== */
+    const filterForm = document.getElementById("filterForm");
     const resetFilter = document.getElementById("resetFilter");
     const searchInput = document.getElementById("searchInput");
     const clearSearch = document.getElementById("clearSearch");
@@ -9,38 +12,66 @@ document.addEventListener("DOMContentLoaded", function() {
     const cols = document.querySelectorAll(".grid-barang .col");
     const pesanKosong = document.getElementById("pesanKosong");
 
-    /* FUNGSI PENCARIAN DAN FILTER BARANG */
+    /* ========================================
+       FUNGSI PENCARIAN DAN FILTER BARANG
+    ======================================== */
     function filterBarang() {
+        if (!searchInput || !selectStatus || !selectKategori) return;
+
         const keyword = searchInput.value.trim().toLowerCase();
-        const statusValue = selectStatus.value;
-        const kategoriValue = selectKategori.value;
+        const statusRaw = selectStatus.value.trim().toLowerCase();
+        const kategoriRaw = selectKategori.value.trim().toLowerCase();
 
         let jumlahDitemukan = 0;
 
-        cols.forEach(function(col) {
+        cols.forEach(function (col) {
             const card = col.querySelector(".card");
+            if (!card) return;
 
-            const namaBarang = card.querySelector("h3")
-                .innerText.toLowerCase();
+            const namaBarang = (
+                col.dataset.name ||
+                card.querySelector("h3")?.innerText ||
+                ""
+            ).toLowerCase();
 
-            const statusBarang = card.querySelector(".badge")
-                .innerText.trim();
+            const statusBarang = (
+                col.dataset.status ||
+                card.querySelector(".badge-status, .badge")?.innerText ||
+                ""
+            ).toLowerCase();
 
-            const kategoriBarang = card.querySelector(".kategori")
-                .innerText.trim();
+            const kategoriId = (col.dataset.kategoriId || "").toLowerCase();
+            const kategoriNama = (
+                col.dataset.kategoriName ||
+                card.querySelector(".kategori")?.innerText ||
+                ""
+            ).toLowerCase();
 
-            /* MEMERIKSA KESESUAIAN NAMA, STATUS, DAN KATEGORI */
-            const matchKeyword = namaBarang.includes(keyword);
+            /* 1. KECOCOKAN KATA KUNCI */
+            const matchKeyword = (keyword === "" || namaBarang.includes(keyword));
 
-            const matchStatus =
-                statusValue === "Semua Status" ||
-                statusBarang === statusValue;
+            /* 2. KECOCOKAN STATUS */
+            let matchStatus = true;
+            if (statusRaw !== "" && statusRaw !== "semua status") {
+                if (statusRaw === "hilang" || statusRaw === "lost") {
+                    matchStatus = (statusBarang === "hilang" || statusBarang === "lost");
+                } else if (statusRaw === "ditemukan" || statusRaw === "found") {
+                    matchStatus = (statusBarang === "ditemukan" || statusBarang === "found");
+                } else {
+                    matchStatus = (statusBarang === statusRaw);
+                }
+            }
 
-            const matchKategori =
-                kategoriValue === "Semua Kategori" ||
-                kategoriBarang === kategoriValue;
+            /* 3. KECOCOKAN KATEGORI */
+            let matchKategori = true;
+            if (kategoriRaw !== "" && kategoriRaw !== "semua kategori") {
+                matchKategori = (
+                    kategoriId === kategoriRaw ||
+                    kategoriNama === kategoriRaw
+                );
+            }
 
-            /* MENAMPILKAN BARANG YANG SESUAI */
+            /* TAMPILKAN / SEMBUNYIKAN KARTU */
             if (matchKeyword && matchStatus && matchKategori) {
                 col.style.display = "";
                 jumlahDitemukan++;
@@ -49,68 +80,101 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         });
 
-        /* MENAMPILKAN PESAN JIKA BARANG TIDAK DITEMUKAN */
-        pesanKosong.style.display =
-            jumlahDitemukan === 0 ? "block" : "none";
+        /* TAMPILKAN EMPTY STATE BILA HASIL 0 */
+        if (pesanKosong) {
+            pesanKosong.style.display = (jumlahDitemukan === 0) ? "block" : "none";
+        }
     }
 
-    /* DEBOUNCE 400 MS */
+    /* ========================================
+       DEBOUNCE UNTUK SEARCH REAL-TIME
+    ======================================== */
     let debounceTimer;
 
     function debounceFilter() {
         clearTimeout(debounceTimer);
-
-        debounceTimer = setTimeout(function() {
+        debounceTimer = setTimeout(function () {
             filterBarang();
-        }, 400);
+        }, 250);
     }
 
-    /* LIVE SEARCH SAAT PENGGUNA MENGETIK */
-    searchInput.addEventListener("input", function() {
+    /* ========================================
+       EVENT LISTENERS
+    ======================================== */
+    if (searchInput) {
+        searchInput.addEventListener("input", function () {
+            if (clearSearch) {
+                clearSearch.hidden = searchInput.value.length === 0;
+            }
+            debounceFilter();
+        });
+    }
 
-        /* TAMPILKAN ATAU SEMBUNYIKAN TOMBOL SILANG */
-        clearSearch.hidden = searchInput.value.length === 0;
+    if (clearSearch) {
+        clearSearch.addEventListener("click", function () {
+            clearTimeout(debounceTimer);
+            if (searchInput) {
+                searchInput.value = "";
+                searchInput.focus();
+            }
+            clearSearch.hidden = true;
+            filterBarang();
+        });
+    }
 
-        /* FILTER BERJALAN SETELAH JEDA 400 MS */
-        debounceFilter();
-    });
+    if (selectStatus) {
+        selectStatus.addEventListener("change", function () {
+            clearTimeout(debounceTimer);
+            filterBarang();
+        });
+    }
 
-    /* TOMBOL SILANG (X) PENCARIAN */
-    clearSearch.addEventListener("click", function() {
-        clearTimeout(debounceTimer);
+    if (selectKategori) {
+        selectKategori.addEventListener("change", function () {
+            clearTimeout(debounceTimer);
+            filterBarang();
+        });
+    }
 
-        searchInput.value = "";
-        clearSearch.hidden = true;
+    if (resetFilter) {
+        resetFilter.addEventListener("click", function () {
+            clearTimeout(debounceTimer);
 
-        filterBarang();
-        searchInput.focus();
-    });
+            if (searchInput) {
+                searchInput.value = "";
+            }
+            if (clearSearch) {
+                clearSearch.hidden = true;
+            }
+            if (selectStatus) {
+                selectStatus.selectedIndex = 0;
+            }
+            if (selectKategori) {
+                selectKategori.selectedIndex = 0;
+            }
 
-    /* TOMBOL RESET FILTER UTAMA */
-    resetFilter.addEventListener("click", function () {
-        clearTimeout(debounceTimer);
+            // Bersihkan URL parameter tanpa reload halaman
+            if (window.history && window.history.replaceState) {
+                const cleanUrl = window.location.pathname + "#barang";
+                window.history.replaceState(null, "", cleanUrl);
+            }
 
-        searchInput.value = "";
-        selectStatus.selectedIndex = 0;
-        selectKategori.selectedIndex = 0;
-        clearSearch.hidden = true;
+            filterBarang();
 
-        filterBarang();
-    });
+            if (searchInput) {
+                searchInput.focus();
+            }
+        });
+    }
 
-    /* FILTER STATUS BARANG */
-    selectStatus.addEventListener("change", function() {
-        clearTimeout(debounceTimer);
-        filterBarang();
-    });
+    if (filterForm) {
+        filterForm.addEventListener("submit", function (e) {
+            e.preventDefault();
+            clearTimeout(debounceTimer);
+            filterBarang();
+        });
+    }
 
-    /* FILTER KATEGORI BARANG */
-    selectKategori.addEventListener("change", function() {
-        clearTimeout(debounceTimer);
-        filterBarang();
-    });
-
-    /* FILTER AWAL SAAT HALAMAN DIBUKA */
+    // Jalankan filter saat halaman siap
     filterBarang();
-
 });

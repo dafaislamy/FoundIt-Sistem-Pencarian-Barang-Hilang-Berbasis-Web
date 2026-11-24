@@ -1,4 +1,4 @@
-﻿/* ==========================================================================
+/* ==========================================================================
    FILE: css/style.css
    ========================================================================== */
 
@@ -21,155 +21,303 @@ a {
 
 /* NAVIGASI UTAMA */
 .navbar {
-    background-color: white;
-    padding: 18px 0;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    background-color: #ffffff;
+    height: 70px;
+    min-height: 70px;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    box-shadow: 0 2px 14px rgba(0, 0, 0, 0.05);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
 
+.navbar-container,
 .navbar .container-fluid {
-    padding: 0 60px;
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding-left: 32px;
+    padding-right: 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
+    height: 100%;
 }
 
-.logo {
-    font-size: 32px !important;
-    font-weight: bold;
-    color: #2c3e50;
+.navbar-brand,
+.navbar .logo {
+    font-size: 24px !important;
+    font-weight: 800;
+    color: #1e293b;
+    letter-spacing: -0.5px;
+    text-decoration: none;
+    margin: 0 !important;
+    padding: 0 !important;
+    line-height: 1 !important;
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
 }
 
+.navbar .logo span,
 .logo span {
     color: #3498db;
 }
 
-.navbar ul {
+.navbar-collapse {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-left: auto;
+    padding: 0;
+    flex-grow: 1;
+}
+
+.navbar ul,
+.navbar-nav {
     list-style: none;
+    margin: 0;
+    margin-left: auto;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    gap: 28px;
 }
 
-.navbar a {
-    color: #555;
-    font-size: 14px;
+.navbar-nav .nav-item {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+}
+
+.navbar .nav-link {
+    color: #475569;
+    font-size: 15px;
     font-weight: 500;
+    padding: 6px 0;
+    border-radius: 6px;
+    margin: 0;
+    line-height: 1.5;
+    transition: color 0.2s ease;
+    white-space: nowrap;
 }
 
-.navbar a:hover {
+.navbar .nav-link:hover {
     color: #3498db;
+    background-color: transparent;
 }
 
 .btn-login {
     background-color: #3498db !important;
     color: white !important;
-    padding: 9px 20px !important;
-    border-radius: 20px !important;
-    font-weight: 500 !important;
+    padding: 8px 22px !important;
+    border-radius: 25px !important;
+    font-weight: 600 !important;
+    font-size: 14px !important;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 40px;
+    line-height: 1;
+    box-shadow: 0 3px 10px rgba(52, 152, 219, 0.25);
+    transition: all 0.2s ease;
+    text-decoration: none;
+    margin: 0 !important;
+    white-space: nowrap;
 }
 
 .btn-login:hover {
     background-color: #2980b9 !important;
+    box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+    transform: translateY(-1px);
+    color: white !important;
 }
 
 /* BAGIAN HERO */
 .hero {
-    background: linear-gradient(135deg, #3498db, #2c3e50);
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 45%, #1e3a8a 100%);
     color: white;
-    padding: 85px 0;
-    min-height: 450px;
+    padding: 65px 0 85px;
+    min-height: auto;
+    position: relative;
+    overflow: hidden;
 }
 
 .hero-text {
-    max-width: 700px;
+    max-width: 780px;
     text-align: center;
     margin: 0 auto;
+    position: relative;
+    z-index: 2;
 }
 
+.hero-badge,
 .label {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #bae6fd;
+    padding: 6px 18px;
+    border-radius: 20px;
     font-size: 12px;
-    font-weight: bold;
-    letter-spacing: 2px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    margin-bottom: 22px;
 }
 
 .hero h1 {
-    font-size: 45px;
-    line-height: 1.2;
-    margin: 18px 0;
+    font-size: 52px;
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 22px;
+    color: #ffffff;
+    letter-spacing: -0.5px;
 }
 
 .hero h1 span {
-    color: #a9e7ff;
+    color: #38bdf8;
 }
 
 .hero p {
-    font-size: 16px;
-    line-height: 1.7;
-    color: #eaf5fc;
+    font-size: 17px;
+    line-height: 1.75;
+    color: #cbd5e1;
+    max-width: 660px;
+    margin: 0 auto 34px;
 }
 
 .hero-button {
-    margin-top: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-top: 10px;
 }
 
 .btn-utama {
-    display: inline-block;
-    background-color: #2ecc71 !important;
-    color: white !important;
-    padding: 12px 25px !important;
-    border-radius: 25px !important;
-    font-weight: bold;
-    margin: 5px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #38bdf8 !important;
+    color: #0f172a !important;
+    padding: 13px 32px !important;
+    border-radius: 30px !important;
+    font-size: 15px;
+    font-weight: 700;
+    text-decoration: none;
     border: none !important;
+    box-shadow: 0 4px 16px rgba(56, 189, 248, 0.35);
+    transition: all 0.25s ease;
 }
 
 .btn-utama:hover {
-    background-color: #27ae60 !important;
+    background-color: #7dd3fc !important;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(56, 189, 248, 0.5);
+    color: #0f172a !important;
 }
 
 .btn-outline {
-    display: inline-block;
-    border: 1px solid white !important;
-    color: white !important;
-    padding: 11px 25px !important;
-    border-radius: 25px !important;
-    font-weight: bold;
-    margin: 5px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid rgba(255, 255, 255, 0.85) !important;
+    color: #ffffff !important;
+    padding: 11px 30px !important;
+    border-radius: 30px !important;
+    font-size: 15px;
+    font-weight: 700;
     background: transparent !important;
+    text-decoration: none;
+    transition: all 0.25s ease;
 }
 
 .btn-outline:hover {
-    background-color: white !important;
-    color: #2c3e50 !important;
+    background-color: rgba(255, 255, 255, 0.15) !important;
+    border-color: #ffffff !important;
+    transform: translateY(-2px);
+    color: #ffffff !important;
 }
 
-/* BAGIAN FITUR */
+/* BAGIAN FITUR (3 KARTU FITUR) */
 .fitur {
-    margin-top: -50px;
-    margin-bottom: 50px;
+    margin-top: -55px;
+    margin-bottom: 60px;
     position: relative;
+    z-index: 10;
 }
 
 .fitur-box {
-    background-color: white;
-    padding: 25px;
+    background-color: #ffffff;
+    padding: 32px 26px;
     text-align: center;
-    border-radius: 12px;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
-    transition: 0.2s;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    border: 1px solid #f1f5f9;
+    transition: all 0.25s ease;
     height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .fitur-box:hover {
     transform: translateY(-4px);
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.12);
+    border-color: #e2e8f0;
 }
 
-.ikon {
-    font-size: 30px;
+.ikon-circle {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 18px;
+    transition: transform 0.25s ease;
+}
+
+.fitur-box:hover .ikon-circle {
+    transform: scale(1.08);
+}
+
+.ikon-blue {
+    background-color: #e0f2fe;
+    color: #0284c7;
+}
+
+.ikon-amber {
+    background-color: #fef3c7;
+    color: #d97706;
+}
+
+.ikon-emerald {
+    background-color: #dcfce7;
+    color: #16a34a;
 }
 
 .fitur-box h3 {
+    font-size: 19px;
+    font-weight: 700;
+    color: #1e293b;
     margin-bottom: 8px;
 }
 
 .fitur-box p {
-    color: #777;
-    font-size: 13px;
+    color: #64748b;
+    font-size: 14px;
     line-height: 1.6;
+    margin: 0;
 }
 
 /* BAGIAN PENCARIAN BARANG */
@@ -196,50 +344,78 @@ a {
 
 .filter {
     background-color: white;
-    padding: 18px;
+    padding: 16px 20px;
     margin: 30px 0;
     border-radius: 12px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.07);
+    border: 1px solid #edf2f7;
+}
+
+.filter-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
 }
 
 /* KOTAK PENCARIAN */
+.filter-search {
+    position: relative;
+    flex: 2;
+    min-width: 220px;
+    display: flex;
+    align-items: center;
+    height: 44px;
+    box-shadow: none !important;
+    background: transparent;
+}
+
 .search-box {
     position: relative;
     width: 100%;
 }
 
+.filter-search input,
 .search-box input {
     width: 100%;
-    padding: 11px 40px 11px 42px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
+    height: 44px;
+    padding: 0 38px 0 42px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
     font-family: inherit;
+    font-size: 14px;
     color: #2c3e50;
     background-color: white;
+    box-shadow: none !important;
+    outline: none;
     transition: border-color 0.2s, box-shadow 0.2s;
 }
 
+.filter-search input::placeholder,
 .search-box input::placeholder {
-    color: #999;
+    color: #9ca3af;
 }
 
 /* IKON KACA PEMBESAR */
 .search-icon {
     position: absolute;
-    left: 13px;
+    left: 14px;
     top: 50%;
     transform: translateY(-50%);
     display: flex;
     align-items: center;
-    color: #888;
+    justify-content: center;
+    color: #94a3b8;
     pointer-events: none;
+    z-index: 2;
 }
 
 /* EFEK INPUT AKTIF */
+.filter-search input:focus,
 .search-box input:focus {
     outline: none;
     border-color: #3498db;
-    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.12);
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15) !important;
 }
 
 /* TOMBOL SILANG */
@@ -248,85 +424,124 @@ a {
     right: 10px;
     top: 50%;
     transform: translateY(-50%);
-    width: 25px;
-    height: 25px;
+    width: 24px;
+    height: 24px;
     padding: 0;
     border: none;
     border-radius: 50%;
     background: transparent;
-    color: #888;
-    font-size: 22px;
+    color: #9ca3af;
+    font-size: 20px;
     line-height: 1;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
+    z-index: 2;
+    transition: background-color 0.2s, color 0.2s;
 }
 
 .clear-search:hover {
-    background-color: #f0f0f0;
-    color: #333;
+    background-color: #f3f4f6;
+    color: #374151;
 }
 
 .clear-search[hidden] {
-    display: none;
+    display: none !important;
 }
 
 /* FILTER STATUS DAN KATEGORI */
+.filter-select-wrapper {
+    flex: 1;
+    min-width: 160px;
+    height: 44px;
+}
+
+.filter-select-wrapper select,
 .filter select {
     width: 100%;
-    padding: 11px 28px 11px 14px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
+    height: 44px;
+    padding: 0 32px 0 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
     font-family: inherit;
+    font-size: 14px;
     color: #2c3e50;
     background-color: white;
     cursor: pointer;
+    outline: none;
+    box-shadow: none !important;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%236b7280' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
 }
 
+.filter-select-wrapper select:focus,
 .filter select:focus {
     outline: none;
     border-color: #3498db;
-    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.12);
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15) !important;
 }
 
 /* TOMBOL RESET FILTER */
+.filter-btn-wrapper,
 .filter-actions {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100%;
+    height: 44px;
+    flex-shrink: 0;
 }
 
+.btn-reset-filter,
 .reset-filter {
-    width: 100%;
-    padding: 11px 8px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    background-color: white;
-    color: #2c3e50;
+    height: 44px;
+    padding: 0 20px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background-color: #f8fafc;
+    color: #4b5563;
     font-family: inherit;
-    font-size: inherit;
-    font-weight: 400;
+    font-size: 14px;
+    font-weight: 500;
     cursor: pointer;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     transition: all 0.2s;
 }
 
+.btn-reset-filter:hover,
 .reset-filter:hover {
-    background-color: #f8fafc;
+    background-color: #eff6ff;
     border-color: #3498db;
     color: #3498db;
 }
 
 /* KARTU BARANG */
+.grid-barang {
+    align-items: stretch;
+}
+
+.grid-barang .col {
+    display: flex;
+}
+
 .grid-barang .card {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
     background-color: white;
     border-radius: 12px;
     overflow: hidden;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.07);
-    transition: 0.2s;
-    height: 100%;
-    border: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: 1px solid #edf0f2;
 }
 
 .grid-barang .card:hover {
@@ -334,28 +549,59 @@ a {
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
 }
 
-.card-body {
+.grid-barang .card-body {
     padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex: 1 1 auto;
+    height: 100%;
 }
 
-.card-body h3 {
+.card-content-top {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 16px;
+}
+
+.card-meta-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.grid-barang .card-body h3 {
     font-size: 18px;
-    margin: 12px 0;
+    font-weight: 600;
+    color: #2c3e50;
+    margin: 0 0 10px 0;
+    line-height: 1.4;
 }
 
-.card-body p {
-    color: #777;
+.card-info-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #64748b;
     font-size: 13px;
-    margin: 7px 0;
+    margin: 4px 0;
+}
+
+.card-info-item svg {
+    flex-shrink: 0;
+    color: #94a3b8;
 }
 
 .kategori {
     display: inline-block;
     background-color: #eef6fc;
     color: #3498db !important;
-    padding: 5px 9px;
+    padding: 4px 9px;
     border-radius: 5px;
     font-size: 11px !important;
+    font-weight: 500;
 }
 
 .badge {
@@ -376,21 +622,103 @@ a {
     color: #2e7d32;
 }
 
+/* TOMBOL AKSI KARTU */
+.card-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: auto;
+    padding-top: 14px;
+    width: 100%;
+}
+
+.card-actions a,
+.card-actions button {
+    flex: 1 1 0;
+    width: 100%;
+    min-height: 40px;
+    height: 40px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    text-align: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    box-sizing: border-box;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+}
+
+.btn-card-detail,
 .btn-detail {
     width: 100%;
-    margin-top: 15px;
-    padding: 10px;
+    margin-top: 0;
+    padding: 8px 12px;
     background-color: white !important;
     color: #3498db !important;
     border: 1px solid #3498db !important;
-    border-radius: 6px;
+    border-radius: 8px;
     cursor: pointer;
     font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
+.btn-card-detail:hover,
 .btn-detail:hover {
     background-color: #3498db !important;
     color: white !important;
+}
+
+.btn-card-klaim {
+    background-color: #3498db !important;
+    color: white !important;
+    border: 1px solid #3498db !important;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-card-klaim:hover {
+    background-color: #2980b9 !important;
+    border-color: #2980b9 !important;
+    color: white !important;
+}
+
+/* EMPTY STATE */
+.empty-state {
+    text-align: center;
+    padding: 50px 20px;
+    background-color: white;
+    border-radius: 12px;
+    border: 1px dashed #cbd5e1;
+    margin: 30px 0;
+}
+
+.empty-state-icon {
+    margin-bottom: 15px;
+}
+
+.empty-state h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 8px;
+}
+
+.empty-state p {
+    color: #7f8c8d;
+    font-size: 14px;
+    margin: 0;
 }
 
 /* BAGIAN CARA KERJA */
@@ -524,19 +852,62 @@ a {
 .gambar-barang {
     width: 100%;
     height: 200px;
+    min-height: 200px;
+    max-height: 200px;
     overflow: hidden;
-    background-color: #f3f4f6;
+    background-color: #f1f5f9;
+    position: relative;
 }
 
 .gambar-barang img {
     width: 100%;
     height: 100%;
-    object-fit: contain;
+    object-fit: cover;
     display: block;
+    transition: transform 0.3s ease;
+}
+
+.grid-barang .card:hover .gambar-barang img {
+    transform: scale(1.03);
+}
+
+/* RESPONSIVE FILTER */
+@media (max-width: 991px) {
+    .filter-bar {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .filter-search {
+        flex: 1 1 100%;
+        min-width: 100%;
+    }
+
+    .filter-select-wrapper {
+        flex: 1 1 calc(50% - 5px);
+        min-width: calc(50% - 5px);
+    }
+
+    .filter-btn-wrapper {
+        flex: 1 1 100%;
+        min-width: 100%;
+    }
+
+    .btn-reset-filter {
+        width: 100%;
+    }
+}
+
+@media (max-width: 575px) {
+    .filter-select-wrapper {
+        flex: 1 1 100%;
+        min-width: 100%;
+    }
 }
 
 /* RESPONSIVE UNTUK LAYAR KECIL */
 @media (max-width: 767px) {
+    .navbar-container,
     .navbar .container-fluid {
         padding: 0 20px;
     }
@@ -593,7 +964,7 @@ body {
     flex-direction: column;
 }
 
-.logo {
+.sidebar .logo {
     font-size: 28px;
     font-weight: bold;
     margin-bottom: 40px;
@@ -1020,7 +1391,7 @@ body {
     z-index: 1000;
 }
 
-.logo {
+.sidebar .logo {
     font-size: 28px;
     font-weight: bold;
     margin-bottom: 40px;
@@ -1464,7 +1835,7 @@ body {
     min-height: 100vh;
 }
 
-.logo { font-size: 30px; font-weight: bold; margin-bottom: 50px; }
+.login-info .logo { font-size: 30px; font-weight: bold; margin-bottom: 50px; }
 
 .logo span { color: #3498db; }
 
@@ -1650,7 +2021,7 @@ body {
     justify-content: center;
 }
 
-.logo {
+.register-info .logo {
     font-size: 30px;
     font-weight: bold;
     margin-bottom: 60px;
@@ -1863,10 +2234,11 @@ body {
    ========================================================================== */
 
 /* ========================================
-   CONTAINER PENCARIAN & FILTER
+   CONTAINER PENCARIAN & FILTER (DASHBOARD USER)
 ======================================== */
 
-.search-box {
+.main-content .search-box,
+section.search-box {
     background: #ffffff;
     padding: 28px;
     border-radius: 18px;
